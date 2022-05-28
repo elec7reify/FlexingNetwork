@@ -1,0 +1,56 @@
+package com.flexingstudios.FlexingNetwork.api.event;
+
+import com.flexingstudios.FlexingNetwork.api.updater.WatchedDir;
+import com.flexingstudios.FlexingNetwork.api.updater.WatchedEntry;
+import com.flexingstudios.FlexingNetwork.api.updater.WatchedFile;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
+public class FileUpdateEvent extends Event {
+    private static final HandlerList HANDLERS = new HandlerList();
+    private Action action = Action.IGNORE;
+    private WatchedEntry old;
+    private WatchedEntry curr;
+
+    public FileUpdateEvent(WatchedEntry old, WatchedEntry curr) {
+        this.old = old;
+        this.curr = curr;
+    }
+
+    public boolean isDir() {
+        return this.old instanceof WatchedDir;
+    }
+
+    public boolean isFile() {
+        return this.old instanceof WatchedFile;
+    }
+
+    public WatchedEntry getOld() {
+        return this.old;
+    }
+
+    public WatchedEntry getCurrent() {
+        return this.curr;
+    }
+
+    public Action getAction() {
+        return this.action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
+    public enum Action {
+        RESTART, IGNORE;
+    }
+}

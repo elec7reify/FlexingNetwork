@@ -1,0 +1,37 @@
+name: FlexingNetwork
+author: Elec7reify
+version: '0.4.3'
+
+main: com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
+
+commands:
+  msg:
+    aliases: [m, w, whisper, t, tell, pm, лс]
+  reply:
+    aliases: [r]
+  ignore:
+  unignore:
+  msgtoggle:
+  gamemode:
+    aliases: [gm]
+  gms:
+  gmc:
+  gma:
+  gmsp:
+  fly:
+  seen:
+  alert:
+  report:
+  me:
+    aliases: [я]
+  help:
+  vanish:
+    aliases: [v]
+  speed:
+  tp:
+  hub:
+    aliases: [lobby, хаб, лобби, лоби]
+  stp:
+  donate:
+  flexingnetwork:
+    aliases: [flexingworld, flex, flexing, fn, fw]

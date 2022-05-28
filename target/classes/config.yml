@@ -1,0 +1,17 @@
+mysql:
+  host: localhost
+  port: 3306
+  database:
+  username:
+  password: ''
+
+# Обновление информации о сервере в бд
+lobby:
+  enabled: false
+  serverHost: localhost
+  serverId: TEST_1
+
+development: false
+
+updater:
+  enabled: false
