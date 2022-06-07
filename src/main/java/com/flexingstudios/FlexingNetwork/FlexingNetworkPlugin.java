@@ -34,7 +34,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public FCoins coins;
     public ExpBuffer expBuffer;
     public FMetrics metrics;
-    public PlayerMetaSaver metaSaver;
     public VanishCommand vanishCommand;
     public static Connection connection;
 
