@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -15,6 +16,12 @@ public class ServiceItems implements Listener {
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event) {
         if (ItemsDef.isThisItem(event.getItemDrop().getItemStack()))
+            event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onItemSpawn(ItemSpawnEvent event) {
+        if (ItemsDef.isThisItem(event.getEntity().getItemStack()))
             event.setCancelled(true);
     }
 

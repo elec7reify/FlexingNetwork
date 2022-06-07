@@ -20,12 +20,12 @@ public enum Particles {
         this.id = id;
     }
 
-    public void play(World w, float x, float y, float z, float xOffset, float yOffset, float zOffset, float effectSpeed, int amountOfParticles, Player... players) {
-        play(this.id, x, y, z, xOffset, yOffset, zOffset, effectSpeed, amountOfParticles, players);
+    public void play(World world, float x, float y, float z, float xOffset, float yOffset, float zOffset, float effectSpeed, int amountOfParticles, Player... players) {
+        play(world, this.id, x, y, z, xOffset, yOffset, zOffset, effectSpeed, amountOfParticles, players);
     }
 
     public void play(Location loc, float xOffset, float yOffset, float zOffset, float effectSpeed, int amountOfParticles, Player... players) {
-        play(this.id, (float)loc.getX(), (float)loc.getY(), (float)loc.getZ(), xOffset, yOffset, zOffset, effectSpeed, amountOfParticles, players);
+        play(loc.getWorld(), this.id, (float)loc.getX(), (float)loc.getY(), (float)loc.getZ(), xOffset, yOffset, zOffset, effectSpeed, amountOfParticles, players);
     }
 
     /*public static void playIconCrack(int id, float x, float y, float z, float xOffset, float yOffset, float zOffset, float effectSpeed, int amountOfParticles, Player... players) {
@@ -36,11 +36,11 @@ public enum Particles {
         play("tilecrack_" + id + "_" + meta, x, y, z, xOffset, yOffset, zOffset, effectSpeed, amountOfParticles, players);
     }*/
 
-    public static void play(String particle, float x, float y, float z, float xOffset, float yOffset, float zOffset, float effectSpeed, int amountOfParticles, Player... players) {
+    public static void play(World world, String particle, float x, float y, float z, float xOffset, float yOffset, float zOffset, float effectSpeed, int amountOfParticles, Player... players) {
         PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.HEART, false, x, y, z, xOffset, yOffset, zOffset, effectSpeed, amountOfParticles);
         if (players.length == 0) {
             int radius = 400;
-            List<EntityPlayer> list = (MinecraftServer.getServer().getPlayerList()).players;
+            List<EntityPlayer> list = (List<EntityPlayer>) MinecraftServer.getServer().getWorld();
             for (EntityPlayer player : list) {
                 double distanceSquared = NumberConversions.square(player.locX - x) + NumberConversions.square(player.locY - y) + NumberConversions.square(player.locZ - z);
                 if (distanceSquared < radius)

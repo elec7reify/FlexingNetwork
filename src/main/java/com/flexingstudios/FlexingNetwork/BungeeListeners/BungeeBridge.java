@@ -9,7 +9,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class BungeeBridge implements PluginMessageListener {
 

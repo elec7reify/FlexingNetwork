@@ -8,7 +8,7 @@ public class LevelingRewards {
     public static List<LevelingReward> REWARDS = new ArrayList<>();
 
     static {
-        REWARDS.add();
+        //REWARDS.add(1, "");
     }
 
     public static abstract class LevelingReward {
@@ -28,6 +28,4 @@ public class LevelingRewards {
 
         public abstract void accept(FLPlayer flplayer);
     }
-
-    private static class 
 }

@@ -25,10 +25,10 @@ public class FPlayerMenu implements InvMenu {
         int expToNextLevel = Leveling.getExpToNextLevel(player.getLevel());
         float progress = player.getPartialExp() / expToNextLevel;
         this.inv = Bukkit.createInventory(this, 45, player.getName());
-        this.inv.setItem(22, Items.appendLore(Items.head(((FLPlayer) player).username),
-                "&fВаш ник &r" + player.getName(),
-                "&fВаша привилегия &r" + player.getRank().getDisplayName(),
-                "&fФлекс-коинов &r" + mes.pluralsCoins(player.getCoins()),
+        this.inv.setItem(22, Items.name(Items.head(String.valueOf(player)), "Ваш профиль",
+                "&fВаш ник - &e" + player.getName(),
+                "&fВаша привилегия - &r" + player.getRank().getDisplayName(),
+                "&fФлекс-коинов - &e" + mes.pluralsCoins(player.getCoins()),
                 "&b&lУровень " + player.getLevel() + " (" + (int)(progress * 100.0F) + "%) " + mes.genBar(48, progress, '|', "&7", "&a")));
     }
 

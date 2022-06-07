@@ -30,7 +30,7 @@ public class IgnoreCommand implements CommandExecutor {
 
             Player player = Bukkit.getPlayerExact(args[0]);
 
-            if (player == sender) {
+            if (args[0].equalsIgnoreCase(sender.getName())) {
                 mes.msg(sender, T.error("Ошибка", "Не глупи, ты не можешь игнорировать себя"));
                 return true;
             }

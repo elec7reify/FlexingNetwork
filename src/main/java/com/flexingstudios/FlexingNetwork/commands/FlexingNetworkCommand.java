@@ -70,7 +70,7 @@ public class FlexingNetworkCommand extends UpCommand {
     @CmdSub(value = {"toserver"}, rank = Rank.ADMIN)
     private void toServer(dataCommand data) {
         if((data.getArgs().length != 2)) {
-            mes.msg(data.getSender(), "&cusage /" + data.getLabel() + " " + data.getSub() + " <игрок> <сервер>");
+            mes.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <сервер>");
             return;
         }
         Player player = this.plugin.getServer().getPlayerExact(data.getArgs()[0]);
@@ -137,6 +137,7 @@ public class FlexingNetworkCommand extends UpCommand {
         if (data.getArgs()[1] == null) {
             mes.msg(data.getSender(), "&aВсе доступные статусы: &fPLAYER, VIP, PREMIUM, CREATIVE, MODERATOR, CHIKIBAMBONI,", " ADMINOBAMBONI, CHIKIBAMBONYLA, SPONSOR, OWNER, CHIKIBOMBASTER,", " GOD, TEAM, VADMIN, SADMIN, ADMIN");
         } else {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + data.getArgs()[0] + " parent set " + data.getArgs()[1]);
             FlexingNetwork.mysql().query("UPDATE authme SET status='" + data.getArgs()[1] + "' WHERE username = '" + data.getArgs()[0] + "'");
             data.getSender().sendMessage(mes.colored("&aСтатус &f" + data.getArgs()[1] + " &aвыдан игроку &f" + data.getArgs()[0] + "&a!"));
         }
@@ -146,11 +147,11 @@ public class FlexingNetworkCommand extends UpCommand {
     private void stats(dataCommand data) {
         Runtime runtime = Runtime.getRuntime();
         List<String> lines = new ArrayList<>();
-        lines.add("&e------------ &6Статистика &f&e------------");
-        lines.add("&eВремя работы: &f" + (new ParsedTime(System.currentTimeMillis() - ManagementFactory.getRuntimeMXBean().getStartTime())).format());
-        lines.add("&eПамять: &f" + ((runtime.totalMemory() - runtime.freeMemory()) / 1024L / 1024L) + " MB / " + (runtime.totalMemory() / 1024L / 1024L) + " MB up to " + (runtime.maxMemory() / 1024L / 1024L) + " MB");
-        lines.add("&eПодключение к бд: " + (this.plugin.mysql.isConnected() ? "&aактивно" : "&cразорвано"));
-        lines.add("&eЗапросов к бд: &f" + this.plugin.mysql.getExecutedQueries());
+        lines.add("&3------------ &fСтатистика &3------------");
+        lines.add("&bВремя работы: &f" + (new ParsedTime(System.currentTimeMillis() - ManagementFactory.getRuntimeMXBean().getStartTime())).format());
+        lines.add("&bПамять: &f" + ((runtime.totalMemory() - runtime.freeMemory()) / 1024L / 1024L) + " MB / " + (runtime.totalMemory() / 1024L / 1024L) + " MB up to " + (runtime.maxMemory() / 1024L / 1024L) + " MB");
+        lines.add("&bПодключение к бд: " + (this.plugin.mysql.isConnected() ? "&aактивно" : "&cразорвано"));
+        lines.add("&bЗапросов к бд: &f" + this.plugin.mysql.getExecutedQueries());
         mes.msg(data.getSender(), lines);
     }
 

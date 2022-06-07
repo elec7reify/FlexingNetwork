@@ -23,10 +23,10 @@ public class FlyCommand implements CommandExecutor, Listener {
                 return true;
 
             if (!player.getAllowFlight()) {
-              player.setAllowFlight(true);
-              player.setFlying(true);
-              player.sendMessage("§a§lGot it! §e> §fРежим полёта включен");
-        } else {
+                player.setAllowFlight(true);
+                player.setFlying(true);
+                player.sendMessage("§a§lGot it! §e> §fРежим полёта включен");
+            } else {
                 player.setAllowFlight(false);
                 player.setFlying(false);
                 player.sendMessage("§a§lGot it! §e> §fРежим полёта выключен");

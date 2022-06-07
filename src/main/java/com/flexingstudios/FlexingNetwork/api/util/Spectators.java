@@ -93,7 +93,7 @@ public class Spectators implements Listener {
             try {
                 listener.listener.equip(player, spectator);
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.WARNING, (String)null, e);
+                Bukkit.getLogger().log(Level.WARNING, null, e);
             }
         }
     }
