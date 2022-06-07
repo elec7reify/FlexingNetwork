@@ -6,7 +6,7 @@
 
     <groupId>com</groupId>
     <artifactId>flexingstudios</artifactId>
-    <version>0.4.3</version>
+    <version>0.4.4</version>
     <packaging>jar</packaging>
 
     <name>FlexingNetwork</name>
@@ -81,6 +81,12 @@
             <groupId>com.mojang</groupId>
             <artifactId>authlib</artifactId>
             <version>1.5.25</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

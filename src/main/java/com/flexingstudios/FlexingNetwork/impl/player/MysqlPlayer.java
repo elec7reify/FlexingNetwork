@@ -16,10 +16,6 @@ public class MysqlPlayer extends FLPlayer {
     public String lastWriter = null;
     public Map<String, MetaValue> meta = new ConcurrentHashMap<>();
 
-    /*public MysqlPlayer(Player player) {
-        super(player);
-    }*/
-
     public MysqlPlayer(Player player) {
         super(player);
     }

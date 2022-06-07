@@ -61,7 +61,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PerWorldTablist(), this);
         getServer().getPluginManager().registerEvents(new ServiceItems(), this);
         getServer().getPluginManager().registerEvents(new ArrowTrailListener(), this);
-        getServer().getPluginManager().registerEvents(new FlyCommand(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
 
@@ -78,7 +77,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("gmc").setExecutor(executor);
         getCommand("gma").setExecutor(executor);
         getCommand("gmsp").setExecutor(executor);
-        getCommand("fly").setExecutor(new FlyCommand());
         getCommand("seen").setExecutor(new SeenCommand());
         getCommand("vanish").setExecutor(this.vanishCommand = new VanishCommand());
         getCommand("speed").setExecutor(new SpeedCommand());
@@ -94,13 +92,27 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         //getServer().getScheduler().scheduleSyncRepeatingTask(this, this.metaSaver = new PlayerMetaSaver(this), 20L, 20L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            help.addCommand("banlist", "Банлист", Permission.BAN);
+            help.addCommand("history <игрок>", "История мутов и банов у игрока", Rank.VADMIN);
+            help.addCommand("checkban <игрок>", "Проверить статус бана игрока", Permission.BAN);
+            help.addCommand("checkmute <игрок>", "Проверить статус мута игрока", Permission.MUTE);
+            help.addCommand("ban <игрок> [время] [причина]", "Бан игрока", Permission.BAN);
+            help.addCommand("unban <IP/игрок>", "Разбанить игрока", Permission.BAN);
+            help.addCommand("ipban <IP/игрок> [время] [причина]", "Бан по IP", Permission.IPBAN);
+            help.addCommand("mute <игрок> [время] [причина]", "Замутить игрока", Permission.MUTE);
+            help.addCommand("unmute <игрок>", "Размутить игрока", Permission.MUTE);
+            help.addCommand("kick <игрок> [причина]", "Кик игрока", Rank.CHIKIBAMBONYLA);
             help.addCommand("vanish", "Режим наблюдателя", Permission.VANISH);
+            help.addCommand("tp <игрок>", "Телепортация к игроку", Permission.VANISH);
             help.addCommand("speed <скорость>", "Установить скорость ходьбы или полета", Rank.TEAM);
             help.addCommand("hub", "Телепорт в лобби");
             help.addCommand("msg <игрок> <сообщение>", "Отправить личное сообщение игроку");
             help.addCommand("r <сообщение>", "Ответить игроку");
+            help.addCommand("me", "Ваш профиль");
             help.addCommand("ignore <игрок>", "Игнорирование игрока");
+            help.addCommand("unignore <игрок>", "Снять запрет");
             help.addCommand("msgtoggle", "Переключить личные сообщения");
+            help.addCommand("donate", "Игровое донат меню");
             help.addCommand("gm <режим>", "Изменение игрового режима", Rank.SADMIN);
             help.addCommand("flex", "Админские команды", Rank.ADMIN);
         });
@@ -115,7 +127,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
             e.printStackTrace();
         }*/
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            if ((FlexingNetwork.features()).AUTO_RESTART.isEnabled())
+            if (!FlexingNetwork.isDevelopment() && (FlexingNetwork.features()).AUTO_RESTART.isEnabled())
                 Restart.schedule();
         });
 
@@ -129,6 +141,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         this.expBuffer.finish();
         this.metrics.flush();
         this.mysql.finish();
+        this.scheduledExecutorService.shutdownNow();
         /*try {
             connection.close();
         } catch (SQLException e) {

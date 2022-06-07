@@ -28,8 +28,13 @@ public enum Rank {
 
     static {
         CREATIVE.addPerm(Permission.SURVGAMEMODE);
+        SPONSOR.addPerm(Permission.BAN);
+        GOD.addPerm(Permission.MUTE);
+        GOD.addPerm(Permission.IPBAN);
+        GOD.addAllPerms(SPONSOR);
         TEAM.addPerm(Permission.BUILDSERVER);
         TEAM.addPerm(Permission.VANISH);
+        TEAM.addAllPerms(GOD);
         VADMIN.addAllPerms(TEAM);
         SADMIN.addAllPerms(VADMIN);
         ADMIN.addAllPerms(SADMIN);

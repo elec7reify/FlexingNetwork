@@ -1,5 +1,5 @@
 name: FlexingNetwork
-author: Elec7reify
+author: FlexingStudios, Elec7reify
 version: '${project.version}'
 
 main: com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
@@ -17,10 +17,9 @@ commands:
   gms:
   gmc:
   gma:
-  gmsp:
   fly:
-  seen:
   alert:
+  find:
   report:
   me:
     aliases: [я]

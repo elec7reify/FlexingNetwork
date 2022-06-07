@@ -1,5 +1,7 @@
 package com.flexingstudios.FlexingNetwork.api.player;
 
+import java.util.Map;
+
 public class Collectable {
     protected final NetworkPlayer player;
     private final String key;

@@ -65,7 +65,7 @@ public class Items {
 
     public static ItemStack head(String player) {
         ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-        SkullMeta sm = (SkullMeta)is.getItemMeta();
+        SkullMeta sm = (SkullMeta) is.getItemMeta();
         sm.setOwner(player);
         is.setItemMeta(sm);
         return is;

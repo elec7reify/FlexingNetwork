@@ -27,6 +27,12 @@ public class MessageCommand implements CommandExecutor {
                     mes.msg(sender, "&cИспользование: /" + label + " &f<кому> <сообщение>");
                     return true;
                 }
+
+                if (args[0].equalsIgnoreCase(sender.getName())) {
+                    mes.msg(sender, "boy next door");
+                    return true;
+                }
+
                 player = Bukkit.getPlayerExact(args[0]);
 
                 if (player == null) {
@@ -35,6 +41,7 @@ public class MessageCommand implements CommandExecutor {
                 }
                 senderInfo = (MysqlPlayer) FLPlayer.get(sender.getName());
                 recieverInfo = (MysqlPlayer) FLPlayer.get(player);
+
                 message = args[1];
 
                 for (i = 2; i < args.length; i++)
@@ -47,12 +54,12 @@ public class MessageCommand implements CommandExecutor {
                     return true;
                 }
                 senderInfo = (MysqlPlayer) FLPlayer.get(sender.getName());
+                message = args[0];
 
                 if (senderInfo.lastWriter == null || (lastWriter = (MysqlPlayer) FLPlayer.PLAYERS.get(senderInfo.lastWriter)) == null) {
                     mes.msg(sender, "§cНекому ответить");
                     return true;
                 }
-                message = args[0];
 
                 for (i = 1; i < args.length; i++)
                     message = message + " " + args[i];

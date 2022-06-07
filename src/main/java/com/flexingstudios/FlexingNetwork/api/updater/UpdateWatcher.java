@@ -60,16 +60,7 @@ public class UpdateWatcher implements Listener {
                 return;
             }
             if (curr.path.startsWith("configs/") && curr.path.endsWith(".zip"))
-                if (Bukkit.getPluginManager().isPluginEnabled("GameReloader")) {
-                    if (FLPlayer.PLAYERS.isEmpty()) {
-                        event.setAction(FileUpdateEvent.Action.RESTART);
-                    } else {
-                        this.plugin.getLogger().info("[UpdateWatcher] Configs update found. Ignored due to plugin GameReloader.");
-                    }
-                } else {
                     event.setAction(FileUpdateEvent.Action.RESTART);
-                    return;
-                }
             if (!curr.path.contains("/") && curr.path.endsWith(".jar")) {
                 event.setAction(FileUpdateEvent.Action.RESTART);
                 return;
