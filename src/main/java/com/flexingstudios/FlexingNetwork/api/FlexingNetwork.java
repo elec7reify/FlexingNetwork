@@ -17,6 +17,10 @@ public class FlexingNetwork {
 
     public static final ZoneId TZ_MOSCOW = ZoneId.of("Europe/Moscow");
 
+    public static boolean isDevelopment() {
+        return (FlexingNetworkPlugin.getInstance()).config.development;
+    }
+
     public static Lobby lobby() {
         return (FlexingNetworkPlugin.getInstance()).lobby;
     }
@@ -71,6 +75,18 @@ public class FlexingNetwork {
 
     public static boolean isPlayerOnline(int userid) {
         return FLPlayer.IDS.containsKey(Integer.valueOf(userid));
+    }
+
+    public static void addCommandHelp(String command, String help) {
+        (FlexingNetworkPlugin.getInstance()).help.addCommand(command, help);
+    }
+
+    public static void addCommandHelp(String command, String help, Rank rank) {
+        (FlexingNetworkPlugin.getInstance()).help.addCommand(command, help, rank);
+    }
+
+    public static void addCommandHelp(String command, String help, Permission permission) {
+        (FlexingNetworkPlugin.getInstance()).help.addCommand(command, help, permission);
     }
 
     public static void toLobby(Player... players) {
