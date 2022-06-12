@@ -17,12 +17,12 @@ commands:
   gms:
   gmc:
   gma:
+  gmsp:
   fly:
   alert:
-  find:
   report:
-  me:
-    aliases: [я]
+  profile:
+    aliases: [me, я, профиль]
   help:
   vanish:
     aliases: [v]

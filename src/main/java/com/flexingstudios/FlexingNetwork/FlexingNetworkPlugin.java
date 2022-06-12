@@ -76,7 +76,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("gmc").setExecutor(executor);
         getCommand("gma").setExecutor(executor);
         getCommand("gmsp").setExecutor(executor);
-        getCommand("seen").setExecutor(new SeenCommand());
         getCommand("vanish").setExecutor(this.vanishCommand = new VanishCommand());
         getCommand("speed").setExecutor(new SpeedCommand());
         getCommand("tp").setExecutor(new TpCommand());
@@ -84,7 +83,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("hub").setExecutor(new HubCommand());
         getCommand("stp").setExecutor(new StpCommand());
         getCommand("donate").setExecutor(new DonateCommand());
-        getCommand("me").setExecutor(new MeCommand());
+        getCommand("profile").setExecutor(new ProfileCommand());
         getCommand("help").setExecutor(help);
 
         //getServer().getScheduler().scheduleSyncRepeatingTask(this, new MemoryFix(), 100L, 100L);

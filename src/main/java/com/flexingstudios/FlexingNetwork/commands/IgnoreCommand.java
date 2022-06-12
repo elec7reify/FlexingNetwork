@@ -1,7 +1,7 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
 import com.flexingstudios.FlexingNetwork.api.util.T;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import org.bukkit.Bukkit;
@@ -15,14 +15,14 @@ public class IgnoreCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equals("ignore")) {
             if (args.length != 1) {
-                mes.msg(sender, "&cИспользование /ignore <ник>");
+                Utilities.msg(sender, "&cИспользование /ignore <ник>");
                 return true;
             }
 
             MysqlPlayer flplayer = (MysqlPlayer) FLPlayer.get(sender.getName());
 
             if (args[0].equals("@all")) {
-                mes.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
+                Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
                 //flplayer.ignoreAll = true;
                 (FLPlayer.get(sender.getName())).settings.set(1, false);
                 return true;
@@ -31,17 +31,17 @@ public class IgnoreCommand implements CommandExecutor {
             Player player = Bukkit.getPlayerExact(args[0]);
 
             if (args[0].equalsIgnoreCase(sender.getName())) {
-                mes.msg(sender, T.error("Ошибка", "Не глупи, ты не можешь игнорировать себя"));
+                Utilities.msg(sender, T.error("Ошибка", "Не глупи, ты не можешь игнорировать себя"));
                 return true;
             }
 
             if (player == null) {
-                mes.msg(sender, "&cИгрок " + args[0] + " не найден");
+                Utilities.msg(sender, "&cИгрок " + args[0] + " не найден");
             } else if (flplayer != null) {
                 if (flplayer.ignored.contains(player.getName())) {
-                    mes.msg(sender, "Вы уже игнорируете этого игрока");
+                    Utilities.msg(sender, "Вы уже игнорируете этого игрока");
                 } else {
-                    mes.msg(sender, T.success("GOT IT!", "Теперь вы игнорируете игрока " + player.getName()));
+                    Utilities.msg(sender, T.success("GOT IT!", "Теперь вы игнорируете игрока " + player.getName()));
                     flplayer.ignored.add(player.getName());
                 }
             }
@@ -49,14 +49,14 @@ public class IgnoreCommand implements CommandExecutor {
 
         if (command.getName().equals("unignore")) {
             if (args.length != 1) {
-                mes.msg(sender, "&cИспользование /unignore <ник>");
+                Utilities.msg(sender, "&cИспользование /unignore <ник>");
                 return true;
             }
 
             MysqlPlayer flplayer = (MysqlPlayer) FLPlayer.get(sender.getName());
 
             if (args[0].equals("@all")) {
-                mes.msg(sender, T.success("GOT IT!", "Личные сообщения теперь принимаются"));
+                Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения теперь принимаются"));
                 //flplayer.ignoreAll = false;
                 (FLPlayer.get(sender.getName())).settings.set(1, true);
                 return true;
@@ -65,12 +65,12 @@ public class IgnoreCommand implements CommandExecutor {
             Player player = Bukkit.getPlayerExact(args[0]);
 
             if (player == null) {
-                mes.msg(sender, "&cИгрок " + args[0] + " не найден");
+                Utilities.msg(sender, "&cИгрок " + args[0] + " не найден");
             } else if (flplayer != null) {
                 if (!flplayer.ignored.contains(player.getName())) {
-                    mes.msg(sender, "Вы не игнорируете " + player.getName());
+                    Utilities.msg(sender, "Вы не игнорируете " + player.getName());
                 } else {
-                    mes.msg(sender, T.success("GOT IT!", "Вы больше не игнорируете игрока " + player.getName()));
+                    Utilities.msg(sender, T.success("GOT IT!", "Вы больше не игнорируете игрока " + player.getName()));
                     flplayer.ignored.remove(player.getName());
                 }
             }
@@ -80,10 +80,10 @@ public class IgnoreCommand implements CommandExecutor {
             MysqlPlayer flplayer = (MysqlPlayer) FLPlayer.get(sender.getName());
 
             if (!flplayer.ignoreAll) {
-                mes.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
+                Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
                 flplayer.ignoreAll = true;
             } else {
-                mes.msg(sender, T.success("GOT IT!", "Личные сообщения теперь принимаются"));
+                Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения теперь принимаются"));
                 flplayer.ignoreAll = false;
             }
         }

@@ -1,6 +1,6 @@
 package com.flexingstudios.FlexingNetwork.api.conf;
 
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.api.geom.Cuboid;
 import com.flexingstudios.FlexingNetwork.api.geom.Vec3f;
 import com.flexingstudios.FlexingNetwork.api.geom.Vec3i;
@@ -162,7 +162,7 @@ public class Configuration {
     }
 
     public Location getLocation(World world, String path) {
-        return mes.parseLocation(world, getString(path));
+        return Utilities.parseLocation(world, getString(path));
     }
 
     public Vec3i getVec3i(String path) {
@@ -196,7 +196,7 @@ public class Configuration {
     }
 
     public List<Location> getLocationList(World world, String path) {
-        return mes.parseLocations(world, getStringList(path));
+        return Utilities.parseLocations(world, getStringList(path));
     }
 
     public List<Vec3i> getVec3iList(String path) {

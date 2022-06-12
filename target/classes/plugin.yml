@@ -1,5 +1,5 @@
 name: FlexingNetwork
-author: Elec7reify
+author: FlexingStudios, Elec7reify
 version: '0.4.4'
 
 main: com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
@@ -19,11 +19,10 @@ commands:
   gma:
   gmsp:
   fly:
-  seen:
   alert:
   report:
-  me:
-    aliases: [я]
+  profile:
+    aliases: [me, я, профиль]
   help:
   vanish:
     aliases: [v]

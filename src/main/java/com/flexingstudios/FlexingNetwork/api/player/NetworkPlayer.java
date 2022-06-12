@@ -2,7 +2,7 @@ package com.flexingstudios.FlexingNetwork.api.player;
 
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -32,14 +32,14 @@ public interface NetworkPlayer {
     default boolean hasAndNotify(Rank rank) {
         if (getRank().has(rank))
             return true;
-        mes.msg(getBukkitPlayer(), "&cОшибка в доступе: Для этого действия необходим статус " + rank.getColor() + rank.getName());
+        Utilities.msg(getBukkitPlayer(), "&cОшибка в доступе: Для этого действия необходим статус " + rank.getColor() + rank.getName());
         return false;
     }
 
     default boolean hasAndNotify(Permission permission) {
         if (getRank().has(permission))
             return true;
-        mes.msg(getBukkitPlayer(), "&cОшибка в доступе: У вас недостаточно прав для выполнения этого действия");
+        Utilities.msg(getBukkitPlayer(), "&cОшибка в доступе: У вас недостаточно прав для выполнения этого действия");
         return false;
     }
 

@@ -5,11 +5,11 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 
-import net.minecraft.server.v1_12_R1.MinecraftKey;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,6 +38,7 @@ class WorldProtect implements Listener {
         if (!player.hasPlayedBefore())
             Fireworks.launchRandom(player.getLocation());
         event.setJoinMessage(null);
+        player.setGameMode(GameMode.ADVENTURE);
         FLPlayer networkPlayer = FLPlayer.get(player);
         this.plugin.mysql.addLoadPlayer(networkPlayer);
         ((CraftPlayer) player).addChannel("BungeeCord");
@@ -66,7 +67,7 @@ class WorldProtect implements Listener {
                         if (replaced) {
                             matcher.appendTail(sb);
                             event.setMessage(sb.toString());
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> mes.msg(event.getPlayer(), "&cЗапрещено отправлять сторонние ссылки в чат"));
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> Utilities.msg(event.getPlayer(), "&cЗапрещено отправлять сторонние ссылки в чат"));
                         }
                         break;
                     }
@@ -82,17 +83,17 @@ class WorldProtect implements Listener {
             String msgColor = "&f";
             if ((player.has(Rank.ADMIN) || player.has(Rank.SADMIN) || player.has(Rank.VADMIN))) {
                 msgColor = "&c&l";
-                event.setMessage(mes.colored(event.getMessage()));
+                event.setMessage(Utilities.colored(event.getMessage()));
             } else if (player.has(Rank.TEAM)) {
                 msgColor = "&a";
-                event.setMessage(mes.colored(event.getMessage()));
+                event.setMessage(Utilities.colored(event.getMessage()));
             }
             if (player.has(Rank.PLAYER)) {
                 event.setMessage(event.getMessage());
             } else if (player.has(Rank.CHIKIBAMBONYLA)) {
-                event.setMessage(mes.colored(event.getMessage()));
+                event.setMessage(Utilities.colored(event.getMessage()));
             }
-            event.setFormat(mes.colored("&7«&r" + player.getRank().getDisplayName() + "&r&7»&r" + " &7%1$s&r&7: " + msgColor) + "%2$s");
+            event.setFormat(Utilities.colored("&7«&r" + player.getRank().getDisplayName() + "&r&7»&r" + " &7%1$s&r&7: " + msgColor) + "%2$s");
         }
     }
 

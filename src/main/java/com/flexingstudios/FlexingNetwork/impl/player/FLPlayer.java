@@ -9,7 +9,7 @@ import com.flexingstudios.FlexingNetwork.api.player.Collectable;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
 import com.flexingstudios.FlexingNetwork.api.util.T;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import gnu.trove.set.hash.TIntHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -53,13 +53,13 @@ public abstract class FLPlayer implements NetworkPlayer {
     }
 
     public void onMetaLoaded() {
-        this.settings.load();
+        settings.load();
         loadArrows();
     }
 
     public void onMetaUpdate(String key, String value) {
         if (key.equals("settings")) {
-            this.settings.load();
+            settings.load();
         } else if (key.equals("arr.sel") || key.equals("arr.open")) {
             loadArrows();
         }
@@ -71,67 +71,67 @@ public abstract class FLPlayer implements NetworkPlayer {
     }
 
     public void addCoinsExact(int amount) {
-        this.plugin.coins.addCoins(this, amount, false);
+        plugin.coins.addCoins(this, amount, false);
     }
 
     public int getCoins() {
-        return this.coins;
+        return coins;
     }
 
     public void takeCoins(int amount) {
-        this.plugin.coins.takeCoins(this, amount, false);
+        plugin.coins.takeCoins(this, amount, false);
     }
 
     public Rank getRank() {
-        return this.rank;
+        return rank;
     }
 
     public Player getBukkitPlayer() {
-        return this.player;
+        return player;
     }
 
     public void toLobby() {
-        FlexingNetwork.toLobby(this.player);
+        FlexingNetwork.toLobby(player);
     }
 
     public void toServer(String id) {
-        FlexingNetwork.toServer(id, this.player);
+        FlexingNetwork.toServer(id, player);
     }
 
     public String getName() {
-        return this.username;
+        return username;
     }
 
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public String getPrefixedName() {
         String prefix = getPrefix();
         if (!prefix.isEmpty())
-            return this.rank.getColor() + "[" + prefix + ChatColor.RESET + this.rank.getColor() + "] " + this.username + ChatColor.RESET;
-        return this.rank.getColor() + this.username + ChatColor.RESET;
+            return rank.getColor() + "[" + prefix + ChatColor.RESET + rank.getColor() + "] " + username + ChatColor.RESET;
+        return rank.getColor() + username + ChatColor.RESET;
     }
 
     public String getPrefix() {
         String prefix = getMeta("prefix");
-        return (prefix == null) ? this.rank.getPrefix() : prefix;
+        return (prefix == null) ? rank.getPrefix() : prefix;
     }
 
     public String getColoredName() {
-        return this.rank.getColor() + this.username + ChatColor.RESET;
+        return rank.getColor() + username + ChatColor.RESET;
     }
 
     public boolean isOnline() {
-        return PLAYERS.containsKey(this.username);
+        return PLAYERS.containsKey(username);
     }
 
     public ArrowTrail getArrowTrail() {
-        return this.arrowTrail;
+        return arrowTrail;
     }
 
     public void setArrowTrail(ArrowTrail arrowTrail) {
-        if (arrowTrail != this.arrowTrail) {
+        if (arrowTrail != arrowTrail) {
             this.arrowTrail = arrowTrail;
             if (arrowTrail == null) {
                 removeMeta("arr.sel");
@@ -142,7 +142,7 @@ public abstract class FLPlayer implements NetworkPlayer {
     }
 
     public void unlockArrowTrail(ArrowTrail trail) {
-        if (this.availableArrowTrails.add(trail.getId()))
+        if (availableArrowTrails.add(trail.getId()))
             saveAvailableArrowTrails();
     }
 
@@ -150,9 +150,9 @@ public abstract class FLPlayer implements NetworkPlayer {
         String val = getMeta("arr.sel");
         if (val != null)
             try {
-                this.arrowTrail = ArrowTrail.byId(Integer.parseInt(val));
+                arrowTrail = ArrowTrail.byId(Integer.parseInt(val));
             } catch (Exception ex) {
-                this.plugin.getLogger().warning("[" + this.username + "] ArrowTrail " + val + " not exists [1]");
+                plugin.getLogger().warning("[" + username + "] ArrowTrail " + val + " not exists [1]");
                 removeMeta("arr.sel");
             }
         val = getMeta("arr.open");
@@ -160,9 +160,9 @@ public abstract class FLPlayer implements NetworkPlayer {
             boolean changed = false;
             for (String str : val.split(",")) {
                 try {
-                    this.availableArrowTrails.add(Integer.parseInt(str));
+                    availableArrowTrails.add(Integer.parseInt(str));
                 } catch (Exception ex) {
-                    this.plugin.getLogger().warning("[" + this.username + "] ArrowTrail " + val + " not exists [2]");
+                    plugin.getLogger().warning("[" + username + "] ArrowTrail " + val + " not exists [2]");
                     changed = true;
                 }
             }
@@ -174,7 +174,7 @@ public abstract class FLPlayer implements NetworkPlayer {
     private void saveAvailableArrowTrails() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
-        for (int id : this.availableArrowTrails.toArray()) {
+        for (int id : availableArrowTrails.toArray()) {
             if (first) {
                 first = false;
             } else {
@@ -186,19 +186,19 @@ public abstract class FLPlayer implements NetworkPlayer {
     }
 
     public long getLoginTime() {
-        return this.loginTime;
+        return loginTime;
     }
 
     public int getLevel() {
-        return this.level;
+        return level;
     }
 
     public int getTotalExp() {
-        return this.exp;
+        return exp;
     }
 
     public int getPartialExp() {
-        return this.exp - Leveling.getTotalExp(this.level);
+        return exp - Leveling.getTotalExp(level);
     }
 
     public void giveExp(int exp) {
@@ -219,7 +219,7 @@ public abstract class FLPlayer implements NetworkPlayer {
     public void updateExp(int given) {
         if (this.exp >= Leveling.getTotalExp(this.level + 1)) {
             this.level = Leveling.getLevel(this.exp);
-            mes.msg(this.player, T.success("Flexing&f&lWorld", "Вы получили &3" + this.level + " &fуровень!"));
+            Utilities.msg(this.player, T.success("Flexing&f&lWorld", "Вы получили &3" + this.level + " &fуровень!"));
             boolean launchFirework = true;
 
             if (launchFirework)
@@ -232,11 +232,12 @@ public abstract class FLPlayer implements NetworkPlayer {
     }
 
     public int hashCode() {
-        return this.username.hashCode();
+        return username.hashCode();
     }
 
     public String toString() {
-        return "FLPlayer{name='" + this.username + "'}";
+        return "FLPlayer{" +
+                "name='" + username + "'}";
     }
 
     public static Function<Player, FLPlayer> CONSTRUCTOR = null;

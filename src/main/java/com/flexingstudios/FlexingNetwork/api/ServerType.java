@@ -13,9 +13,7 @@ public enum ServerType {
     UNKNOWN("UNKNOWN", "UNKNOWN");
 
     private static final Map<String, ServerType> byId;
-
     private String name;
-
     private String id;
 
     static {
@@ -32,13 +30,20 @@ public enum ServerType {
         this.name = name;
     }
 
-    public String getId() {
-        return this.id;
+    /**
+     * @return The official name of the ServerType
+     */
+    public String getName() {
+        return name;
     }
 
-    public String getName() {
-        return this.name;
+    /**
+     * @return The internal ID
+     */
+    public String getId() {
+        return id;
     }
+
 
     public static ServerType byId(String id) {
         return byId.getOrDefault(id.toUpperCase(), UNKNOWN);

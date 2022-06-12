@@ -7,7 +7,7 @@ import com.flexingstudios.FlexingNetwork.api.ServerType;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Spectators;
 import com.flexingstudios.FlexingNetwork.api.util.T;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -32,7 +32,7 @@ public class TpCommand implements CommandExecutor {
                 return true;
 
             if (!networkPlayer.has(Rank.TEAM) && !Spectators.instance().contains((Player) sender)) {
-                mes.msg(sender, "&cВы можете использовать телепорт только в режиме наблюдателя");
+                Utilities.msg(sender, "&cВы можете использовать телепорт только в режиме наблюдателя");
                 return true;
             }
         }
@@ -45,7 +45,7 @@ public class TpCommand implements CommandExecutor {
                 if (target != null) {
                     teleport(sender, target);
                 } else {
-                    mes.msg(sender, "&cИгрок &f" + args[0] + "&c не найден");
+                    Utilities.msg(sender, "&cИгрок &f" + args[0] + "&c не найден");
                     }
                 }
                 return true;
@@ -54,12 +54,12 @@ public class TpCommand implements CommandExecutor {
             if (args.length == 2 && networkPlayer.getRank().has(Rank.ADMIN)) {
                 Player player1 = Bukkit.getPlayerExact(args[0]);
                 if (player1 == null) {
-                    mes.msg(sender, "&cИгрок &f" + args[0] + "&c не найден");
+                    Utilities.msg(sender, "&cИгрок &f" + args[0] + "&c не найден");
                     return true;
                 }
                 Player player2 = Bukkit.getPlayerExact(args[1]);
                 if (player2 == null) {
-                    mes.msg(sender, "&cИгрок &f" + args[1] + "&c не найден");
+                    Utilities.msg(sender, "&cИгрок &f" + args[1] + "&c не найден");
                     return true;
                 }
                 teleport(player1, player1);
@@ -77,7 +77,7 @@ public class TpCommand implements CommandExecutor {
     private void help(CommandSender sender) {
         List<String> list = new ArrayList<>();
         list.add("&cИспользование: /tp <игрок>");
-        mes.msg(sender, list);
+        Utilities.msg(sender, list);
     }
 
     private void teleport(CommandSender sender, String[] loc) {
@@ -103,7 +103,7 @@ public class TpCommand implements CommandExecutor {
 
     private void teleport(CommandSender sender, Player entity) {
         teleport(sender, entity.getLocation());
-        mes.msg(sender, T.success("GOT IT!", "&fВы телепортированы к игркоку &a" + entity.getName()));
+        Utilities.msg(sender, T.success("GOT IT!", "&fВы телепортированы к игркоку &a" + entity.getName()));
     }
 
     private void teleport(CommandSender sender, Location loc) {

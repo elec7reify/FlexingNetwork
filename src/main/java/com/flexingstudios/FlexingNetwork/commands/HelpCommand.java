@@ -3,7 +3,7 @@ package com.flexingstudios.FlexingNetwork.commands;
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -41,7 +41,7 @@ public class HelpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            mes.msg(sender, "&cPlayer only commands!");
+            Utilities.msg(sender, "&cPlayer only commands!");
             return true;
         }
 
@@ -57,7 +57,7 @@ public class HelpCommand implements CommandExecutor {
                 if (page < 0)
                     page = 0;
             } catch (NumberFormatException numberFormatException) {}
-        mes.msg(sender, "&3============== &fПомощь &7[" + (page + 1) + "&8/&7" + (pages + 1) + "] &3==============");
+        Utilities.msg(sender, "&3============== &fПомощь &7[" + (page + 1) + "&8/&7" + (pages + 1) + "] &3==============");
         int index = page * 9;
 
         for (int i = index; i < cmds.size() && i < index + 9; i++) {
@@ -82,8 +82,8 @@ public class HelpCommand implements CommandExecutor {
         String help;
 
         Desc(String command, String help) {
-            this.command = mes.colored(command);
-            this.help = mes.colored(help);
+            this.command = Utilities.colored(command);
+            this.help = Utilities.colored(help);
         }
 
         public abstract boolean canUse(NetworkPlayer param1NetworkPlayer);

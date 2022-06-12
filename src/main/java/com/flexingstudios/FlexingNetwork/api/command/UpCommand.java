@@ -2,7 +2,7 @@ package com.flexingstudios.FlexingNetwork.api.command;
 
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -120,13 +120,13 @@ public abstract class UpCommand implements CommandExecutor {
                         return true;
                 }
                 if (inform != null)
-                    mes.msg(inform, "&cОтказ в доступе: Необходим статус " + this.ranks[0].getDisplayName());
+                    Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + this.ranks[0].getDisplayName());
                 return false;
             }
             if (rank.has(this.ranks[0]))
                 return true;
             if (inform != null)
-                mes.msg(inform, "&cОтказ в доступе: Необходим статус " + this.ranks[0].getDisplayName());
+                Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + this.ranks[0].getDisplayName());
             return false;
         }
     }

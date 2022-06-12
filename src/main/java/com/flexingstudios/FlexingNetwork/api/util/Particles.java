@@ -48,7 +48,7 @@ public enum Particles {
             }
         } else {
             for (Player player : players)
-                mes.sendPacket(player, packet);
+                Utilities.sendPacket(player, packet);
         }
     }
 }

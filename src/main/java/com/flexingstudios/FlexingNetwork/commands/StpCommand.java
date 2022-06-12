@@ -2,7 +2,7 @@ package com.flexingstudios.FlexingNetwork.commands;
 
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.google.common.collect.Sets;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -35,20 +35,20 @@ public class StpCommand implements CommandExecutor {
                     tpToServer(sender, target.substring(1).toUpperCase());
                     return true;
                 }
-                mes.msg(sender, "&aТелепортация на сервер " + target);
+                Utilities.msg(sender, "&aТелепортация на сервер " + target);
 
         return true;
     }
 
     private static void tpToServer(CommandSender sender, String server) {
         if (server.equals(FlexingNetwork.lobby().getServerId())) {
-            mes.msg(sender, "&6Вы уже на нужном сервере");
+            Utilities.msg(sender, "&6Вы уже на нужном сервере");
             return;
         }
         Set<String> allowed = FlexingNetwork.getPlayer(sender.getName()).has(Rank.VADMIN) ? ALLOWED_STP : ALLOWED_SERVER_TYPES;
 
         if (!allowed.contains(server.split("_")[0])) {
-            mes.msg(sender, "&cВы не можете телепортироваться на сервер " + server + ". В доступе отказано");
+            Utilities.msg(sender, "&cВы не можете телепортироваться на сервер " + server + ". В доступе отказано");
             return;
         }
         FlexingNetwork.toServer(server, (Player) sender);

@@ -1,11 +1,10 @@
 package com.flexingstudios.FlexingNetwork.tasks;
 
-import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.ServerType;
 import com.flexingstudios.FlexingNetwork.api.event.ServerRestartEvent;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -42,9 +41,9 @@ public class Restart {
         }
         Bukkit.getPluginManager().callEvent(new ServerRestartEvent(ServerRestartEvent.State.COUNTDOWN, forced));
         Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> {
-            mes.bcast("&b------------------------------"); // 30
-            mes.bcast("&fСервер будет перезагружен через &35 минут&f!");
-            mes.bcast("&b------------------------------"); // 30
+            Utilities.bcast("&b------------------------------"); // 30
+            Utilities.bcast("&fСервер будет перезагружен через &35 минут&f!");
+            Utilities.bcast("&b------------------------------"); // 30
         });
 
         ScheduledExecutorService executor = (FlexingNetworkPlugin.getInstance()).scheduledExecutorService;
@@ -66,7 +65,7 @@ public class Restart {
     }
 
     private static void bcast(String time) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> mes.bcast("&fСервер будет перезагружен через &3" + time + "&f!"));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> Utilities.bcast("&fСервер будет перезагружен через &3" + time + "&f!"));
     }
 
     private static void doRestart() {

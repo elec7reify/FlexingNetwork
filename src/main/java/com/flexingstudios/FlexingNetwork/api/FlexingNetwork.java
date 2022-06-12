@@ -53,14 +53,21 @@ public class FlexingNetwork {
         return getPlayer(who.getName()).has(permission);
     }
 
+    /**
+     * @param player the minecraft username of the player.
+     * @return proxy player
+     */
+    @Deprecated
     public static NetworkPlayer getPlayer(String player) {
         return FLPlayer.get(player);
     }
 
+    @Deprecated
     public static NetworkPlayer getPlayer(Player player) {
         return FLPlayer.get(player);
     }
 
+    @Deprecated
     public static NetworkPlayer getPlayer(int userid) {
         return FLPlayer.IDS.get(Integer.valueOf(userid));
     }

@@ -16,9 +16,9 @@ import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class mes {
+public class Utilities {
 
-    private mes() {
+    private Utilities() {
 
     }
 
@@ -68,6 +68,7 @@ public class mes {
     public static void msg(CommandSender cs, String... msg) {
         cs.sendMessage(colored(msg));
     }
+
 
     public static void msg(CommandSender cs, List<String> msg) {
         for (String str : msg)

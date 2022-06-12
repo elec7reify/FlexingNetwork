@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,9 +22,9 @@ public class Items {
 
     public static ItemStack name(ItemStack is, String name, String... lore) {
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(mes.colored(name));
+        im.setDisplayName(Utilities.colored(name));
         if (lore.length > 0)
-            im.setLore(Arrays.asList(mes.colored(lore)));
+            im.setLore(Arrays.asList(Utilities.colored(lore)));
         is.setItemMeta(im);
         return is;
     }
@@ -36,9 +35,9 @@ public class Items {
 
     public static ItemStack name(ItemStack is, String name, List<String> lore) {
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(mes.colored(name));
+        im.setDisplayName(Utilities.colored(name));
         if (!lore.isEmpty())
-            im.setLore(mes.colored(lore));
+            im.setLore(Utilities.colored(lore));
         is.setItemMeta(im);
         return is;
     }
@@ -81,9 +80,9 @@ public class Items {
         ItemMeta im = is.getItemMeta();
         List<String> lore0 = im.getLore();
         if (lore0 == null) {
-            lore0 = mes.colored(lore);
+            lore0 = Utilities.colored(lore);
         } else {
-            lore0.addAll(mes.colored(lore));
+            lore0.addAll(Utilities.colored(lore));
         }
         im.setLore(lore0);
         is.setItemMeta(im);

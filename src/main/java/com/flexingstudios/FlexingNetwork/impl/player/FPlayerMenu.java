@@ -5,7 +5,7 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -28,8 +28,8 @@ public class FPlayerMenu implements InvMenu {
         this.inv.setItem(22, Items.name(Items.head(String.valueOf(player)), "Ваш профиль",
                 "&fВаш ник - &e" + player.getName(),
                 "&fВаша привилегия - &r" + player.getRank().getDisplayName(),
-                "&fФлекс-коинов - &e" + mes.pluralsCoins(player.getCoins()),
-                "&b&lУровень " + player.getLevel() + " (" + (int)(progress * 100.0F) + "%) " + mes.genBar(48, progress, '|', "&7", "&a")));
+                "&fФлекс-коинов - &e" + Utilities.pluralsCoins(player.getCoins()),
+                "&b&lУровень " + player.getLevel() + " (" + (int)(progress * 100.0F) + "%) " + Utilities.genBar(48, progress, '|', "&7", "&a")));
     }
 
     @Override

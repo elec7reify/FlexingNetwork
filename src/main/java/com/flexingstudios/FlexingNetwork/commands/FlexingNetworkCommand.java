@@ -10,7 +10,7 @@ import com.flexingstudios.FlexingNetwork.api.command.UpCommand;
 import com.flexingstudios.FlexingNetwork.api.command.dataCommand;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.ParsedTime;
-import com.flexingstudios.FlexingNetwork.api.util.mes;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.tasks.Restart;
 import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
@@ -50,44 +50,44 @@ public class FlexingNetworkCommand extends UpCommand {
     @CmdSub(value = {"tolobby"}, rank = Rank.VADMIN)
     private void toLobby(dataCommand data) {
         if ((data.getArgs().length == 0)) {
-            mes.msg(data.getSender(), "&cИспользование /" + data.getLabel() + " " + data.getSub() + " <игрок>");
+            Utilities.msg(data.getSender(), "&cИспользование /" + data.getLabel() + " " + data.getSub() + " <игрок>");
             return;
         }
         Player player = this.plugin.getServer().getPlayerExact(data.getArgs()[0]);
         if (player != null) {
             FlexingNetwork.toLobby(player);
         } else {
-            mes.msg(data.getSender(), "&cИгрок " + data.getArgs()[0] + " не найден");
+            Utilities.msg(data.getSender(), "&cИгрок " + data.getArgs()[0] + " не найден");
         }
     }
 
     @CmdSub(value = {"tolobbyall"}, rank = Rank.ADMIN)
     private void toLobbyAll(dataCommand data) {
-        mes.msg(data.getSender(), "&aВсе игроки отправлены в лобби ");
+        Utilities.msg(data.getSender(), "&aВсе игроки отправлены в лобби ");
         FlexingNetwork.toLobby((Player) Bukkit.getOnlinePlayers());
     }
 
     @CmdSub(value = {"toserver"}, rank = Rank.ADMIN)
     private void toServer(dataCommand data) {
         if((data.getArgs().length != 2)) {
-            mes.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <сервер>");
+            Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <сервер>");
             return;
         }
         Player player = this.plugin.getServer().getPlayerExact(data.getArgs()[0]);
         if (player != null) {
             FlexingNetwork.toServer(data.getArgs()[1], player);
         } else {
-            mes.msg(data.getSender(), "&cИгрок " + data.getArgs()[0] + " не найден");
+            Utilities.msg(data.getSender(), "&cИгрок " + data.getArgs()[0] + " не найден");
         }
     }
 
     @CmdSub(value = {"toserverall"}, rank = Rank.ADMIN)
     private void toServerAll(dataCommand data) {
         if ((data.getArgs()).length != 1) {
-            mes.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <сервер>");
+            Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <сервер>");
             return;
         }
-        mes.msg(data.getSender(), "&aВсе игроки отправлены на сервер " + data.getArgs()[0]);
+        Utilities.msg(data.getSender(), "&aВсе игроки отправлены на сервер " + data.getArgs()[0]);
         for (Player player : Bukkit.getOnlinePlayers())
             FlexingNetwork.toServer(data.getArgs()[0], player);
     }
@@ -95,7 +95,7 @@ public class FlexingNetworkCommand extends UpCommand {
     @CmdSub(value = {"addcoins"}, rank = Rank.ADMIN)
     private void addCoins(dataCommand data) {
         if ((data.getArgs()).length != 2) {
-            mes.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
+            Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
             return;
         }
         int coins = Integer.parseInt(data.getArgs()[1]);
@@ -112,7 +112,7 @@ public class FlexingNetworkCommand extends UpCommand {
     @CmdSub(value = {"giveexp"}, rank = Rank.SADMIN)
     private void giveExp(dataCommand data) {
         if ((data.getArgs()).length != 2) {
-            mes.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
+            Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
             return;
         }
         int exp = Integer.parseInt(data.getArgs()[1]);
@@ -131,15 +131,15 @@ public class FlexingNetworkCommand extends UpCommand {
     @CmdSub(value = {"givestatus"}, rank = Rank.ADMIN)
     private void givestatus(dataCommand data) {
         if ((data.getArgs().length != 2)) {
-            mes.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> [Статус]");
+            Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> [Статус]");
             return;
         }
         if (data.getArgs()[1] == null) {
-            mes.msg(data.getSender(), "&aВсе доступные статусы: &fPLAYER, VIP, PREMIUM, CREATIVE, MODERATOR, CHIKIBAMBONI,", " ADMINOBAMBONI, CHIKIBAMBONYLA, SPONSOR, OWNER, CHIKIBOMBASTER,", " GOD, TEAM, VADMIN, SADMIN, ADMIN");
+            Utilities.msg(data.getSender(), "&aВсе доступные статусы: &fPLAYER, VIP, PREMIUM, CREATIVE, MODERATOR, CHIKIBAMBONI,", " ADMINOBAMBONI, CHIKIBAMBONYLA, SPONSOR, OWNER, CHIKIBOMBASTER,", " GOD, TEAM, VADMIN, SADMIN, ADMIN");
         } else {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + data.getArgs()[0] + " parent set " + data.getArgs()[1]);
             FlexingNetwork.mysql().query("UPDATE authme SET status='" + data.getArgs()[1] + "' WHERE username = '" + data.getArgs()[0] + "'");
-            data.getSender().sendMessage(mes.colored("&aСтатус &f" + data.getArgs()[1] + " &aвыдан игроку &f" + data.getArgs()[0] + "&a!"));
+            data.getSender().sendMessage(Utilities.colored("&aСтатус &f" + data.getArgs()[1] + " &aвыдан игроку &f" + data.getArgs()[0] + "&a!"));
         }
     }
 
@@ -152,14 +152,14 @@ public class FlexingNetworkCommand extends UpCommand {
         lines.add("&bПамять: &f" + ((runtime.totalMemory() - runtime.freeMemory()) / 1024L / 1024L) + " MB / " + (runtime.totalMemory() / 1024L / 1024L) + " MB up to " + (runtime.maxMemory() / 1024L / 1024L) + " MB");
         lines.add("&bПодключение к бд: " + (this.plugin.mysql.isConnected() ? "&aактивно" : "&cразорвано"));
         lines.add("&bЗапросов к бд: &f" + this.plugin.mysql.getExecutedQueries());
-        mes.msg(data.getSender(), lines);
+        Utilities.msg(data.getSender(), lines);
     }
 
     @CmdSub(value = {"gc"}, rank = Rank.ADMIN)
     private void gc(dataCommand data) {
         long start = System.nanoTime();
         System.gc();
-        mes.msg(data.getSender(), "System " + F.formatFloat((float) (System.nanoTime() - start) / 1000000.0F, 2) + " мс.");
+        Utilities.msg(data.getSender(), "System " + F.formatFloat((float) (System.nanoTime() - start) / 1000000.0F, 2) + " мс.");
     }
 
     @CmdSub(value = {"debug"}, rank = Rank.ADMIN)
@@ -167,10 +167,10 @@ public class FlexingNetworkCommand extends UpCommand {
         try {
             Debug group = Debug.valueOf(data.getArgs()[0].toUpperCase());
             if (group.isEnabled()) {
-                mes.msg(data.getSender(), "&e" + group.name() + " дебаг &cвыключен.");
+                Utilities.msg(data.getSender(), "&e" + group.name() + " дебаг &cвыключен.");
                 group.setEnabled(false);
                 } else {
-                    mes.msg(data.getSender(), "&e" + group.name() + " дебаг &aвключен.");
+                    Utilities.msg(data.getSender(), "&e" + group.name() + " дебаг &aвключен.");
                     group.setEnabled(true);
                     }
                 } catch (Exception e) {
@@ -185,7 +185,7 @@ public class FlexingNetworkCommand extends UpCommand {
                         }
                     }
                     str.append("&e>");
-                    mes.msg(data.getSender(), "&e/" + data.getLabel() + " debug " + str);
+                    Utilities.msg(data.getSender(), "&e/" + data.getLabel() + " debug " + str);
                 }
             }
 
