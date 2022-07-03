@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 
 public class Configuration {
     private static final Function<String, Vec3i> VEC3I_PARSER;
-
     private static final Function<String, Vec3f> VEC3F_PARSER;
-
-    private final ConfigurationSection config;
+    private ConfigurationSection config;
+    private YamlConfiguration yml;
+    private File cfg;
 
     static {
         VEC3I_PARSER = (str -> {
@@ -41,46 +41,96 @@ public class Configuration {
     }
 
     public Configuration(Plugin plugin) {
-        this(plugin, "config.yml");
+        this(plugin, "config");
     }
 
     public Configuration(Plugin plugin, String file) {
-        File file0 = new File(plugin.getDataFolder(), file);
+        File file0 = new File(plugin.getDataFolder(), file + ".yml");
         if (!file0.exists())
             try {
                 plugin.getDataFolder().mkdir();
-                Files.copy(plugin.getResource(file), file0.toPath(), new java.nio.file.CopyOption[0]);
+                Files.copy(plugin.getResource(file + ".yml"), file0.toPath(), new java.nio.file.CopyOption[0]);
             } catch (IOException e) {
                 plugin.getLogger().log(Level.SEVERE, null, e);
             }
-        this.config = YamlConfiguration.loadConfiguration(file0);
+
+        config = YamlConfiguration.loadConfiguration(file0);
+    }
+
+    public Configuration(Plugin plugin, String name, String dir) {
+        File d = new File(dir);
+        if (!d.exists()) {
+            if (!d.mkdirs()) {
+                plugin.getLogger().log(Level.SEVERE, "Could not create " + d.getPath());
+                return;
+            }
+        }
+
+        cfg = new File(dir, name + ".yml");
+        if (!cfg.exists()) {
+            plugin.getLogger().log(Level.INFO, "Creating " + cfg.getPath());
+            try {
+                if (!cfg.createNewFile()) {
+                    plugin.getLogger().log(Level.SEVERE, "Could not create " + cfg.getPath());
+                    return;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        yml = YamlConfiguration.loadConfiguration(cfg);
+        yml.options().copyDefaults(true);
     }
 
     public Configuration(File file) {
-        this.config = YamlConfiguration.loadConfiguration(file);
+        config = YamlConfiguration.loadConfiguration(file);
     }
 
     public Configuration(ConfigurationSection config) {
         this.config = config;
     }
 
+
+    /**
+     * Save config changes to file
+     */
+    public void save() {
+        try {
+            yml.save(cfg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Get yml instance
+     */
+    public YamlConfiguration getYml() {
+        return yml;
+    }
+
+    public void addDefault(String path, Object value) {
+        yml.addDefault(path, value);
+    }
+
     public Set<String> getKeys(boolean deep) {
-        return this.config.getKeys(deep);
+        return config.getKeys(deep);
     }
 
     public Map<String, Object> getValues(boolean deep) {
-        return this.config.getValues(deep);
+        return config.getValues(deep);
     }
 
     public List<Configuration> getConfigList(String path) {
         List<Configuration> list = new LinkedList<>();
-        for (Map<?, ?> map : (Iterable<Map<?, ?>>)this.config.getMapList(path))
-            list.add(new Configuration(this.config.createSection(path, map)));
+        for (Map<?, ?> map : config.getMapList(path))
+            list.add(new Configuration(config.createSection(path, map)));
         return list;
     }
 
     public boolean contains(String path) {
-        return this.config.contains(path);
+        return config.contains(path);
     }
 
     public Object get(String path) {
@@ -88,7 +138,7 @@ public class Configuration {
     }
 
     public Object get(String path, Object def) {
-        return this.config.get(path, def);
+        return config.get(path, def);
     }
 
     public boolean getBoolean(String path) {
@@ -96,7 +146,7 @@ public class Configuration {
     }
 
     public boolean getBoolean(String path, boolean def) {
-        return this.config.getBoolean(path, def);
+        return config.getBoolean(path, def);
     }
 
     public int getInt(String path) {
@@ -104,7 +154,7 @@ public class Configuration {
     }
 
     public int getInt(String path, int def) {
-        return this.config.getInt(path, def);
+        return config.getInt(path, def);
     }
 
     public long getLong(String path) {
@@ -112,7 +162,7 @@ public class Configuration {
     }
 
     public long getLong(String path, long def) {
-        return this.config.getLong(path, def);
+        return config.getLong(path, def);
     }
 
     public double getDouble(String path) {
@@ -120,7 +170,7 @@ public class Configuration {
     }
 
     public double getDouble(String path, double def) {
-        return this.config.getDouble(path, def);
+        return config.getDouble(path, def);
     }
 
     public float getFloat(String path) {
@@ -128,25 +178,25 @@ public class Configuration {
     }
 
     public float getFloat(String path, float def) {
-        String str = this.config.getString(path, null);
+        String str = config.getString(path, null);
         if (str == null)
             return def;
         return Float.parseFloat(str);
     }
 
     public Configuration getSection(String path) {
-        ConfigurationSection sec = this.config.getConfigurationSection(path);
+        ConfigurationSection sec = config.getConfigurationSection(path);
         if (sec == null)
             return null;
         return new Configuration(sec);
     }
 
     public Configuration createSection(String path, Map<?, ?> map) {
-        return new Configuration(this.config.createSection(path, map));
+        return new Configuration(config.createSection(path, map));
     }
 
     public Configuration createSection(String path) {
-        return new Configuration(this.config.createSection(path));
+        return new Configuration(config.createSection(path));
     }
 
     public String getString(String path) {
@@ -154,7 +204,14 @@ public class Configuration {
     }
 
     public String getString(String path, String def) {
-        return this.config.getString(path, def);
+        return yml.getString(path, def);
+    }
+
+    /**
+     * Reload configuration.
+     */
+    public void reload() {
+        yml = YamlConfiguration.loadConfiguration(cfg);
     }
 
     public World getWorld(String path) {
@@ -188,11 +245,11 @@ public class Configuration {
     }
 
     public List<Integer> getIntegerList(String path) {
-        return this.config.getIntegerList(path);
+        return config.getIntegerList(path);
     }
 
     public List<String> getStringList(String path) {
-        return this.config.getStringList(path);
+        return config.getStringList(path);
     }
 
     public List<Location> getLocationList(World world, String path) {
@@ -212,7 +269,7 @@ public class Configuration {
     }
 
     public List<Cuboid> getCuboidList(String path) {
-        return (List<Cuboid>)getStringList(path).stream()
+        return getStringList(path).stream()
                 .map(str -> {
                     String[] s = str.split(";", 2);
                     return new Cuboid(VEC3I_PARSER.apply(s[0]), VEC3I_PARSER.apply(s[1]));
@@ -220,6 +277,6 @@ public class Configuration {
     }
 
     public ConfigurationSection getHandle() {
-        return this.config;
+        return config;
     }
 }

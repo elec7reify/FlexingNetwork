@@ -31,7 +31,7 @@ public class LobbyProtector implements Listener {
 
     @EventHandler
     private void onPluginDisable(PluginDisableEvent event) {
-        if (event.getPlugin().equals(this.plugin))
+        if (event.getPlugin().equals(plugin))
             instance = null;
     }
 

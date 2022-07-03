@@ -3,11 +3,17 @@ package com.flexingstudios.FlexingNetwork;
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.Lobby;
 import com.flexingstudios.FlexingNetwork.api.updater.UpdateWatcher;
+import com.flexingstudios.FlexingNetwork.api.util.Reflect;
 import com.flexingstudios.FlexingNetwork.commands.*;
+import com.flexingstudios.FlexingNetwork.friends.commands.FriendCommand;
 import com.flexingstudios.FlexingNetwork.friends.listeners.GUIListener;
 import com.flexingstudios.FlexingNetwork.impl.FMetrics;
+import com.flexingstudios.FlexingNetwork.impl.languages.Deutsch;
+import com.flexingstudios.FlexingNetwork.impl.languages.LangListener;
+import com.flexingstudios.FlexingNetwork.impl.languages.Russian;
 import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
 import com.flexingstudios.FlexingNetwork.impl.player.*;
 import com.flexingstudios.FlexingNetwork.listeners.*;
@@ -16,8 +22,15 @@ import com.flexingstudios.FlexingNetwork.tasks.PlayerMetaSaver;
 import com.flexingstudios.FlexingNetwork.tasks.Restart;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -37,20 +50,42 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public VanishCommand vanishCommand;
     public static Connection connection;
 
-    @Override
-    public void onEnable() {
+    public void onLoad() {
         instance = this;
 
-        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        this.config = new Config(this);
-        this.metrics = new FMetrics(this);
-        this.mysql = new MysqlWorker(this);
-        this.coins = new FCoins(this);
-        this.expBuffer = new ExpBuffer(this);
-        this.help = new HelpCommand();
-        this.lobby = new MysqlLobby(this);
-        this.updateWatcher = new UpdateWatcher(this);
-        this.mysql.start();
+        Class<?> cEntity = Reflect.findClass("net.minecraft.server.v1_12_R1.Entity");
+        if (((Integer)Reflect.get(cEntity, "entityCount")).intValue() == 0)
+            Reflect.set(cEntity, "entityCount", Integer.valueOf(1));
+        String vmname = ManagementFactory.getRuntimeMXBean().getName();
+        String pid = vmname.split("@")[0];
+        File pidfile = new File("pid");
+        if (pidfile.exists())
+            pidfile.delete();
+        try {
+            Files.write(pidfile.toPath(), pid.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Runtime.getRuntime().addShutdownHook(new Thread(pidfile::delete, "FlexingNetwork pid deleter"));
+
+        new Russian();
+        new Deutsch();
+    }
+
+    @Override
+    public void onEnable() {
+        onLoad();
+
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        config = new Config(this);
+        metrics = new FMetrics(this);
+        mysql = new MysqlWorker(this);
+        coins = new FCoins(this);
+        expBuffer = new ExpBuffer(this);
+        help = new HelpCommand();
+        lobby = new MysqlLobby(this);
+        updateWatcher = new UpdateWatcher(this);
+        mysql.start();
         FLPlayer.CONSTRUCTOR = MysqlPlayer::new;
         BungeeBridge bungeeBridge = new BungeeBridge();
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -62,6 +97,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ArrowTrailListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
+        getServer().getPluginManager().registerEvents(new LangListener(), this);
 
         MessageCommand messageCommand = new MessageCommand();
         CommandExecutor executor = new GamemodeCommand();
@@ -84,6 +120,8 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("stp").setExecutor(new StpCommand());
         getCommand("donate").setExecutor(new DonateCommand());
         getCommand("profile").setExecutor(new ProfileCommand());
+        getCommand("friend").setExecutor(new FriendCommand());
+        getCommand("language").setExecutor(new LanguageCommand());
         getCommand("help").setExecutor(help);
 
         //getServer().getScheduler().scheduleSyncRepeatingTask(this, new MemoryFix(), 100L, 100L);
@@ -133,13 +171,13 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
-        this.getServer().getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord", new BungeeBridge());
-        this.coins.finish();
-        this.expBuffer.finish();
-        this.metrics.flush();
-        this.mysql.finish();
-        this.scheduledExecutorService.shutdownNow();
+        getServer().getMessenger().unregisterOutgoingPluginChannel(this);
+        getServer().getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord", new BungeeBridge());
+        coins.finish();
+        expBuffer.finish();
+        metrics.flush();
+        mysql.finish();
+        scheduledExecutorService.shutdownNow();
         /*try {
             connection.close();
         } catch (SQLException e) {

@@ -39,6 +39,7 @@ public class Restart {
             future.cancel(true);
             future = null;
         }
+
         Bukkit.getPluginManager().callEvent(new ServerRestartEvent(ServerRestartEvent.State.COUNTDOWN, forced));
         Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> {
             Utilities.bcast("&b------------------------------"); // 30
@@ -76,7 +77,8 @@ public class Restart {
             for (Player player : Bukkit.getOnlinePlayers())
                 player.kickPlayer(ChatColor.RED + "Перезагрузка сервера");
         } else if (forced) {
-            FlexingNetwork.toLobby((Player) Bukkit.getOnlinePlayers());
+            for (Player player : Bukkit.getOnlinePlayers())
+                FlexingNetwork.toLobby(player);
         } else {
             for (Player player : Bukkit.getOnlinePlayers())
                 player.kickPlayer(ChatColor.RED + "Перезагрузка сервера");

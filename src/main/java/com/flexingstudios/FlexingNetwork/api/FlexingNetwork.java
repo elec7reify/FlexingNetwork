@@ -54,20 +54,28 @@ public class FlexingNetwork {
     }
 
     /**
+     *
      * @param player the minecraft username of the player.
      * @return proxy player
      */
-    @Deprecated
     public static NetworkPlayer getPlayer(String player) {
         return FLPlayer.get(player);
     }
 
-    @Deprecated
+    /**
+     *
+     * @param player player entity
+     * @return proxy player
+     */
     public static NetworkPlayer getPlayer(Player player) {
         return FLPlayer.get(player);
     }
 
-    @Deprecated
+    /**
+     *
+     * @param userid of the player
+     * @return proxy player
+     */
     public static NetworkPlayer getPlayer(int userid) {
         return FLPlayer.IDS.get(Integer.valueOf(userid));
     }

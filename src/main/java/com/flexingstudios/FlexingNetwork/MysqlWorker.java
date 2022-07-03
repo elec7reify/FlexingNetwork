@@ -6,6 +6,7 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
 import com.flexingstudios.FlexingNetwork.api.mysql.SelectCallback;
 import com.flexingstudios.FlexingNetwork.api.mysql.UpdateCallback;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import com.flexingstudios.Commons.F;
@@ -18,7 +19,7 @@ public class MysqlWorker extends MysqlThread {
     private long queryStartTime = 0L;
 
     MysqlWorker(FlexingNetworkPlugin plugin) {
-        super(plugin, (MysqlThread.MysqlConfig)new MysqlThread.MysqlConfigSupplier(() -> plugin.config.mysqlUrl, () -> plugin.config.mysqlUsername, () -> plugin.config.mysqlPassword));
+        super(plugin, new MysqlThread.MysqlConfigSupplier(() -> plugin.config.mysqlUrl, () -> plugin.config.mysqlUsername, () -> plugin.config.mysqlPassword));
         useUnicode();
         this.plugin = plugin;
         SelectCallback.class.getName();
@@ -41,16 +42,16 @@ public class MysqlWorker extends MysqlThread {
     @Override
     protected String onPreQuery(String query) {
         if (Debug.MYSQL.isEnabled())
-            this.queryStartTime = System.nanoTime();
+            queryStartTime = System.nanoTime();
         return query;
     }
 
     @Override
     protected void onPostQuery(String query, boolean success) {
         if (success)
-            this.queryCounter++;
+            queryCounter++;
         if (Debug.MYSQL.isEnabled())
-            this.logger.info("- [" + F.formatFloat((float)(System.nanoTime() - this.queryStartTime) / 1000000.0F, 1) + " ms.] " + query);
+            logger.info("- [" + F.formatFloat((float)(System.nanoTime() - queryStartTime) / 1000000.0F, 1) + " ms.] " + query);
     }
 
     public int getExecutedQueries() {
@@ -71,6 +72,7 @@ public class MysqlWorker extends MysqlThread {
                 player.coins += rs.getInt("coins");
                 player.exp = rs.getInt("exp");
                 player.level = Leveling.getLevel(player.exp);
+                //player.playerLanguage = Language.getPlayerLanguage(player.player.getUniqueId());
                 select("SELECT `key`, `value` FROM `users_meta` WHERE `userid` = " + player.getId(), null);
             } else {
                 query("INSERT INTO authme (username, coins) VALUES ('" + player.getName() + "', 0)");
@@ -89,21 +91,21 @@ public class MysqlWorker extends MysqlThread {
 
         @Override
         public void run() {
-            if (!this.player.isOnline())
+            if (!player.isOnline())
                 return;
-            this.player.onMetaLoaded();
-            if (this.player.rank == Rank.PLAYER)
+            player.onMetaLoaded();
+            if (player.rank == Rank.PLAYER)
                 return;
             if ((FlexingNetwork.features()).CHANGE_PLAYER_LIST_NAMES.isEnabled()) {
-                String name = this.player.rank.getColor() + this.player.rank.getName() + " " + this.player.username;
+                String name = player.rank.getColor() + player.rank.getName() + " " + player.username;
                 if (name.length() > 16)
                     name = name.substring(0, 15);
-                this.player.player.setPlayerListName(name);
+                player.player.setPlayerListName(name);
             }
-            this.player.player.setDisplayName(this.player.getPrefixedName());
-            this.player.player.addAttachment(MysqlWorker.this.plugin).setPermission("flexingworld." + this.player.rank.name().toLowerCase(), true);
-            if (this.player.getMeta("pm-ignore") != null)
-                this.player.ignoreAll = true;
+            player.player.setDisplayName(this.player.getPrefixedName());
+            player.player.addAttachment(MysqlWorker.this.plugin).setPermission("flexingworld." + player.rank.name().toLowerCase(), true);
+            if (player.getMeta("pm-ignore") != null)
+                player.ignoreAll = true;
         }
     }
 }

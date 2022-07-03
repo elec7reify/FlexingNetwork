@@ -64,7 +64,7 @@ public class GUIListener implements Listener {
             } else {
                 return;
             }
-        } else if(e.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lIncoming Friend Requests"))) {
+        } else if (e.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lIncoming Friend Requests"))) {
             e.setCancelled(true);
             ArrayList<String> lore = new ArrayList<String>();
             lore.add(Colour.translate("&9Left-Click to accept."));
@@ -90,7 +90,7 @@ public class GUIListener implements Listener {
             } else {
                 return;
             }
-        } else if(e.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lOutgoing Friend Requests"))) {
+        } else if (e.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lOutgoing Friend Requests"))) {
             e.setCancelled(true);
             ArrayList<String> lore = new ArrayList<String>();
             lore.add(Colour.translate("&9Left-Click to delete."));
@@ -114,11 +114,11 @@ public class GUIListener implements Listener {
 
     @EventHandler
     public void onInvOpen(InventoryOpenEvent event) {
-        if(event.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lFriends List"))) {
+        if (event.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lFriends List"))) {
             GUI.friendlistguislots = 0;
-        } else if(event.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lIncoming Friend Requests"))) {
+        } else if (event.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lIncoming Friend Requests"))) {
             GUI.irguislots = 0;
-        } else if(event.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lOutgoing Friend Requests"))) {
+        } else if (event.getInventory().getTitle().equalsIgnoreCase(Colour.translate("&9&lOutgoing Friend Requests"))) {
             GUI.orguislots = 0;
         }
     }

@@ -1,12 +1,16 @@
 package com.flexingstudios.FlexingNetwork.impl.player;
 
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
+import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MysqlPlayer extends FLPlayer {
@@ -65,6 +69,23 @@ public class MysqlPlayer extends FLPlayer {
         for (Map.Entry<String, MetaValue> entry : this.meta.entrySet())
             newMap.put(entry.getKey(), (entry.getValue()).value);
         return newMap;
+    }
+
+    @Override
+    public void setLanguage(UUID uuid, String iso) {
+        //Player p = Bukkit.getPlayer(uuid);
+        Player player = Bukkit.getPlayer(uuid);
+        FLPlayer flPlayer = FLPlayer.get(player);
+        FlexingNetwork.mysql().query("UPDATE authme SET language = '" + iso + "' WHERE username = '" + player.getName() + "'");
+    }
+
+    @Override
+    public String getLanguage(UUID uuid) {
+        Player p = Bukkit.getPlayer(uuid);
+        FLPlayer flPlayer = FLPlayer.get(p.getPlayer());
+        FlexingNetwork.mysql().query("SELECT language FROM authme WHERE id = " + flPlayer.getId());
+
+        return Language.getDefaultLanguage().getIso();
     }
 
     public void dispose() {

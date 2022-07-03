@@ -6,6 +6,7 @@ import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
 import com.flexingstudios.FlexingNetwork.api.player.Collectable;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
 import com.flexingstudios.FlexingNetwork.api.util.T;
@@ -39,6 +40,7 @@ public abstract class FLPlayer implements NetworkPlayer {
     public int lastDamagerPurgeTask = -1;
     public long lastDamageFromPlayer = 0L;
     public long lastDeath = 0L;
+    public Language playerLanguage;
     public int coins = 0;
     public volatile int coinsAddBuffer = 0;
     public int level = 0;

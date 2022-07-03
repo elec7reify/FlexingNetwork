@@ -1,6 +1,7 @@
 package com.flexingstudios.FlexingNetwork.impl.lobby;
 
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
+import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Lobby;
 import com.flexingstudios.FlexingNetwork.api.ServerType;
 import com.google.common.base.Joiner;
@@ -30,9 +31,9 @@ public class MysqlLobby implements Lobby, Runnable {
             plugin.mysql.query("INSERT IGNORE INTO servers (id, port) VALUES ('" + plugin.config.lobbyServerId + "', " + Bukkit.getPort() + ")");
         }
         String[] split = getServerId().split("_", 2);
-        this.typeId = split[0];
-        this.type = ServerType.byId(split[0]);
-        this.number = Integer.parseInt(split[1]);
+        typeId = split[0];
+        type = ServerType.byId(split[0]);
+        number = Integer.parseInt(split[1]);
     }
 
     @Override
@@ -42,8 +43,8 @@ public class MysqlLobby implements Lobby, Runnable {
 
     @Override
     public int getMaxPlayers() {
-        if (this.maxPlayers != -1)
-            return this.maxPlayers;
+        if (maxPlayers != -1)
+            return maxPlayers;
         return 0;
     }
 
@@ -52,10 +53,10 @@ public class MysqlLobby implements Lobby, Runnable {
     }
 
     private void send(long updateTime) {
-        this.plugin.mysql.query("UPDATE servers SET updated = " + updateTime + ",max = " +
-                getMaxPlayers() + ",online = " +
-                getOnlinePlayers() + ",menu_status = " + this.menuInfo + ",connectable = " + this.state
-                .getId() + " WHERE id = '" + this.plugin.config.lobbyServerId + "'");
+        plugin.mysql.query("UPDATE servers SET updated = " + updateTime + ",max = " +
+           getMaxPlayers() + ",online = " +
+           getOnlinePlayers() + ",menu_status = " + menuInfo + ",connectable = " + state
+           .getId() + " WHERE id = '" + plugin.config.lobbyServerId + "'");
     }
 
     @Override
@@ -73,9 +74,9 @@ public class MysqlLobby implements Lobby, Runnable {
     @Override
     public void setMenuText(String... lines) {
         if (lines == null || lines.length == 0) {
-            this.menuInfo = "NULL";
+            menuInfo = "NULL";
         } else {
-            this.menuInfo = "'" + StringEscapeUtils.escapeSql(Joiner.on("^").join(lines)) + "'";
+            menuInfo = "'" + StringEscapeUtils.escapeSql(Joiner.on("^").join(lines)) + "'";
         }
     }
 
@@ -86,32 +87,32 @@ public class MysqlLobby implements Lobby, Runnable {
 
     @Override
     public void setMaxPlayers(int max) {
-        this.maxPlayers = max;
+        maxPlayers = max;
     }
 
     @Override
     public String getServerId() {
-        return this.plugin.config.lobbyServerId;
+        return plugin.config.lobbyServerId;
     }
 
     @Override
     public ServerType getServerType() {
-        return this.type;
+        return type;
     }
 
     @Override
     public String getServerTypeId() {
-        return this.typeId;
+        return typeId;
     }
 
     @Override
     public int getServerNumber() {
-        return this.number;
+        return number;
     }
 
     @Override
     public String getHost() {
-        return this.plugin.config.lobbyServerHost;
+        return plugin.config.lobbyServerHost;
     }
 
     @Override

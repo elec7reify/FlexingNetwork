@@ -15,3 +15,5 @@ development: false
 
 updater:
   enabled: false
+
+language: ru

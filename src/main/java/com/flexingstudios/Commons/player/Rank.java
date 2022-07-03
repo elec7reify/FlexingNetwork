@@ -3,6 +3,7 @@ package com.flexingstudios.Commons.player;
 import java.util.EnumSet;
 
 public enum Rank {
+    NULL(null, null, null, null),
     PLAYER("&7", "Чикибамбонёнок", null, ""),
     VIP("&a&l", "Чикибамбвипка", "", ""),
     PREMIUM("&5&l", "Премиумбамбони", "", ""),
@@ -49,11 +50,11 @@ public enum Rank {
     }
 
     public void addPerm(Permission permission) {
-        this.permissions.add(permission);
+        permissions.add(permission);
     }
 
     public void addAllPerms(Rank other) {
-        this.permissions.addAll(other.permissions);
+        permissions.addAll(other.permissions);
     }
 
     public boolean has(Rank rank) {
@@ -61,27 +62,27 @@ public enum Rank {
     }
 
     public boolean has(Permission permission) {
-        return this.permissions.contains(permission);
+        return permissions.contains(permission);
     }
 
     public String getColor() {
-        return this.color;
+        return color;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public String getPrefix() {
-        return this.prefix;
+        return prefix;
     }
 
     public String getSuffix() {
-        return this.suffix;
+        return suffix;
     }
 
     public String getDisplayName() {
-        return this.color + this.name + "&r";
+        return color + name + "&r";
     }
 
     public static Rank getRank(String name) {

@@ -6,18 +6,19 @@ import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-public abstract class UpCommand implements CommandExecutor {
+public abstract class UpCommand implements CommandExecutor, TabCompleter {
     private final Map<String, RegisteredSub> subs = new HashMap<>();
     private final List<PublicSub> publicSubs = new ArrayList<>();
 
     public UpCommand() {
         BiConsumer<String, RegisteredSub> adsb = (cmd, sub) -> {
-            if (this.subs.put(cmd, sub) != null)
+            if (subs.put(cmd, sub) != null)
                 throw new IllegalArgumentException("[" + getClass().getSimpleName() + "] Sub " + cmd + " is already registered for " + sub.method.getName());
         };
         Class<?> clazz = getClass();
@@ -30,7 +31,7 @@ public abstract class UpCommand implements CommandExecutor {
                     rsub.hidden = asub.hidden();
                     for (String name : asub.value()) {
                         if (!rsub.hidden)
-                            this.publicSubs.add(new PublicSub(name.toLowerCase(), rsub));
+                            publicSubs.add(new PublicSub(name.toLowerCase(), rsub));
                         adsb.accept(name.toLowerCase(), rsub);
                     }
                     for (String alias : asub.aliases())
@@ -46,7 +47,7 @@ public abstract class UpCommand implements CommandExecutor {
             }
         clazz = clazz.getSuperclass();
     } while (clazz != UpCommand.class);
-    Collections.sort(this.publicSubs);
+    Collections.sort(publicSubs);
     }
 
     protected void runCommand(Runnable action, CommandSender sender, Command cmd, String label, String[] args) {
@@ -56,7 +57,7 @@ public abstract class UpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length > 0) {
-            RegisteredSub rsub = this.subs.get(args[0].toLowerCase());
+            RegisteredSub rsub = subs.get(args[0].toLowerCase());
         if (rsub != null) {
             if (!rsub.isAvailableFor(getRank(sender), sender))
                 return true;
@@ -78,11 +79,11 @@ public abstract class UpCommand implements CommandExecutor {
     }
 
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!this.publicSubs.isEmpty() && args.length == 1) {
+        if (!publicSubs.isEmpty() && args.length == 1) {
             Rank rank = getRank(sender);
-            List<String> list = new ArrayList<>(this.publicSubs.size());
+            List<String> list = new ArrayList<>(publicSubs.size());
             String begin = args[0].toLowerCase();
-            for (PublicSub sub : this.publicSubs) {
+            for (PublicSub sub : publicSubs) {
                 if (sub.cmd.startsWith(begin) && sub.sub.isAvailableFor(rank, null))
                     list.add(sub.cmd);
             }
@@ -98,10 +99,10 @@ public abstract class UpCommand implements CommandExecutor {
     }
 
     protected List<PublicSub> getPublicSubs() {
-        return this.publicSubs;
+        return publicSubs;
     }
 
-    protected abstract boolean main(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString);
+    protected abstract boolean main(CommandSender sender, Command command, String label, String[] args);
 
     protected static class RegisteredSub {
         Method method;
@@ -114,19 +115,19 @@ public abstract class UpCommand implements CommandExecutor {
         }
 
         public boolean isAvailableFor(Rank rank, CommandSender inform) {
-            if (this.rankExact) {
-                for (Rank rank1 : this.ranks) {
+            if (rankExact) {
+                for (Rank rank1 : ranks) {
                     if (rank1 == rank)
                         return true;
                 }
                 if (inform != null)
-                    Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + this.ranks[0].getDisplayName());
+                    Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + ranks[0].getDisplayName());
                 return false;
             }
-            if (rank.has(this.ranks[0]))
+            if (rank.has(ranks[0]))
                 return true;
             if (inform != null)
-                Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + this.ranks[0].getDisplayName());
+                Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + ranks[0].getDisplayName());
             return false;
         }
     }
@@ -141,7 +142,7 @@ public abstract class UpCommand implements CommandExecutor {
         }
 
         public int compareTo(PublicSub sb) {
-            return this.cmd.compareToIgnoreCase(sb.cmd);
+            return cmd.compareToIgnoreCase(sb.cmd);
         }
     }
 }

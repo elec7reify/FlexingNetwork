@@ -32,14 +32,14 @@ public class ExpBuffer {
         TIntObjectIterator<TIntLinkedList> it = tIntObjectHashMap.iterator();
         while (it.hasNext()) {
             it.advance();
-            this.plugin.mysql.query("UPDATE authme SET exp=exp+" + it.key() + " WHERE id IN (" + it.value().toString().substring(1, it.value().toString().length() - 1) + ")");
+            plugin.mysql.query("UPDATE authme SET exp=exp+" + it.key() + " WHERE id IN (" + it.value().toString().substring(1, it.value().toString().length() - 1) + ")");
         }
         tIntObjectHashMap.clear();
     }
 
     public void saveNow(FLPlayer player) {
         if (player.expBuffer != 0) {
-            this.plugin.mysql.query("UPDATE authme SET exp=exp+" + player.expBuffer + " WHERE id = " + player.id);
+            plugin.mysql.query("UPDATE authme SET exp=exp+" + player.expBuffer + " WHERE id = " + player.id);
             player.expBuffer = 0;
         }
     }

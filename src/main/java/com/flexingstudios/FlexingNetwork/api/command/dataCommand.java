@@ -17,26 +17,26 @@ public class dataCommand {
 }
 
     public Player getPlayer() {
-        return (Player) this.sender;
+        return (Player) sender;
     }
 
     public CommandSender getSender() {
-        return this.sender;
+        return sender;
     }
 
     public String getLabel() {
-        return this.label;
+        return label;
     }
 
     public String getSub() {
-        return this.sub;
+        return sub;
     }
 
     public String[] getArgs() {
-        return this.args;
+        return args;
     }
 
     public boolean hasArgs() {
-        return (this.args.length != 0);
+        return (args.length != 0);
     }
 }

@@ -38,12 +38,12 @@ public class ArrowTrailListener implements Listener {
 
         @Override
         public void run() {
-            switch (this.trail) {
+            switch (trail) {
                 case HEARTS:
                     Particles.HEART.play(this.arrow.getLocation(), 0.0F, 0.0F, 0.0F, 0.0F, 1, new Player[0]);
                     break;
             }
-            if (this.arrow.isDead() || this.arrow.isOnGround() || this.tick++ > 600) {
+            if (arrow.isDead() || arrow.isOnGround() || tick++ > 600) {
                 Bukkit.getScheduler().cancelTask(task);
                 task = -1;
             }

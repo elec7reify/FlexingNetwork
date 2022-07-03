@@ -1,11 +1,9 @@
 package com.flexingstudios.FlexingNetwork;
 
-import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.File;
 
 public class Config {
 
@@ -18,6 +16,7 @@ public class Config {
     public String lobbyServerHost;
     public boolean updaterEnabled;
     public boolean development;
+    public String language;
 
     public Config(FlexingNetworkPlugin plugin) {
         this.plugin = plugin;
@@ -26,14 +25,15 @@ public class Config {
     }
 
     private void loadConfig() {
-        FileConfiguration config = this.plugin.getConfig();
-        this.mysqlUrl = "jdbc:mysql://" + config.getString("mysql.host", "localhost") + ":" + config.getString("mysql.port", "3306") + "/" + config.getString("mysql.database", "minecraft");
-        this.mysqlUsername = config.getString("mysql.username", "root");
-        this.mysqlPassword = config.getString("mysql.password", "");
-        this.lobbyEnabled = config.getBoolean("lobby.enabled", false);
-        this.lobbyServerHost = config.getString("lobby.serverHost", "localhost");
-        this.lobbyServerId = config.getString("lobby.serverId");
-        this.development = config.getBoolean("dev", false);
-        this.updaterEnabled = config.getBoolean("updater.enabled", true);
+        FileConfiguration config = plugin.getConfig();
+        mysqlUrl = "jdbc:mysql://" + config.getString("mysql.host", "localhost") + ":" + config.getString("mysql.port", "3306") + "/" + config.getString("mysql.database", "minecraft");
+        mysqlUsername = config.getString("mysql.username", "root");
+        mysqlPassword = config.getString("mysql.password", "");
+        lobbyEnabled = config.getBoolean("lobby.enabled", false);
+        lobbyServerHost = config.getString("lobby.serverHost", "localhost");
+        lobbyServerId = config.getString("lobby.serverId");
+        development = config.getBoolean("development", false);
+        updaterEnabled = config.getBoolean("updater.enabled", true);
+        language = config.getString("language", "ru");
     }
 }

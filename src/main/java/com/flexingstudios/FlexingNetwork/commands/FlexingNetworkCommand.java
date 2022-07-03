@@ -8,6 +8,7 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.command.CmdSub;
 import com.flexingstudios.FlexingNetwork.api.command.UpCommand;
 import com.flexingstudios.FlexingNetwork.api.command.dataCommand;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.ParsedTime;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
@@ -197,6 +198,14 @@ public class FlexingNetworkCommand extends UpCommand {
          } else {
              Restart.countdown();
          }
+    }
+
+    @CmdSub(value = {"reload"}, rank = Rank.ADMIN)
+    private void reload(dataCommand data) {
+        for (Language l : Language.getLanguages()){
+            l.reload();
+            data.getSender().sendMessage("§7"+l.getLangName()+" reloaded!");
+        }
     }
 
     @CmdSub(value = {"help"}, ranks = {Rank.ADMIN, Rank.SADMIN, Rank.VADMIN}, hidden = true)

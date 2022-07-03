@@ -29,8 +29,8 @@ public class Spectators implements Listener {
     private final List<ListenerInfo> listeners;
 
     private Spectators(Plugin plugin) {
-        this.set = new HashSet<>();
-        this.listeners = new LinkedList<>();
+        set = new HashSet<>();
+        listeners = new LinkedList<>();
         addListener(plugin, (player, spectator) -> {
             /*if (spectator) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, (null), 10L);
@@ -62,13 +62,13 @@ public class Spectators implements Listener {
     }
 
     public boolean contains(Player player) {
-        return this.set.contains(player);
+        return set.contains(player);
     }
 
     public void add(Player player) {
         if (contains(player))
             return;
-        this.set.add(player);
+        set.add(player);
         for (Player otherPlayer : Bukkit.getOnlinePlayers())
             otherPlayer.hidePlayer(player);
         setStats(player, true);
@@ -77,7 +77,7 @@ public class Spectators implements Listener {
     public void remove(Player player) {
         if (!contains(player))
             return;
-        this.set.remove(player);
+        set.remove(player);
         setStats(player, false);
         for (Player otherPlayer : Bukkit.getOnlinePlayers())
             otherPlayer.showPlayer(player);
@@ -89,7 +89,7 @@ public class Spectators implements Listener {
         } else {
             enableCollision(player);
         }
-        for (ListenerInfo listener : this.listeners) {
+        for (ListenerInfo listener : listeners) {
             try {
                 listener.listener.equip(player, spectator);
             } catch (Exception e) {
@@ -107,7 +107,7 @@ public class Spectators implements Listener {
     }
 
     public Set<Player> getSpectators() {
-        return Collections.unmodifiableSet(this.set);
+        return Collections.unmodifiableSet(set);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -120,7 +120,7 @@ public class Spectators implements Listener {
     private void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
-        this.set.forEach(player::hidePlayer);
+        set.forEach(player::hidePlayer);
     }
 
     @EventHandler
@@ -236,6 +236,6 @@ public class Spectators implements Listener {
     }
 
     public static interface SpecListener {
-        void equip(Player param1Player, boolean param1Boolean);
+        void equip(Player player, boolean param1Boolean);
     }
 }

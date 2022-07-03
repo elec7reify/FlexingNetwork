@@ -6,6 +6,7 @@ import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.UUID;
 
 public interface NetworkPlayer {
     String getMeta(String paramString);
@@ -19,6 +20,17 @@ public interface NetworkPlayer {
     void toLobby();
     void toServer(String paramString);
     void takeCoins(int paramInt);
+
+    /**
+     * Set a player language.
+     */
+    void setLanguage(UUID uuid, String iso);
+
+    /**
+     * Get a player language.
+     */
+    String getLanguage(UUID player);
+
     Rank getRank();
 
     default boolean has(Permission permission) {

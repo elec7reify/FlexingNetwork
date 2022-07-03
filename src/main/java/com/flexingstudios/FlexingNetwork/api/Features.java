@@ -21,16 +21,16 @@ public class Features {
         public void setEnabled(boolean enabled) {
             if (this.enabled != enabled) {
                 this.enabled = enabled;
-                FlexingNetworkPlugin.getInstance().getLogger().info("Feature [" + this.name + "] is " + (enabled ? "enabled" : "disabled"));
+                FlexingNetworkPlugin.getInstance().getLogger().info("Feature [" + name + "] is " + (enabled ? "enabled" : "disabled"));
             }
         }
 
         public boolean isEnabled() {
-            return this.enabled;
+            return enabled;
         }
 
         public String getName() {
-            return this.name;
+            return name;
         }
     }
 }

@@ -16,12 +16,12 @@ public class FCoins {
 
     public FCoins(FlexingNetworkPlugin plugin) {
         this.plugin = plugin;
-        this.waiting = true;
+        waiting = true;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::flush, 200L, 200L);
     }
 
     private void flush() {
-        this.waiting = false;
+        waiting = false;
         int total = 0;
         TIntObjectHashMap tIntObjectHashMap = new TIntObjectHashMap();
         for (FLPlayer player : FLPlayer.PLAYERS.values()) {
@@ -35,23 +35,23 @@ public class FCoins {
             }
         }
         FlexingNetwork.metrics().add("coins.added", total);
-        this.waiting = true;
+        waiting = true;
         TIntObjectIterator<TIntLinkedList> it = tIntObjectHashMap.iterator();
         while (it.hasNext()) {
             it.advance();
             String ids = (it.value()).toString();
-            this.plugin.mysql.query("UPDATE authme SET coins=coins+" + it.key() + " WHERE id IN (" + ids.substring(1, ids.length() - 1) + ")");
+            plugin.mysql.query("UPDATE authme SET coins=coins+" + it.key() + " WHERE id IN (" + ids.substring(1, ids.length() - 1) + ")");
         }
         tIntObjectHashMap.clear();
     }
 
     public void saveNow(FLPlayer player) {
-        if (!this.waiting)
+        if (!waiting)
             return;
         if (player.coinsAddBuffer > 0) {
             int amount = player.coinsAddBuffer;
             player.coinsAddBuffer = 0;
-            this.plugin.mysql.query("UPDATE authme SET coins=coins+" + amount + " WHERE id = " + player.id);
+            plugin.mysql.query("UPDATE authme SET coins=coins+" + amount + " WHERE id = " + player.id);
         }
     }
 
@@ -60,16 +60,16 @@ public class FCoins {
             return -1;
         try {
             if (!simulate) {
-                if (this.waiting) {
+                if (waiting) {
                     player.coinsAddBuffer += amount;
-                    this.plugin.mysql.query("UPDATE users SET coins=coins+" + amount + " WHERE id = " + player.id);
+                    plugin.mysql.query("UPDATE users SET coins=coins+" + amount + " WHERE id = " + player.id);
                 }
                 player.coins += amount;
             }
             player.player.sendMessage(ChatColor.GREEN + "Вы получили " + amount + " Флекс-коинов");
             return amount;
         } catch (Exception e) {
-            this.plugin.getLogger().log(Level.WARNING, null, e);
+            plugin.getLogger().log(Level.WARNING, null, e);
             return -1;
         }
     }
@@ -79,12 +79,12 @@ public class FCoins {
             return;
         if (!simulate) {
             player.coins -= amount;
-            this.plugin.mysql.query("UPDATE users SET coins=coins-" + amount + " WHERE id = " + player.id);
+            plugin.mysql.query("UPDATE users SET coins=coins-" + amount + " WHERE id = " + player.id);
         }
     }
 
     public void finish() {
         flush();
-        this.waiting = false;
+        waiting = false;
     }
 }

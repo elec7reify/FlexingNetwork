@@ -26,14 +26,14 @@ public class ParsedTime {
 
     public String format() {
         StringBuilder sb = new StringBuilder();
-        if (this.days != 0)
-            sb.append(this.days).append(" д. ");
-        if (this.hours != 0)
-            sb.append(this.hours).append(" ч. ");
-        if (this.minutes != 0)
-            sb.append(this.minutes).append(" м. ");
-        if (this.seconds != 0)
-            sb.append(this.seconds).append(" с.");
+        if (days != 0)
+            sb.append(days).append(" д. ");
+        if (hours != 0)
+            sb.append(hours).append(" ч. ");
+        if (minutes != 0)
+            sb.append(minutes).append(" м. ");
+        if (seconds != 0)
+            sb.append(seconds).append(" с.");
         return sb.toString().trim();
     }
 }

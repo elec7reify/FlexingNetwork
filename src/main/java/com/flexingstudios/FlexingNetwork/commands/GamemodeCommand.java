@@ -3,7 +3,9 @@ package com.flexingstudios.FlexingNetwork.commands;
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.ServerType;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.GameMode;
@@ -11,6 +13,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
 
 public class GamemodeCommand implements CommandExecutor {
 
@@ -27,7 +31,7 @@ public class GamemodeCommand implements CommandExecutor {
         switch (cmd.getName()) {
             case "gamemode":
                 if (args.length == 0) {
-                    Utilities.msg(player, "&cИспользование: /" + label + " <режим>");
+                    Utilities.msg(player, Language.getMsg(player, Messages.COMMAND_GAMEMODE_USAGE) + " /" + label + " " + Language.getMsg(player, Messages.COMMAND_GAMEMODE_USAGE_MODE));
                     break;
                 }
             switch (args[0].toLowerCase()) {
@@ -71,10 +75,10 @@ public class GamemodeCommand implements CommandExecutor {
 
     private void changeGamemode(Player player, GameMode mode) {
         if (player.getGameMode() == mode) {
-            Utilities.msg(player, T.error("Error","&cВаш режим игры уже является " + mode.name()));
+            Utilities.msg(player, T.error("Error",Language.getMsg(player, Messages.COMMAND_GAMEMODE_ERROR) + mode.name()));
             return;
         }
         player.setGameMode(mode);
-        Utilities.msg(player, T.success("GOT IT!", "Режим игры изменён на &a" + mode.name()));
+        Utilities.msg(player, T.success("GOT IT!", Language.getMsg(player, Messages.COMMAND_GAMEMODE_CHANGED) + mode.name()));
     }
 }

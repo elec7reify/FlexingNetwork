@@ -7,29 +7,29 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemsClickEvent extends PlayerEvent implements Cancellable {
+public class ItemClickedEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final ItemStack item;
     private final Action action;
     private final PlayerInteractEvent interactEvent;
     private boolean cancelled = false;
 
-    public ItemsClickEvent(PlayerInteractEvent interactEvent) {
+    public ItemClickedEvent(PlayerInteractEvent interactEvent) {
         super(interactEvent.getPlayer());
         this.interactEvent = interactEvent;
-        this.item = interactEvent.getItem();
-        this.action = interactEvent.getAction();
+        item = interactEvent.getItem();
+        action = interactEvent.getAction();
     }
     public ItemStack getItem() {
-        return this.item;
+        return item;
     }
 
     public Action getAction() {
-        return this.action;
+        return action;
     }
 
     public PlayerInteractEvent getInteractEvent() {
-        return this.interactEvent;
+        return interactEvent;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ItemsClickEvent extends PlayerEvent implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+        cancelled = cancel;
     }
 
     @Override

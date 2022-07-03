@@ -47,7 +47,7 @@ public class Items {
     }
 
     public static ItemStack menuTitle(ItemStack is, String title, String... lore) {
-        return name(is, "&a&l" + title + "", lore);
+        return name(is, "&3&l" + title + "", lore);
     }
 
     public static String getLore(ItemStack is, int index) {
@@ -98,7 +98,7 @@ public class Items {
     }
 
     public static ItemStack glow(ItemStack is) {
-        return nbt(is).set("ench", new NBTTagList()).build();
+        return nbt(is).set("ench", new NBTTagList().get(1)).build();
     }
 
     public static ItemStack enchant(Material type, Object... params) {
@@ -117,16 +117,16 @@ public class Items {
         private final net.minecraft.server.v1_12_R1.ItemStack nms;
 
         private NBT(ItemStack is) {
-            this.nms = CraftItemStack.asNMSCopy(is);
-            if (!this.nms.hasTag())
-                this.nms.setTag(new NBTTagCompound());
+            nms = CraftItemStack.asNMSCopy(is);
+            if (!nms.hasTag())
+                nms.setTag(new NBTTagCompound());
         }
 
         private NBTTagCompound getTag(String path, boolean write) {
             if (path.contains(".")) {
-                String[] parts = path.split(",");
-                NBTTagCompound t = this.nms.getTag();
-                for (int i = 0; i < parts.length - 1; i++) {
+                String[] parts = path.split("\\.");
+                NBTTagCompound t = nms.getTag();
+                for (int i = 0; i < parts.length; i++) {
                     NBTTagCompound t0 = t.getCompound(parts[i]);
                     if (write && t.hasKey(parts[i]))
                         t.set(parts[i], t0);
@@ -134,7 +134,7 @@ public class Items {
                 }
                 return t;
             }
-            return this.nms.getTag();
+            return nms.getTag();
         }
 
         private String getKey(String path) {
@@ -262,11 +262,11 @@ public class Items {
         }
 
         public NBTTagCompound getHandle() {
-            return this.nms.getTag();
+            return nms.getTag();
         }
 
         public ItemStack build() {
-            return CraftItemStack.asCraftMirror(this.nms);
+            return CraftItemStack.asCraftMirror(nms);
         }
     }
 }

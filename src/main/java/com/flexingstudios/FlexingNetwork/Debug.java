@@ -6,7 +6,7 @@ public enum Debug {
     private boolean enabled;
 
     Debug() {
-        this.enabled = false;
+        enabled = false;
     }
 
     public void setEnabled(boolean enabled) {
@@ -14,6 +14,6 @@ public enum Debug {
     }
 
     public boolean isEnabled() {
-        return this.enabled;
+        return enabled;
     }
 }

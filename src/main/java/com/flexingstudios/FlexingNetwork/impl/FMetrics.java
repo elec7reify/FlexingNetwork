@@ -13,18 +13,18 @@ public class FMetrics implements Metrics {
     private final HashMap<String, Value> map;
 
     public FMetrics(FlexingNetworkPlugin plugin) {
-        this.map = new HashMap<>();
+        map = new HashMap<>();
         Value.class.getName();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::flush, 24000L, 24000L);
     }
 
     @Override
     public void add(String key, int amount) {
-        (this.map.computeIfAbsent(key, k -> new Value())).value += amount;
+        (map.computeIfAbsent(key, k -> new Value())).value += amount;
     }
 
     public void flush() {
-        for (Map.Entry<String, Value> entry : this.map.entrySet()) {
+        for (Map.Entry<String, Value> entry : map.entrySet()) {
             if ((entry.getValue()).value == 0)
                 continue;
             if (!(entry.getValue()).inserted) {

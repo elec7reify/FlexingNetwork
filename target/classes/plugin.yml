@@ -21,6 +21,8 @@ commands:
   fly:
   alert:
   report:
+  friend:
+    aliases: [friends, f]
   profile:
     aliases: [me, я, профиль]
   help:
@@ -34,3 +36,5 @@ commands:
   donate:
   flexingnetwork:
     aliases: [flexingworld, flex, flexing, fn, fw]
+  language:
+    aliases: [lang]

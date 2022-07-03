@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class UpdateWatcher implements Listener {
-    public static final File UPDATE_DIR = new File("/home/flexingworld/update").getAbsoluteFile();
+    public static final File UPDATE_DIR = (SystemUtils.IS_OS_WINDOWS ? new File("C:/FlexingWorld/update") : new File("/home/flexingworld/update")).getAbsoluteFile();
     public static final File SERVER_UPDATE_DIR = new File(UPDATE_DIR, FlexingNetwork.lobby().getServerTypeId());
     private final FlexingNetworkPlugin plugin;
     private boolean restartNeeded = false;
@@ -61,6 +61,7 @@ public class UpdateWatcher implements Listener {
             }
             if (curr.path.startsWith("configs/") && curr.path.endsWith(".zip"))
                     event.setAction(FileUpdateEvent.Action.RESTART);
+
             if (!curr.path.contains("/") && curr.path.endsWith(".jar")) {
                 event.setAction(FileUpdateEvent.Action.RESTART);
                 return;
