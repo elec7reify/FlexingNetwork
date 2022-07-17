@@ -11,7 +11,9 @@ public class Deutsch extends Language {
 
         YamlConfiguration yml = getYml();
         yml.addDefault("name", "Deutsch");
-        yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "vse ok язык сменён");
+        yml.addDefault(Messages.COMMAND_LANG_AVAILABLE, "&fVerfügbare Sprachen:");
+        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&e{iso} - {name}");
+        yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "&aSprache geändert");
 
         yml.addDefault(Messages.COMMAND_GAMEMODE_USAGE, "&cVerwendung:");
         yml.addDefault(Messages.COMMAND_GAMEMODE_USAGE_MODE, "<modus>");
@@ -20,6 +22,11 @@ public class Deutsch extends Language {
 
         yml.addDefault(Messages.COMMAND_LOBBY_SUCCESSFUL, "&cSie wurden zur Lobby weitergeleitet.");
         yml.addDefault(Messages.COMMAND_LOBBY_ERROR, "&aSie befinden sich bereits in der Lobby.");
+
+        yml.addDefault(Messages.NO_PERMISSION, "&cZugriff verweigert: Sie haben nicht die erforderlichen Rechte, um diese Aktion auszuführen");
+        yml.addDefault(Messages.NO_RANK, "&cZugriff verweigert: Diese Aktion erfordert einen Status ");
+
+        yml.addDefault(Messages.CLOSE_DONATE_INVENTORY, "&3&lMenü schließen");
 
         save();
     }

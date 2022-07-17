@@ -1,6 +1,8 @@
 package com.flexingstudios.FlexingNetwork.impl;
 
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.ItemBuilder;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.api.util.SkullBuilder;
@@ -29,7 +31,7 @@ public class GroupsMenu implements InvMenu {
         GLASS_PANE.setItemMeta(GLASS_PANE_META);
         GLASS_PANE_SLOTS.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE));
 
-        this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lЗакрыть меню"));
+        this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), Language.getMsg(player, Messages.CLOSE_DONATE_INVENTORY)));
         this.inv.setItem(10, Items.name(Items.glow(Material.GRASS), "&f&lВы просматриваете возможности на &a&lВыживании"));
         this.inv.setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
         this.inv.setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
@@ -297,8 +299,6 @@ public class GroupsMenu implements InvMenu {
         public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
-                    player.openInventory(new GroupsMenu(player).getInventory());
-                    break;
                 case 10:
                     player.openInventory(new GroupsMenu(player).getInventory());
                     break;
@@ -456,8 +456,6 @@ public class GroupsMenu implements InvMenu {
         public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
-                    player.openInventory(new GroupsMenu(player).getInventory());
-                    break;
                 case 10:
                     player.openInventory(new GroupsMenu(player).getInventory());
                     break;
@@ -515,8 +513,6 @@ public class GroupsMenu implements InvMenu {
         public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
-                    player.openInventory(new GroupsMenu(player).getInventory());
-                    break;
                 case 10:
                     player.openInventory(new GroupsMenu(player).getInventory());
                     break;
@@ -571,8 +567,6 @@ public class GroupsMenu implements InvMenu {
         public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
-                    player.openInventory(new GroupsMenu(player).getInventory());
-                    break;
                 case 10:
                     player.openInventory(new GroupsMenu(player).getInventory());
                     break;
@@ -628,8 +622,6 @@ public class GroupsMenu implements InvMenu {
         public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
-                    player.openInventory(new GroupsMenu(player).getInventory());
-                    break;
                 case 10:
                     player.openInventory(new GroupsMenu(player).getInventory());
                     break;

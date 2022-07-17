@@ -28,15 +28,15 @@ public enum ArrowTrail {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public ItemStack getItem() {
-        return this.itemStack.clone();
+        return itemStack.clone();
     }
 
     public static ArrowTrail byId(int id) {

@@ -23,7 +23,7 @@ public class ArrowTrailMenu implements InvMenu {
             String color, lore;
             ItemStack is = trail.getItem();
             if (this.player.availableArrowTrails.contains(trail.getId())) {
-                if (this.player.getArrowTrail() == trail) {
+                if (player.getArrowTrail() == trail) {
                     color = "&a";
                     lore = "&aВыбрано";
                 } else {
@@ -34,7 +34,7 @@ public class ArrowTrailMenu implements InvMenu {
                 color = "&c";
                 lore = "&cНужно купить";
             }
-            Items.name(is, color + trail.getName(), new String[] { lore });
+            Items.name(is, color + trail.getName(), lore);
             this.inv.setItem(getSlot(index++), is);
         }
     }
@@ -60,18 +60,18 @@ public class ArrowTrailMenu implements InvMenu {
             return;
         ArrowTrail selected = ArrowTrail.values()[index];
 
-        if (player.has(Rank.ADMIN)) {
-            this.player.availableArrowTrails.add(selected.getId());
-        }
-        if (this.player.availableArrowTrails.contains(selected.getId()) &&
-                this.player.getArrowTrail() != selected) {
-            this.player.setArrowTrail(selected);
+        player.availableArrowTrails.add(selected.getId());
+        player.unlockArrowTrail(selected);
+
+        /*if (player.availableArrowTrails.contains(selected.getId()) &&
+                player.getArrowTrail() != selected) {*/
+            player.setArrowTrail(selected);
             bukkitPlayer.closeInventory();
-        }
+        /*}*/
     }
 
     @Override
     public Inventory getInventory() {
-        return this.inv;
+        return inv;
     }
 }

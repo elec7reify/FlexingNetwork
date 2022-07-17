@@ -4,6 +4,7 @@ import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.api.geom.Cuboid;
 import com.flexingstudios.FlexingNetwork.api.geom.Vec3f;
 import com.flexingstudios.FlexingNetwork.api.geom.Vec3i;
+import org.apache.logging.log4j.core.config.json.JsonConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,16 +46,16 @@ public class Configuration {
     }
 
     public Configuration(Plugin plugin, String file) {
-        File file0 = new File(plugin.getDataFolder(), file + ".yml");
-        if (!file0.exists())
+        cfg = new File(plugin.getDataFolder(), file + ".yml");
+        if (!cfg.exists())
             try {
                 plugin.getDataFolder().mkdir();
-                Files.copy(plugin.getResource(file + ".yml"), file0.toPath(), new java.nio.file.CopyOption[0]);
+                Files.copy(plugin.getResource(file + ".yml"), cfg.toPath(), new java.nio.file.CopyOption[0]);
             } catch (IOException e) {
                 plugin.getLogger().log(Level.SEVERE, null, e);
             }
 
-        config = YamlConfiguration.loadConfiguration(file0);
+        yml = YamlConfiguration.loadConfiguration(cfg);
     }
 
     public Configuration(Plugin plugin, String name, String dir) {
@@ -84,7 +85,7 @@ public class Configuration {
     }
 
     public Configuration(File file) {
-        config = YamlConfiguration.loadConfiguration(file);
+        yml = YamlConfiguration.loadConfiguration(file);
     }
 
     public Configuration(ConfigurationSection config) {
@@ -146,7 +147,7 @@ public class Configuration {
     }
 
     public boolean getBoolean(String path, boolean def) {
-        return config.getBoolean(path, def);
+        return yml.getBoolean(path, def);
     }
 
     public int getInt(String path) {
@@ -200,7 +201,7 @@ public class Configuration {
     }
 
     public String getString(String path) {
-        return getString(path, null);
+        return yml.getString(path, null);
     }
 
     public String getString(String path, String def) {
@@ -245,11 +246,11 @@ public class Configuration {
     }
 
     public List<Integer> getIntegerList(String path) {
-        return config.getIntegerList(path);
+        return yml.getIntegerList(path);
     }
 
     public List<String> getStringList(String path) {
-        return config.getStringList(path);
+        return yml.getStringList(path);
     }
 
     public List<Location> getLocationList(World world, String path) {

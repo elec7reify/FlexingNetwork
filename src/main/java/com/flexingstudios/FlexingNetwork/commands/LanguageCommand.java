@@ -3,6 +3,7 @@ package com.flexingstudios.FlexingNetwork.commands;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,11 +17,14 @@ public class LanguageCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
         if (args.length == 0) {
-
+            Utilities.msg(p, getMsg(p, Messages.COMMAND_LANG_AVAILABLE));
+            for (Language l : Language.getLanguages()) {
+                Utilities.msg(p, getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
+            }
         } else if (Language.isLanguageExist(args[0])) {
             Language.setPlayerLanguage(p.getUniqueId(), args[0]);
-            p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY));
-            //Bukkit.getScheduler().runTaskLater(FlexingNetworkPlugin.getInstance(), () -> p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 3L);
+            //p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY));
+            Bukkit.getScheduler().runTaskLater(FlexingNetworkPlugin.getInstance(), () -> p.sendMessage(getMsg(p, Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY)), 3L);
         }
 
         return true;

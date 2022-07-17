@@ -78,6 +78,7 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if (!publicSubs.isEmpty() && args.length == 1) {
             Rank rank = getRank(sender);

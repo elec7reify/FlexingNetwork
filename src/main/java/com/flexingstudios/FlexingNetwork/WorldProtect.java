@@ -11,6 +11,8 @@ import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
+import litebans.api.Entry;
+import litebans.api.Events;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -18,10 +20,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -67,6 +69,9 @@ class WorldProtect implements Listener {
         plugin.mysql.addLoadPlayer(networkPlayer);
         ((CraftPlayer) player).addChannel("BungeeCord");
         ((CraftPlayer) player).addChannel("FlexingBungee");
+        /*if (FlexingNetwork.isDevelopment() && !Bukkit.getOnlinePlayers().equals(FlexingNetworkPlugin.getInstance().config.onDevCanJoin)) {
+                player.kickPlayer("§cВы были кикнуты с сервера \n" + "§cВы не включены в список разрешённых игроков");
+        }*/
     }
 
     @EventHandler
@@ -78,13 +83,32 @@ class WorldProtect implements Listener {
         if (Language.getLangByPlayer().containsKey(p.getUniqueId())) {
             final UUID u = p.getUniqueId();
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                String iso = Language.getLangByPlayer().get(p.getUniqueId()).getIso();
+                String iso = Language.getLangByPlayer().get(u).getIso();
                 if (Language.isLanguageExist(iso)) {
-                    MysqlPlayer.get(p).setLanguage(p.getUniqueId(), iso);
+                    MysqlPlayer.get(p).setLanguage(u, iso);
                 }
-                Language.getLangByPlayer().remove(p.getUniqueId());
+                Language.getLangByPlayer().remove(u);
             });
         }
+    }
+
+    @EventHandler
+    public void onCommand(PlayerCommandPreprocessEvent event) {
+        String label = "";
+        StringBuffer sb = new StringBuffer(event.getMessage());
+        for (int i = 0; i< sb.length(); i++) {
+            String s = Character.toString(sb.charAt(i));
+            if (s.equalsIgnoreCase(" ")) break;
+            label = label.concat(s);
+        }
+
+        if (!label.contains(":")) return;
+        event.setCancelled(true);
+        /*
+        if (event.getMessage().split(" ")[0].contains(":")) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage("that syntax is not accepted");
+        }*/
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -163,6 +187,7 @@ class WorldProtect implements Listener {
         Bukkit.getPluginManager().callEvent(new PlayerUnloadEvent(player));
         FLPlayer.PLAYERS.remove(player.getName());
         FLPlayer.IDS.remove(Integer.valueOf(player.getId()));
+
         return event.getLeaveMessage();
     }
 

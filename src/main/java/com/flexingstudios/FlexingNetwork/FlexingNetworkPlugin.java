@@ -48,8 +48,10 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public ExpBuffer expBuffer;
     public FMetrics metrics;
     public VanishCommand vanishCommand;
+    public PlayerMetaSaver metaSaver;
     public static Connection connection;
 
+    @Override
     public void onLoad() {
         instance = this;
 
@@ -74,7 +76,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        onLoad();
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         config = new Config(this);

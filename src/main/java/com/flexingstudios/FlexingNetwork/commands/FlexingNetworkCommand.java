@@ -8,6 +8,7 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.command.CmdSub;
 import com.flexingstudios.FlexingNetwork.api.command.UpCommand;
 import com.flexingstudios.FlexingNetwork.api.command.dataCommand;
+import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.ParsedTime;
@@ -139,8 +140,8 @@ public class FlexingNetworkCommand extends UpCommand {
             Utilities.msg(data.getSender(), "&aВсе доступные статусы: &fPLAYER, VIP, PREMIUM, CREATIVE, MODERATOR, CHIKIBAMBONI,", " ADMINOBAMBONI, CHIKIBAMBONYLA, SPONSOR, OWNER, CHIKIBOMBASTER,", " GOD, TEAM, VADMIN, SADMIN, ADMIN");
         } else {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + data.getArgs()[0] + " parent set " + data.getArgs()[1]);
-            FlexingNetwork.mysql().query("UPDATE authme SET status='" + data.getArgs()[1] + "' WHERE username = '" + data.getArgs()[0] + "'");
-            data.getSender().sendMessage(Utilities.colored("&aСтатус &f" + data.getArgs()[1] + " &aвыдан игроку &f" + data.getArgs()[0] + "&a!"));
+            FlexingNetwork.mysql().query("UPDATE authme SET status='" + data.getArgs()[1].toUpperCase() + "' WHERE username = '" + data.getArgs()[0] + "'");
+            data.getSender().sendMessage(Utilities.colored("&aСтатус &f" + data.getArgs()[1].toUpperCase() + " &aвыдан игроку &f" + data.getArgs()[0] + "&a!"));
         }
     }
 
@@ -204,7 +205,7 @@ public class FlexingNetworkCommand extends UpCommand {
     private void reload(dataCommand data) {
         for (Language l : Language.getLanguages()){
             l.reload();
-            data.getSender().sendMessage("§7"+l.getLangName()+" reloaded!");
+            data.getSender().sendMessage("§7" + l.getLangName() + " reloaded!");
         }
     }
 

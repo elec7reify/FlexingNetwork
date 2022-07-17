@@ -60,6 +60,7 @@ public class MysqlWorker extends MysqlThread {
 
     void addLoadPlayer(FLPlayer player) {
         loadPlayer((MysqlPlayer) player);
+        player.onMetaLoaded();
     }
 
     private void loadPlayer(MysqlPlayer player) {
@@ -82,7 +83,7 @@ public class MysqlWorker extends MysqlThread {
         });
     }
 
-    private class LoadFinishRunnable implements Runnable {
+    public class LoadFinishRunnable implements Runnable {
         private MysqlPlayer player;
 
         public LoadFinishRunnable(FLPlayer player) {

@@ -6,7 +6,7 @@
 
     <groupId>net.flexingworld</groupId>
     <artifactId>FlexingNetwork</artifactId>
-    <version>0.4.4</version>
+    <version>0.5.5</version>
     <packaging>jar</packaging>
 
     <name>FlexingNetwork</name>
@@ -55,6 +55,12 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.gitlab.ruany</groupId>
+            <artifactId>LiteBansAPI</artifactId>
+            <version>0.3.4</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-core</artifactId>

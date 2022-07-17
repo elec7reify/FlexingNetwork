@@ -7,6 +7,7 @@ import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
+import com.google.gson.Gson;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import java.time.ZoneId;
 public class FlexingNetwork {
 
     public static final ZoneId TZ_MOSCOW = ZoneId.of("Europe/Moscow");
+    public static final Gson gson = new Gson();
 
     public static boolean isDevelopment() {
         return (FlexingNetworkPlugin.getInstance()).config.development;

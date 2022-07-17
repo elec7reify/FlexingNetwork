@@ -1,5 +1,7 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
@@ -15,7 +17,7 @@ public class IgnoreCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equals("ignore")) {
             if (args.length != 1) {
-                Utilities.msg(sender, "&cИспользование /ignore <ник>");
+                Utilities.msg(sender, Language.getMsg((Player) sender, Messages.COMMAND_IGNORE_USAGE));
                 return true;
             }
 
@@ -49,7 +51,7 @@ public class IgnoreCommand implements CommandExecutor {
 
         if (command.getName().equals("unignore")) {
             if (args.length != 1) {
-                Utilities.msg(sender, "&cИспользование /unignore <ник>");
+                Utilities.msg(sender, Language.getMsg((Player) sender, Messages.COMMAND_UNIGNORE_USAGE));
                 return true;
             }
 
@@ -68,7 +70,7 @@ public class IgnoreCommand implements CommandExecutor {
                 Utilities.msg(sender, "&cИгрок " + args[0] + " не найден");
             } else if (flplayer != null) {
                 if (!flplayer.ignored.contains(player.getName())) {
-                    Utilities.msg(sender, "Вы не игнорируете " + player.getName());
+                    Utilities.msg(sender, "&cВы не игнорируете " + player.getName());
                 } else {
                     Utilities.msg(sender, T.success("GOT IT!", "Вы больше не игнорируете игрока " + player.getName()));
                     flplayer.ignored.remove(player.getName());

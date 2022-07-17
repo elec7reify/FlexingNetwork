@@ -5,10 +5,7 @@ import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.TrailMenu;
 import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Invs;
-import com.flexingstudios.FlexingNetwork.api.util.ItemBuilder;
-import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.api.util.SkullBuilder;
+import com.flexingstudios.FlexingNetwork.api.util.*;
 import com.flexingstudios.FlexingNetwork.impl.GroupsMenu;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
@@ -62,6 +59,16 @@ public class FCoinsMenu implements InvMenu {
                 break;
             case 49:
                 player.openInventory(new FlexCoinShop(player).getInventory());
+                break;
+            case 28:
+            case 30:
+            case 32:
+            case 34:
+            case 37:
+            case 39:
+            case 41:
+            case 43:
+                Utilities.msg(player, "&fДля покупки &9&lFlex&f&lCoin", "&fВы должны перейти на сайт &7↴", "&ehttps://vk.com/zzzrazum", "&fи написать администратору.");
                 break;
         }
     }
@@ -153,8 +160,8 @@ public class FCoinsMenu implements InvMenu {
             for (ArrowTrail trail : ArrowTrail.values()) {
                 String color, lore;
                 ItemStack is = trail.getItem();
-                if (this.player.availableArrowTrails.contains(trail.getId())) {
-                    if (this.player.getArrowTrail() == trail) {
+                if (player.availableArrowTrails.contains(trail.getId())) {
+                    if (player.getArrowTrail() == trail) {
                         color = "&b";
                         lore = "&bВыбрано";
                     } else {

@@ -2,6 +2,7 @@ package com.flexingstudios.FlexingNetwork.api.player;
 
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.entity.Player;
 
@@ -9,17 +10,17 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface NetworkPlayer {
-    String getMeta(String paramString);
-    void setMeta(String paramString1, String paramString2);
-    String removeMeta(String paramString);
-    boolean hasMeta(String paramString);
+    String getMeta(String key);
+    void setMeta(String key, String value);
+    String removeMeta(String key);
+    boolean hasMeta(String key);
     Map<String, String> getMetaMap();
-    int addCoins(int paramInt);
-    void addCoinsExact(int paramInt);
+    int addCoins(int amount);
+    void addCoinsExact(int amount);
     int getCoins();
     void toLobby();
-    void toServer(String paramString);
-    void takeCoins(int paramInt);
+    void toServer(String id);
+    void takeCoins(int amount);
 
     /**
      * Set a player language.
@@ -44,14 +45,14 @@ public interface NetworkPlayer {
     default boolean hasAndNotify(Rank rank) {
         if (getRank().has(rank))
             return true;
-        Utilities.msg(getBukkitPlayer(), "&cОшибка в доступе: Для этого действия необходим статус " + rank.getColor() + rank.getName());
+        Utilities.msg(getBukkitPlayer(), Language.getMsg(getBukkitPlayer(), Messages.NO_RANK) + rank.getColor() + rank.getName());
         return false;
     }
 
     default boolean hasAndNotify(Permission permission) {
         if (getRank().has(permission))
             return true;
-        Utilities.msg(getBukkitPlayer(), "&cОшибка в доступе: У вас недостаточно прав для выполнения этого действия");
+        Utilities.msg(getBukkitPlayer(), Language.getMsg(getBukkitPlayer(), Messages.NO_PERMISSION));
         return false;
     }
 
@@ -63,12 +64,12 @@ public interface NetworkPlayer {
     Player getBukkitPlayer();
     boolean isOnline();
     ArrowTrail getArrowTrail();
-    void setArrowTrail(ArrowTrail paramArrowTrail);
-    void unlockArrowTrail(ArrowTrail paramArrowTrail);
+    void setArrowTrail(ArrowTrail arrowTrail);
+    void unlockArrowTrail(ArrowTrail trail);
     long getLoginTime();
     int getLevel();
     int getTotalExp();
     int getPartialExp();
-    void giveExp(int paramInt);
-    void giveExpExact(int paramInt);
+    void giveExp(int exp);
+    void giveExpExact(int exp);
 }

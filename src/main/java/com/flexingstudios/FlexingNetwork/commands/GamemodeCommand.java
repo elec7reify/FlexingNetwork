@@ -8,6 +8,7 @@ import com.flexingstudios.FlexingNetwork.api.ServerType;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import litebans.api.Events;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

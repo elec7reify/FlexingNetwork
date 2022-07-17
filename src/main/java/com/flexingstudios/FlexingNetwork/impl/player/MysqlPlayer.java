@@ -24,14 +24,9 @@ public class MysqlPlayer extends FLPlayer {
         super(player);
     }
 
-    public MysqlPlayer(FlexingNetworkPlugin plugin) {
-        super(null);
-        this.plugin = plugin;
-    }
-
     @Override
     public String getMeta(String key) {
-        MetaValue value = this.meta.get(key);
+        MetaValue value = meta.get(key);
         return (value == null) ? null : value.value;
     }
 
@@ -41,7 +36,7 @@ public class MysqlPlayer extends FLPlayer {
             removeMeta(key);
             return;
         }
-        MetaValue metaValue = this.meta.computeIfAbsent(key, k -> new MetaValue(value));
+        MetaValue metaValue = meta.computeIfAbsent(key, k -> new MetaValue(value));
         metaValue.changed = System.currentTimeMillis();
         metaValue.value = value;
         metaValue.saved = false;
@@ -49,12 +44,12 @@ public class MysqlPlayer extends FLPlayer {
 
     @Override
     public boolean hasMeta(String key) {
-        return this.meta.containsKey(key);
+        return meta.containsKey(key);
     }
 
     @Override
     public String removeMeta(String key) {
-        MetaValue prev = this.meta.get(key);
+        MetaValue prev = meta.get(key);
         if (prev != null) {
             prev.value = null;
             prev.saved = false;
@@ -65,25 +60,22 @@ public class MysqlPlayer extends FLPlayer {
 
     @Override
     public Map<String, String> getMetaMap() {
-        HashMap<String, String> newMap = new HashMap<>(this.meta.size());
-        for (Map.Entry<String, MetaValue> entry : this.meta.entrySet())
+        HashMap<String, String> newMap = new HashMap<>(meta.size());
+        for (Map.Entry<String, MetaValue> entry : meta.entrySet())
             newMap.put(entry.getKey(), (entry.getValue()).value);
         return newMap;
     }
 
     @Override
     public void setLanguage(UUID uuid, String iso) {
-        //Player p = Bukkit.getPlayer(uuid);
         Player player = Bukkit.getPlayer(uuid);
-        FLPlayer flPlayer = FLPlayer.get(player);
         FlexingNetwork.mysql().query("UPDATE authme SET language = '" + iso + "' WHERE username = '" + player.getName() + "'");
     }
 
     @Override
     public String getLanguage(UUID uuid) {
-        Player p = Bukkit.getPlayer(uuid);
-        FLPlayer flPlayer = FLPlayer.get(p.getPlayer());
-        FlexingNetwork.mysql().query("SELECT language FROM authme WHERE id = " + flPlayer.getId());
+        Player player = Bukkit.getPlayer(uuid);
+        FlexingNetwork.mysql().query("SELECT language FROM authme WHERE username = " + player.getName());
 
         return Language.getDefaultLanguage().getIso();
     }

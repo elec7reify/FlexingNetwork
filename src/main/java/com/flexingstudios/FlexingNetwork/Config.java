@@ -1,9 +1,10 @@
 package com.flexingstudios.FlexingNetwork;
 
-import com.flexingstudios.FlexingNetwork.api.player.Language;
+import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
+import java.util.List;
 
 public class Config {
 
@@ -17,6 +18,7 @@ public class Config {
     public boolean updaterEnabled;
     public boolean development;
     public String language;
+    public List<String> onDevCanJoin;
 
     public Config(FlexingNetworkPlugin plugin) {
         this.plugin = plugin;
@@ -25,7 +27,7 @@ public class Config {
     }
 
     private void loadConfig() {
-        FileConfiguration config = plugin.getConfig();
+        Configuration config = new Configuration(this.plugin);
         mysqlUrl = "jdbc:mysql://" + config.getString("mysql.host", "localhost") + ":" + config.getString("mysql.port", "3306") + "/" + config.getString("mysql.database", "minecraft");
         mysqlUsername = config.getString("mysql.username", "root");
         mysqlPassword = config.getString("mysql.password", "");
@@ -35,5 +37,6 @@ public class Config {
         development = config.getBoolean("development", false);
         updaterEnabled = config.getBoolean("updater.enabled", true);
         language = config.getString("language", "ru");
+        onDevCanJoin = config.getStringList("ifDevCanJoin");
     }
 }

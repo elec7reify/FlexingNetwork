@@ -49,9 +49,9 @@ public abstract class FLPlayer implements NetworkPlayer {
 
     FLPlayer(Player player) {
         this.player = player;
-        this.username = player.getName();
-        this.availableArrowTrails = new TIntHashSet();
-        this.settings = new Collectable(this, "settings", new boolean[] {true, true, true, true, true, true, false, true});
+        username = player.getName();
+        availableArrowTrails = new TIntHashSet();
+        settings = new Collectable(this, "settings", new boolean[] {true, true, true, true, true, true, false, true});
     }
 
     public void onMetaLoaded() {
@@ -133,7 +133,7 @@ public abstract class FLPlayer implements NetworkPlayer {
     }
 
     public void setArrowTrail(ArrowTrail arrowTrail) {
-        if (arrowTrail != arrowTrail) {
+        if (arrowTrail != this.arrowTrail) {
             this.arrowTrail = arrowTrail;
             if (arrowTrail == null) {
                 removeMeta("arr.sel");
