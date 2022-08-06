@@ -25,20 +25,23 @@ public class FMetrics implements Metrics {
 
     public void flush() {
         for (Map.Entry<String, Value> entry : map.entrySet()) {
-            if ((entry.getValue()).value == 0)
+            if (entry.getValue().value == 0)
                 continue;
-            if (!(entry.getValue()).inserted) {
-                (entry.getValue()).inserted = true;
-                FlexingNetwork.mysql().query("INSERT INTO `metrics` (`id`, `value`) VALUES ('" + entry.getKey() + "', " + (entry.getValue()).value + ") ON DUPLICATE KEY UPDATE `value` = `value` + " + (entry.getValue()).value);
+            if (!entry.getValue().inserted) {
+                entry.getValue().inserted = true;
+                FlexingNetwork.mysql().query("INSERT INTO `metrics` (`id`, `value`) VALUES ('" + entry.getKey() + "', " + entry.getValue().value + ") ON DUPLICATE KEY UPDATE `value` = `value` + " + entry.getValue().value);
             } else {
-                FlexingNetwork.mysql().query("UPDATE `metrics` SET `value` = `value` + " + (entry.getValue()).value + " WHERE id = '" + entry.getKey() + "'");
+                FlexingNetwork.mysql().query("UPDATE `metrics` SET `value` = `value` + " + entry.getValue().value + " WHERE id = '" + entry.getKey() + "'");
             }
-            (entry.getValue()).value = 0;
+            entry.getValue().value = 0;
         }
     }
 
     private static class Value {
-        private Value() {}
+
+        private Value() {
+            // no instances
+        }
 
         boolean inserted = false;
         int value = 0;

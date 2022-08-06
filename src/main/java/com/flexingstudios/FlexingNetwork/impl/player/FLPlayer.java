@@ -34,6 +34,8 @@ public abstract class FLPlayer implements NetworkPlayer {
     public Rank rank = Rank.PLAYER;
     private ArrowTrail arrowTrail = null;
     public TIntHashSet availableArrowTrails;
+    public TIntHashSet availableJoinMessages;
+    public TIntHashSet activeJoinMessage;
     public Collectable settings;
     public Player lastDamager = null;
     public Entity lastDamagerEntity = null;
@@ -51,6 +53,8 @@ public abstract class FLPlayer implements NetworkPlayer {
         this.player = player;
         username = player.getName();
         availableArrowTrails = new TIntHashSet();
+        availableJoinMessages = new TIntHashSet();
+        activeJoinMessage = new TIntHashSet();
         settings = new Collectable(this, "settings", new boolean[] {true, true, true, true, true, true, false, true});
     }
 

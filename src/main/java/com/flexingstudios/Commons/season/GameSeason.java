@@ -14,9 +14,7 @@ public abstract class GameSeason {
 
     private static class MonthlyGameSeason extends GameSeason {
         private long updated;
-
         private boolean ending;
-
         private String suffix;
 
         private MonthlyGameSeason() {}

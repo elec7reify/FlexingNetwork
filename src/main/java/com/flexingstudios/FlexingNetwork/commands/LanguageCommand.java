@@ -4,6 +4,7 @@ import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import org.apache.commons.codec.language.bm.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,8 +19,9 @@ public class LanguageCommand implements CommandExecutor {
         Player p = (Player) sender;
         if (args.length == 0) {
             Utilities.msg(p, getMsg(p, Messages.COMMAND_LANG_AVAILABLE));
-            for (Language l : Language.getLanguages()) {
-                Utilities.msg(p, getMsg(p, Messages.COMMAND_LANG_LIST_FORMAT).replace("{iso}", l.getIso()).replace("{name}", l.getLangName()));
+            Utilities.msg(p, Language.getLanguages().listIterator().toString().toUpperCase());
+            for (Language lf : Language.getLanguages()) {
+
             }
         } else if (Language.isLanguageExist(args[0])) {
             Language.setPlayerLanguage(p.getUniqueId(), args[0]);

@@ -16,6 +16,10 @@ import java.util.List;
 
 public class Items {
 
+    private Items() {
+        // no instances
+    }
+
     public static ItemStack name(Material mat, String name, String... lore) {
         return name(new ItemStack(mat), name, lore);
     }

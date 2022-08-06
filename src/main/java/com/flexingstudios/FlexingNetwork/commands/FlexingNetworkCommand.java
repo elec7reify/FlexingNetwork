@@ -2,6 +2,7 @@ package com.flexingstudios.FlexingNetwork.commands;
 
 import com.flexingstudios.Commons.F;
 import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.FlexingNetwork.Config;
 import com.flexingstudios.FlexingNetwork.Debug;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
@@ -113,7 +114,7 @@ public class FlexingNetworkCommand extends UpCommand {
 
     @CmdSub(value = {"giveexp"}, rank = Rank.SADMIN)
     private void giveExp(dataCommand data) {
-        if ((data.getArgs()).length != 2) {
+        if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
             return;
         }
@@ -207,6 +208,7 @@ public class FlexingNetworkCommand extends UpCommand {
             l.reload();
             data.getSender().sendMessage("§7" + l.getLangName() + " reloaded!");
         }
+        new Config(FlexingNetworkPlugin.getInstance()).reload();
     }
 
     @CmdSub(value = {"help"}, ranks = {Rank.ADMIN, Rank.SADMIN, Rank.VADMIN}, hidden = true)

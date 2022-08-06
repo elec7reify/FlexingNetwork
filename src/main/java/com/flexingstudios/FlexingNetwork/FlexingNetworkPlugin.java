@@ -12,6 +12,7 @@ import com.flexingstudios.FlexingNetwork.friends.commands.FriendCommand;
 import com.flexingstudios.FlexingNetwork.friends.listeners.GUIListener;
 import com.flexingstudios.FlexingNetwork.impl.FMetrics;
 import com.flexingstudios.FlexingNetwork.impl.languages.Deutsch;
+import com.flexingstudios.FlexingNetwork.impl.languages.English;
 import com.flexingstudios.FlexingNetwork.impl.languages.LangListener;
 import com.flexingstudios.FlexingNetwork.impl.languages.Russian;
 import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
@@ -70,13 +71,13 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         }
         Runtime.getRuntime().addShutdownHook(new Thread(pidfile::delete, "FlexingNetwork pid deleter"));
 
+        new English();
         new Russian();
         new Deutsch();
     }
 
     @Override
     public void onEnable() {
-
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         config = new Config(this);
         metrics = new FMetrics(this);

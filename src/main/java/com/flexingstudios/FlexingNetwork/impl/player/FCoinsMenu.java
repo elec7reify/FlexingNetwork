@@ -4,10 +4,15 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.TrailMenu;
 import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.*;
 import com.flexingstudios.FlexingNetwork.impl.GroupsMenu;
 import com.google.common.collect.ImmutableSet;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.cacheddata.CachedPermissionData;
+import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -79,9 +84,9 @@ public class FCoinsMenu implements InvMenu {
     }
 
     private static class FlexCoinShop implements InvMenu {
-        private static final Set<Integer> GLASS_PANE_BLACK_SLOTS = ImmutableSet.of(Integer.valueOf(0), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(16), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(28), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(37), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(53));
-        private static final Set<Integer> GLASS_PANE_BLUE_SLOTS = ImmutableSet.of(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(10), Integer.valueOf(12), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(29), Integer.valueOf(30), Integer.valueOf(31), Integer.valueOf(38), Integer.valueOf(40), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(49));
-        private static final Set<Integer> GLASS_PANE_WHITE_SLOTS = ImmutableSet.of(Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(13), Integer.valueOf(15), Integer.valueOf(22), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(32), Integer.valueOf(33), Integer.valueOf(34), Integer.valueOf(41), Integer.valueOf(43), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52));
+        private static final Set<Integer> GLASS_PANE_BLACK_SLOTS = ImmutableSet.of(0, 7, 9, 16, 17, 18, 25, 26, 27, 28, 35, 36, 37, 44, 45, 46, 53);
+        private static final Set<Integer> GLASS_PANE_BLUE_SLOTS = ImmutableSet.of(1, 2, 3, 10, 12, 19, 20, 21, 29, 30, 31, 38, 40, 47, 48, 49);
+        private static final Set<Integer> GLASS_PANE_WHITE_SLOTS = ImmutableSet.of(4, 5, 6, 13, 15, 22, 23, 24, 32, 33, 34, 41, 43, 50, 51, 52);
         private final Inventory inv;
 
         public FlexCoinShop(Player player) {
@@ -131,6 +136,7 @@ public class FCoinsMenu implements InvMenu {
                 case 11:
                     break;
                 case 14:
+                    player.openInventory(new MessageOnJoinMenu(player).getInventory());
                     break;
                 case 39:
                     break;
@@ -143,6 +149,87 @@ public class FCoinsMenu implements InvMenu {
         @Override
         public Inventory getInventory() {
             return this.inv;
+        }
+    }
+
+    private static class MessageOnJoinMenu implements InvMenu {
+
+        private final Inventory inv;
+        private static final Set<String> test = ImmutableSet.of("join.1", "join.2");
+
+        public MessageOnJoinMenu(Player player) {
+            inv = Bukkit.createInventory(this, 36, "Сообщения при входе");
+
+            FLPlayer nplayer = FLPlayer.get(player);
+            LuckPerms luckPerms = LuckPermsProvider.get();
+            User user = luckPerms.getUserManager().getUser(player.getName());
+            CachedPermissionData permissionData = user.getCachedData().getPermissionData();
+
+            String color, lore;
+            if (nplayer.availableJoinMessages.contains(1) || nplayer.availableJoinMessages.contains(2)) {
+                if (permissionData.checkPermission("join.1").asBoolean()) {
+                    color = "&b";
+                    lore = "&bВыбрано";
+                } else {
+                    color = "&a";
+                    lore = "&aНажмите для выбора";
+                }
+            } else {
+                color = "&c";
+                lore = "&cНужно купить за флекс-коины";
+            }
+
+            inv.setItem(10, Items.name(Material.BOOK, "test1", lore));
+            inv.setItem(11, Items.name(Material.BOOK, "test2", lore));
+        }
+
+        @Override
+        public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
+            LuckPerms luckPerms = LuckPermsProvider.get();
+            User user = luckPerms.getUserManager().getUser(player.getName());
+            CachedPermissionData permissionData = user.getCachedData().getPermissionData();
+            FLPlayer nplayer = FLPlayer.get(player);
+            switch (slot) {
+                case 10:
+                    if (player.isPermissionSet("join.1")) {
+                        //if (permissionData.checkPermission("join.1").asBoolean() == permissionData.checkPermission("join.1").asBoolean()) return;
+                        if (!permissionData.checkPermission("join.1").asBoolean()) {
+                            for (String strings : test) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set " + strings + " false");
+                            }
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set join.1 true");
+                        } else {
+                            return;
+                        }
+                    } else {
+                        nplayer.takeCoins(50);
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set join.1 false");
+                        Utilities.msg(player, "&aВы купили это");
+                    }
+                    break;
+                case 11:
+                    if (player.isPermissionSet("join.2")) {
+                        //if (permissionData.checkPermission("join.1").asBoolean() == permissionData.checkPermission("join.1").asBoolean()) return;
+                        if (!permissionData.checkPermission("join.2").asBoolean()) {
+                            for (String strings : test) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set " + strings + " false");
+                            }
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set join.2 true");
+                        } else {
+                            return;
+                        }
+                    } else {
+                        nplayer.takeCoins(50);
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set join.2 false");
+                        Utilities.msg(player, "&aВы купили это");
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public Inventory getInventory() {
+            return inv;
         }
     }
 
@@ -198,7 +285,7 @@ public class FCoinsMenu implements InvMenu {
                 return;
             }
             int index = getIndex(slot);
-            if (index < 0 || index >= (ArrowTrail.values()).length)
+            if (index < 0 || index >= ArrowTrail.values().length)
                 return;
             ArrowTrail selected = ArrowTrail.values()[index];
             if (this.player.availableArrowTrails.contains(selected.getId()) && this.player.getArrowTrail() != selected) {
@@ -209,7 +296,7 @@ public class FCoinsMenu implements InvMenu {
 
         @Override
         public Inventory getInventory() {
-            return this.inv;
+            return inv;
         }
     }
 }

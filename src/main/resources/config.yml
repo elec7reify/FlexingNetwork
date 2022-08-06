@@ -12,9 +12,6 @@ lobby:
   serverId: TEST_1
 
 development: false
-ifDevCanJoin:
-  - Elec7reify
-  - ItsRazum
 
 updater:
   enabled: false

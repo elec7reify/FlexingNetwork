@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class Utilities {
 
     private Utilities() {
-
+        // no instances
     }
 
     public static String plurals(int n, String form1, String form2, String form3) {
@@ -42,6 +42,12 @@ public class Utilities {
 
     public static void bcast(String msg) {
         Bukkit.broadcastMessage(colored(msg));
+    }
+
+    public static void bcast(List<String> msg) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Utilities.msg(player, msg);
+        }
     }
 
     public static String colored(String str) {

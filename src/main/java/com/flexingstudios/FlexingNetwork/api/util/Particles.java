@@ -1,9 +1,7 @@
 package com.flexingstudios.FlexingNetwork.api.util;
 
-import net.minecraft.server.v1_12_R1.EntityPlayer;
-import net.minecraft.server.v1_12_R1.EnumParticle;
-import net.minecraft.server.v1_12_R1.MinecraftServer;
-import net.minecraft.server.v1_12_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -40,7 +38,7 @@ public enum Particles {
         PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.HEART, false, x, y, z, xOffset, yOffset, zOffset, effectSpeed, amountOfParticles);
         if (players.length == 0) {
             int radius = 400;
-            List<EntityPlayer> list = (List<EntityPlayer>) MinecraftServer.getServer().getWorld();
+            List<EntityPlayer> list = MinecraftServer.getServer().getPlayerList().players;
             for (EntityPlayer player : list) {
                 double distanceSquared = NumberConversions.square(player.locX - x) + NumberConversions.square(player.locY - y) + NumberConversions.square(player.locZ - z);
                 if (distanceSquared < radius)

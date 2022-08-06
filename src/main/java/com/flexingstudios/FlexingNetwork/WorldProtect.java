@@ -7,12 +7,19 @@ import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.FlexingNetwork.api.util.Particles;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import litebans.api.Entry;
 import litebans.api.Events;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.cacheddata.CachedPermissionData;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.util.Tristate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -65,10 +72,20 @@ class WorldProtect implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.setJoinMessage(null);
-        FLPlayer networkPlayer = FLPlayer.get(player);
-        plugin.mysql.addLoadPlayer(networkPlayer);
+        FLPlayer nplayer = FLPlayer.get(player);
+        plugin.mysql.addLoadPlayer(nplayer);
         ((CraftPlayer) player).addChannel("BungeeCord");
         ((CraftPlayer) player).addChannel("FlexingBungee");
+
+        LuckPerms luckPerms = LuckPermsProvider.get();
+        User user = luckPerms.getUserManager().getUser(player.getName());
+        CachedPermissionData permissionData = user.getCachedData().getPermissionData();
+        Particles.HEART.play(player.getLocation(), 0.0F, 0.0F, 0.0F, 0.0F, 5);
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
+            if (player.hasPermission("join.1") && permissionData.queryPermission("join.1").result().asBoolean()) {
+                player1.sendMessage(Utilities.colored("&8&l[&c&l+&8&l] " + nplayer.getRank().getDisplayName() + " &7" + player.getDisplayName() + " &aзалетел на тусу"));
+            }
+        }
         /*if (FlexingNetwork.isDevelopment() && !Bukkit.getOnlinePlayers().equals(FlexingNetworkPlugin.getInstance().config.onDevCanJoin)) {
                 player.kickPlayer("§cВы были кикнуты с сервера \n" + "§cВы не включены в список разрешённых игроков");
         }*/

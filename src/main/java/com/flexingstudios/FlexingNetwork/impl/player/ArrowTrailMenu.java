@@ -22,7 +22,7 @@ public class ArrowTrailMenu implements InvMenu {
         for (ArrowTrail trail : ArrowTrail.values()) {
             String color, lore;
             ItemStack is = trail.getItem();
-            if (this.player.availableArrowTrails.contains(trail.getId())) {
+            if (player.availableArrowTrails.contains(trail.getId())) {
                 if (player.getArrowTrail() == trail) {
                     color = "&a";
                     lore = "&aВыбрано";

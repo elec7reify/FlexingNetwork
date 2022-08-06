@@ -45,7 +45,7 @@ public interface NetworkPlayer {
     default boolean hasAndNotify(Rank rank) {
         if (getRank().has(rank))
             return true;
-        Utilities.msg(getBukkitPlayer(), Language.getMsg(getBukkitPlayer(), Messages.NO_RANK) + rank.getColor() + rank.getName());
+        Utilities.msg(getBukkitPlayer(), Language.getMsg(getBukkitPlayer(), Messages.NO_RANK).replace("{status}", rank.getColor() + rank.getName()));
         return false;
     }
 

@@ -11,7 +11,6 @@ import org.bukkit.plugin.Plugin;
 import java.util.*;
 
 public class Language extends Configuration {
-
     private final String iso;
     private String prefix = "";
     private static final HashMap<UUID, Language> langByPlayer = new HashMap<>();

@@ -38,10 +38,10 @@ public class IgnoreCommand implements CommandExecutor {
             }
 
             if (player == null) {
-                Utilities.msg(sender, "&cИгрок " + args[0] + " не найден");
+                Utilities.msg(sender, Language.getMsg((Player) sender, Messages.PLAYER_NOT_FOUND).replace("{targetPlayer}", args[0]));
             } else if (flplayer != null) {
                 if (flplayer.ignored.contains(player.getName())) {
-                    Utilities.msg(sender, "Вы уже игнорируете этого игрока");
+                    Utilities.msg(sender, Language.getMsg((Player) sender, Messages.IGNORE_ALREADY));
                 } else {
                     Utilities.msg(sender, T.success("GOT IT!", "Теперь вы игнорируете игрока " + player.getName()));
                     flplayer.ignored.add(player.getName());
@@ -67,7 +67,7 @@ public class IgnoreCommand implements CommandExecutor {
             Player player = Bukkit.getPlayerExact(args[0]);
 
             if (player == null) {
-                Utilities.msg(sender, "&cИгрок " + args[0] + " не найден");
+                Utilities.msg(sender, Language.getMsg((Player) sender, Messages.PLAYER_NOT_FOUND).replace("{targetPlayer}", args[0]));
             } else if (flplayer != null) {
                 if (!flplayer.ignored.contains(player.getName())) {
                     Utilities.msg(sender, "&cВы не игнорируете " + player.getName());

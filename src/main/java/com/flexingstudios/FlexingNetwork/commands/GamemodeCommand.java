@@ -32,7 +32,7 @@ public class GamemodeCommand implements CommandExecutor {
         switch (cmd.getName()) {
             case "gamemode":
                 if (args.length == 0) {
-                    Utilities.msg(player, Language.getMsg(player, Messages.COMMAND_GAMEMODE_USAGE) + " /" + label + " " + Language.getMsg(player, Messages.COMMAND_GAMEMODE_USAGE_MODE));
+                    Utilities.msg(player, Language.getMsg(player, Messages.COMMAND_GAMEMODE_USAGE).replace("{label}", label));
                     break;
                 }
             switch (args[0].toLowerCase()) {
@@ -76,10 +76,10 @@ public class GamemodeCommand implements CommandExecutor {
 
     private void changeGamemode(Player player, GameMode mode) {
         if (player.getGameMode() == mode) {
-            Utilities.msg(player, T.error("Error",Language.getMsg(player, Messages.COMMAND_GAMEMODE_ERROR) + mode.name()));
+            Utilities.msg(player, T.error("Error",Language.getMsg(player, Messages.COMMAND_GAMEMODE_ERROR).replace("{mode}", mode.name())));
             return;
         }
         player.setGameMode(mode);
-        Utilities.msg(player, T.success("GOT IT!", Language.getMsg(player, Messages.COMMAND_GAMEMODE_CHANGED) + mode.name()));
+        Utilities.msg(player, T.success("GOT IT!", Language.getMsg(player, Messages.COMMAND_GAMEMODE_CHANGED).replace("{modename}", mode.name())));
     }
 }

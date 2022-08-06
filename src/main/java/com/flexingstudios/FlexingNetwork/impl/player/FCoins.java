@@ -62,7 +62,7 @@ public class FCoins {
             if (!simulate) {
                 if (waiting) {
                     player.coinsAddBuffer += amount;
-                    plugin.mysql.query("UPDATE users SET coins=coins+" + amount + " WHERE id = " + player.id);
+                    plugin.mysql.query("UPDATE authme SET coins=coins+" + amount + " WHERE id = " + player.id);
                 }
                 player.coins += amount;
             }
@@ -79,7 +79,7 @@ public class FCoins {
             return;
         if (!simulate) {
             player.coins -= amount;
-            plugin.mysql.query("UPDATE users SET coins=coins-" + amount + " WHERE id = " + player.id);
+            plugin.mysql.query("UPDATE authme SET coins=coins-" + amount + " WHERE id = " + player.id);
         }
     }
 

@@ -11,29 +11,30 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BungeeBridge implements PluginMessageListener {
-    private final Map<String, Integer> counts = new HashMap<>();
-    private int total = 0;
-    private final Map<String, Integer> servers = new ConcurrentHashMap<>();
+    public static final Map<String, Integer> counts = new HashMap<>();
+    public static int total = 0;
+    public static final Map<String, Integer> servers = new ConcurrentHashMap<>();
     @Override
-    public void onPluginMessageReceived(String channel, Player player, byte[] bytes) {
+    public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (channel.equals("FlexingBungee")) {
-            String msg = new String(bytes, StandardCharsets.UTF_8);
+            String msg = new String(message, StandardCharsets.UTF_8);
             if (msg.startsWith("bcast"))
                 Bukkit.broadcastMessage(Utilities.colored(msg.substring(6)));
         }
-        ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
+        ByteArrayDataInput in = ByteStreams.newDataInput(message);
         switch (in.readUTF()) {
             case "PlayerCount":
-                this.counts.put(in.readUTF(), Integer.valueOf(in.readInt()));
+                this.counts.put(in.readUTF(), in.readInt());
                 break;
         }
 
-        DataInputStream in2 = new DataInputStream(new ByteArrayInputStream(bytes));
+        DataInputStream in2 = new DataInputStream(new ByteArrayInputStream(message));
         try {
             String subChannel = in2.readUTF();
             if (subChannel.equals("PlayerCount")) {
@@ -43,7 +44,7 @@ public class BungeeBridge implements PluginMessageListener {
                     if (server.equals("ALL")) {
                         this.total = count;
                     } else {
-                        this.servers.put(server, Integer.valueOf(count));
+                        this.servers.put(server, count);
                     }
                 }
             }
@@ -68,12 +69,12 @@ public class BungeeBridge implements PluginMessageListener {
         player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", b.toByteArray());
     }
 
-    private void getPlayers(String server) {
-        if (Bukkit.getOnlinePlayers().isEmpty())
-            return;
+    public static Collection<Integer> getPlayers(String server) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("PlayerCount");
         out.writeUTF(server);
         (Bukkit.getOnlinePlayers().iterator().next()).sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", out.toByteArray());
+        ByteArrayDataInput in = ByteStreams.newDataInput(out.toByteArray());
+        return counts.values();
     }
 }

@@ -33,7 +33,7 @@ public class GameMetrics {
     }
 
     public void setReadOnly(boolean flag) {
-        this.readOnly = flag;
+        readOnly = flag;
     }
 
     public void setSeason(GameSeason season) {
@@ -41,7 +41,7 @@ public class GameMetrics {
     }
 
     public List<GameMetricValue> getMetrics() {
-        return this.metrics;
+        return metrics;
     }
 
     public boolean isLoaded() {
@@ -57,18 +57,18 @@ public class GameMetrics {
     }
 
     public void load() {
-        for (GameMetricValue metric : this.metrics)
+        for (GameMetricValue metric : metrics)
             metric.reset();
         mysqlLoad();
     }
 
     public void save() {
-        if (!isLoaded() || this.readOnly)
+        if (!isLoaded() || readOnly)
             return;
         beforeSave();
         mysqlSave();
 
-        for (GameMetricValue metric : this.metrics)
+        for (GameMetricValue metric : metrics)
             metric.commitChanges();
     }
 
@@ -77,23 +77,23 @@ public class GameMetrics {
     protected void beforeSave() {}
 
     private void queryFinished() {
-        if (this.loadCounter.decrementAndGet() == 0) {
+        if (loadCounter.decrementAndGet() == 0) {
             afterLoad();
-            if (this.callbacks.isEmpty())
+            if (callbacks.isEmpty())
                 return;
             Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> {
-                for (Consumer<GameMetrics> callback : this.callbacks)
+                for (Consumer<GameMetrics> callback : callbacks)
                     callback.accept(this);
-                this.callbacks.clear();
+                callbacks.clear();
             });
         }
     }
 
     private void mysqlLoad() {
-        if (this.season != null) {
-            this.loadCounter.set(2);
+        if (season != null) {
+            loadCounter.set(2);
             StringBuilder stringBuilder = new StringBuilder();
-            for (GameMetricValue metric : this.metrics) {
+            for (GameMetricValue metric : metrics) {
                 if (metric.getType() != GameMetricType.GLOBAL) {
                     if (stringBuilder.length() > 0)
                         stringBuilder.append(',');
@@ -102,7 +102,7 @@ public class GameMetrics {
             }
             if (stringBuilder.length() == 0)
                 stringBuilder.append('1');
-            FlexingNetwork.mysql().select("SELECT " + stringBuilder + " FROM " + this.game + "_stats" + this.season.getTableSuffix() + " WHERE userid = " + this.player.getId(), rs -> {
+            FlexingNetwork.mysql().select("SELECT " + stringBuilder + " FROM " + game + "_stats" + this.season.getTableSuffix() + " WHERE userid = " + this.player.getId(), rs -> {
                 if (rs.next()) {
                     for (GameMetricValue metric : this.metrics) {
                         if (metric.getType() != GameMetricType.GLOBAL)

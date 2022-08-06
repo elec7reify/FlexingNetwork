@@ -5,5 +5,5 @@ public interface Metrics {
         add(key, 1);
     }
 
-    void add(String paramString, int paramInt);
+    void add(String value, int val);
 }

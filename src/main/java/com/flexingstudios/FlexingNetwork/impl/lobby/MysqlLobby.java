@@ -27,7 +27,7 @@ public class MysqlLobby implements Lobby, Runnable {
             task = -1;
         }
         if (plugin.config.lobbyEnabled) {
-            task = Bukkit.getScheduler().scheduleSyncRepeatingTask((Plugin) plugin, this, 5L, 30L);
+            task = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 5L, 30L);
             plugin.mysql.query("INSERT IGNORE INTO servers (id, port) VALUES ('" + plugin.config.lobbyServerId + "', " + Bukkit.getPort() + ")");
         }
         String[] split = getServerId().split("_", 2);

@@ -1,13 +1,10 @@
 package com.flexingstudios.FlexingNetwork;
 
 import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
 
-public class Config {
-
+public class Config extends Configuration {
     private final FlexingNetworkPlugin plugin;
     public String mysqlUrl;
     public String mysqlUsername;
@@ -21,22 +18,22 @@ public class Config {
     public List<String> onDevCanJoin;
 
     public Config(FlexingNetworkPlugin plugin) {
+        super(plugin);
         this.plugin = plugin;
         plugin.saveDefaultConfig();
         loadConfig();
     }
 
     private void loadConfig() {
-        Configuration config = new Configuration(this.plugin);
-        mysqlUrl = "jdbc:mysql://" + config.getString("mysql.host", "localhost") + ":" + config.getString("mysql.port", "3306") + "/" + config.getString("mysql.database", "minecraft");
-        mysqlUsername = config.getString("mysql.username", "root");
-        mysqlPassword = config.getString("mysql.password", "");
-        lobbyEnabled = config.getBoolean("lobby.enabled", false);
-        lobbyServerHost = config.getString("lobby.serverHost", "localhost");
-        lobbyServerId = config.getString("lobby.serverId");
-        development = config.getBoolean("development", false);
-        updaterEnabled = config.getBoolean("updater.enabled", true);
-        language = config.getString("language", "ru");
-        onDevCanJoin = config.getStringList("ifDevCanJoin");
+        mysqlUrl = "jdbc:mysql://" + getString("mysql.host", "localhost") + ":" + getString("mysql.port", "3306") + "/" + getString("mysql.database", "minecraft");
+        mysqlUsername = getString("mysql.username", "root");
+        mysqlPassword = getString("mysql.password", "");
+        lobbyEnabled = getBoolean("lobby.enabled", false);
+        lobbyServerHost = getString("lobby.serverHost", "localhost");
+        lobbyServerId = getString("lobby.serverId");
+        development = getBoolean("development", false);
+        updaterEnabled = getBoolean("updater.enabled", true);
+        language = getString("language", "ru");
+        onDevCanJoin = getStringList("ifDevCanJoin");
     }
 }

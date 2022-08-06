@@ -40,7 +40,7 @@ public class ArrowTrailListener implements Listener {
         public void run() {
             switch (trail) {
                 case HEARTS:
-                    Particles.HEART.play(this.arrow.getLocation(), 0.0F, 0.0F, 0.0F, 0.0F, 1, new Player[0]);
+                    Particles.HEART.play(this.arrow.getLocation(), 0.0F, 0.0F, 0.0F, 0.0F, 1);
                     break;
             }
             if (arrow.isDead() || arrow.isOnGround() || tick++ > 600) {
