@@ -1,24 +1,17 @@
 package com.flexingstudios.FlexingNetwork.impl.player;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 public class MysqlPlayer extends FLPlayer {
-    private FlexingNetworkPlugin plugin;
     public Set<String> ignored = new HashSet<>();
     public boolean ignoreAll = false;
     public String lastWriter = null;
-    public Map<String, MetaValue> meta = new ConcurrentHashMap<>();
 
     public MysqlPlayer(Player player) {
         super(player);
@@ -27,7 +20,8 @@ public class MysqlPlayer extends FLPlayer {
     @Override
     public String getMeta(String key) {
         MetaValue value = meta.get(key);
-        return (value == null) ? null : value.value;
+
+        return value == null ? null : value.value;
     }
 
     @Override
@@ -36,6 +30,7 @@ public class MysqlPlayer extends FLPlayer {
             removeMeta(key);
             return;
         }
+
         MetaValue metaValue = meta.computeIfAbsent(key, k -> new MetaValue(value));
         metaValue.changed = System.currentTimeMillis();
         metaValue.value = value;
@@ -55,6 +50,7 @@ public class MysqlPlayer extends FLPlayer {
             prev.saved = false;
             prev.changed = System.currentTimeMillis();
         }
+
         return (prev == null) ? null : prev.value;
     }
 
@@ -63,12 +59,12 @@ public class MysqlPlayer extends FLPlayer {
         HashMap<String, String> newMap = new HashMap<>(meta.size());
         for (Map.Entry<String, MetaValue> entry : meta.entrySet())
             newMap.put(entry.getKey(), (entry.getValue()).value);
+
         return newMap;
     }
 
     @Override
-    public void setLanguage(UUID uuid, String iso) {
-        Player player = Bukkit.getPlayer(uuid);
+    public void setLanguage(Player player, String iso) {
         FlexingNetwork.mysql().query("UPDATE authme SET language = '" + iso + "' WHERE username = '" + player.getName() + "'");
     }
 
@@ -81,9 +77,9 @@ public class MysqlPlayer extends FLPlayer {
     }
 
     public void dispose() {
-        this.meta.clear();
-        this.lastWriter = null;
-        this.ignored.clear();
+        meta.clear();
+        lastWriter = null;
+        ignored.clear();
     }
 
     public static class MetaValue {

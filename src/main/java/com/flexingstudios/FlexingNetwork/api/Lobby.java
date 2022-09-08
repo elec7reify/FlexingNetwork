@@ -23,15 +23,14 @@ public interface Lobby {
     void shutdown();
     void forceSend();
 
-    public enum State {
+    enum State {
         ALLOW_SPECTATORS(0),
         ALLOW_ALL(1),
         ALLOW_VIP(2),
         DENY_ALL(10),
         OFFLINE(11);
 
-        private static final TIntObjectMap<State> byId = (TIntObjectMap<State>) new TIntObjectHashMap(16);
-
+        private static final TIntObjectMap<State> byId = new TIntObjectHashMap<>(16);
         private int id;
 
         static {
@@ -44,11 +43,11 @@ public interface Lobby {
         }
 
         public int getId() {
-            return this.id;
+            return id;
         }
 
         public static State byId(int id) {
-            return (State)byId.get(id);
+            return byId.get(id);
         }
     }
 }

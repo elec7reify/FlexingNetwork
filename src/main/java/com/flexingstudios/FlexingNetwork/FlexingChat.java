@@ -1,39 +1,38 @@
 package com.flexingstudios.FlexingNetwork;
 
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.*;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.util.Iterator;
+import java.util.logging.Logger;
 
 public class FlexingChat implements Listener {
-
         @EventHandler
         private void onChat(AsyncPlayerChatEvent event) {
-        String message = event.getMessage();
-        Player player = event.getPlayer();
-        event.setCancelled(false);
+            event.setCancelled(true);
+            Player player = event.getPlayer();
+            FLPlayer flPlayer = FLPlayer.get(player);
+            TextComponent rank = new TextComponent(Utilities.colored("&7«" + flPlayer.getRank().getDisplayName() + "&7» "));
 
-        Iterator iter = event.getRecipients().iterator();
-        while (iter.hasNext()) {
-            Object o = (iter.next());
-            Player p = o instanceof Player ? ((Player) o) : null;
-            // p.spigot().sendMessage(main);
+            TextComponent playerName = new TextComponent(new ComponentBuilder(player.getName())
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/actions " + player.getName()))
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§7Нажмите, чтобы открыть меню быстрых действий")))
+                    .append(": ", ComponentBuilder.FormatRetention.NONE)
+                    .create());
 
-        }
+            TextComponent message = new TextComponent(Utilities.colored(event.getMessage()));
 
-            event.setFormat(":" + message);
+            BaseComponent[] components = new BaseComponent[]{rank, playerName, message};
 
+            Logger.getGlobal().info(Utilities.colored("«" + flPlayer.getRank().getName() + "» " + player.getName() + ": " + event.getMessage()));
+            for (Player player1 : Bukkit.getOnlinePlayers()) {
+                player1.spigot().sendMessage(ChatMessageType.CHAT, components);
+            }
     }
 }
-/*
-    public Chat getChat() {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        return rsp != null ? rsp.getProvider() : null;
-    }
-
-    public void setPrefix(UUID uuid, String s) {
-        getChat().setPlayerPrefix(Bukkit.getPlayer(uuid), s);
-    }
- */

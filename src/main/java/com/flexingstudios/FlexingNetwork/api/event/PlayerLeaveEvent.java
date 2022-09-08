@@ -37,6 +37,7 @@ public class PlayerLeaveEvent extends Event {
         return isKick;
     }
 
+    @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }

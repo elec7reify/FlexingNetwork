@@ -45,8 +45,8 @@ public class Invs {
     }
 
     public static boolean isInMenu(HumanEntity bukkitPlayer, Inventory inv) {
-        Container c = (((CraftPlayer) bukkitPlayer).getHandle()).activeContainer;
-        return (c instanceof ContainerChest && ((ContainerChest) c).e() == ((CraftInventory) inv).getInventory());
+        Container c = ((CraftPlayer) bukkitPlayer).getHandle().activeContainer;
+        return c instanceof ContainerChest && ((ContainerChest) c).e() == ((CraftInventory) inv).getInventory();
     }
 
     public static void clear(HumanEntity entity) {
@@ -71,6 +71,7 @@ public class Invs {
     public static int take(Inventory inv, Material type, int amount) {
         for (Map.Entry<Integer, ? extends ItemStack> entry : inv.all(type).entrySet()) {
             ItemStack is = entry.getValue();
+
             if (is.getAmount() <= amount) {
                 inv.setItem(entry.getKey().intValue(), null);
                 amount -= is.getAmount();
@@ -79,9 +80,11 @@ public class Invs {
                 inv.setItem(entry.getKey().intValue(), is);
                 amount = 0;
             }
+
             if (amount == 0)
                 break;
         }
+
         return amount;
     }
 }

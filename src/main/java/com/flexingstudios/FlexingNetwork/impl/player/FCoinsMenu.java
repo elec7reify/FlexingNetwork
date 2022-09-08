@@ -36,7 +36,7 @@ public class FCoinsMenu implements InvMenu {
                 "&a◆ &fПокупки &e&lТитулов", "&a◆ &fПокупки &b&lПерсонализированных сообщений", "&a◆ &fПокупки &d&lГаджетов и плюшек на выживании",
                 "&a◆ &fПокупки &6&lСледов от стрел", "", "&f&lДанная валюта никак не влияет на экономику сервера",
                 "&f&lЕё нельзя обменять на внутриигровую валюту и наоборот");
-        INFO_BOOK_SLOTS.forEach(slot -> inv.setItem(slot.intValue(), INFO_BOOK));
+        INFO_BOOK_SLOTS.forEach(slot -> inv.setItem(slot, INFO_BOOK));
 
         this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3Вернуться назад"));
         this.inv.setItem(28, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/4cb3acdc11ca747bf710e59f4c8e9b3d949fdd364c6869831ca878f0763d1787", 1)).build(), "&fКупить &f&lМешочек &9&lFlex&f&lCoin &f- &a&l19 руб", "", "&7&lДля аскетычей, которым много не надо", "", "&fСодержит &b&l&n60&9&l Flex&f&lCoin"));
@@ -53,7 +53,7 @@ public class FCoinsMenu implements InvMenu {
         ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
         GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
         GLASS_PANE.setItemMeta(GLASS_PANE_META);
-        GLASS_PANE_SLOTS.forEach(slot -> inv.setItem(slot.intValue(), GLASS_PANE));
+        GLASS_PANE_SLOTS.forEach(slot -> inv.setItem(slot, GLASS_PANE));
     }
 
     @Override
@@ -98,19 +98,19 @@ public class FCoinsMenu implements InvMenu {
             ItemMeta GLASS_PANE_BLACK_META = GLASS_PANE_BLACK.getItemMeta();
             GLASS_PANE_BLACK_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
             GLASS_PANE_BLACK.setItemMeta(GLASS_PANE_BLACK_META);
-            this.GLASS_PANE_BLACK_SLOTS.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE_BLACK));
+            GLASS_PANE_BLACK_SLOTS.forEach(slot -> this.inv.setItem(slot, GLASS_PANE_BLACK));
 
             ItemStack GLASS_PANE_BLUE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
             ItemMeta GLASS_PANE_BLUE_META = GLASS_PANE_BLUE.getItemMeta();
             GLASS_PANE_BLUE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
             GLASS_PANE_BLUE.setItemMeta(GLASS_PANE_BLUE_META);
-            this.GLASS_PANE_BLUE_SLOTS.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE_BLUE));
+            GLASS_PANE_BLUE_SLOTS.forEach(slot -> this.inv.setItem(slot, GLASS_PANE_BLUE));
 
             ItemStack GLASS_PANE_WHITE = new ItemStack(Material.STAINED_GLASS_PANE, 1);
             ItemMeta GLASS_PANE_WHITE_META = GLASS_PANE_WHITE.getItemMeta();
             GLASS_PANE_WHITE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
             GLASS_PANE_WHITE.setItemMeta(GLASS_PANE_WHITE_META);
-            this.GLASS_PANE_WHITE_SLOTS.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE_WHITE));
+            GLASS_PANE_WHITE_SLOTS.forEach(slot -> this.inv.setItem(slot, GLASS_PANE_WHITE));
 
             this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
 
@@ -128,7 +128,7 @@ public class FCoinsMenu implements InvMenu {
 
         @Override
         public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
-            FLPlayer flPlayer = (FLPlayer) FlexingNetwork.getPlayer(player);
+            FLPlayer flplayer = (FLPlayer) FlexingNetwork.getPlayer(player);
             switch (slot) {
                 case 8:
                     player.openInventory(new FCoinsMenu(player).getInventory());
@@ -136,12 +136,12 @@ public class FCoinsMenu implements InvMenu {
                 case 11:
                     break;
                 case 14:
-                    player.openInventory(new MessageOnJoinMenu(player).getInventory());
+                    player.openInventory(new MsgJoinMenu(flplayer).getInventory());
                     break;
                 case 39:
                     break;
                 case 42:
-                    player.openInventory(new com.flexingstudios.FlexingNetwork.impl.player.ArrowTrailMenu(flPlayer).getInventory());
+                    player.openInventory(new ArrowTrailMenu(flplayer).getInventory());
                     break;
             }
         }
@@ -149,154 +149,6 @@ public class FCoinsMenu implements InvMenu {
         @Override
         public Inventory getInventory() {
             return this.inv;
-        }
-    }
-
-    private static class MessageOnJoinMenu implements InvMenu {
-
-        private final Inventory inv;
-        private static final Set<String> test = ImmutableSet.of("join.1", "join.2");
-
-        public MessageOnJoinMenu(Player player) {
-            inv = Bukkit.createInventory(this, 36, "Сообщения при входе");
-
-            FLPlayer nplayer = FLPlayer.get(player);
-            LuckPerms luckPerms = LuckPermsProvider.get();
-            User user = luckPerms.getUserManager().getUser(player.getName());
-            CachedPermissionData permissionData = user.getCachedData().getPermissionData();
-
-            String color, lore;
-            if (nplayer.availableJoinMessages.contains(1) || nplayer.availableJoinMessages.contains(2)) {
-                if (permissionData.checkPermission("join.1").asBoolean()) {
-                    color = "&b";
-                    lore = "&bВыбрано";
-                } else {
-                    color = "&a";
-                    lore = "&aНажмите для выбора";
-                }
-            } else {
-                color = "&c";
-                lore = "&cНужно купить за флекс-коины";
-            }
-
-            inv.setItem(10, Items.name(Material.BOOK, "test1", lore));
-            inv.setItem(11, Items.name(Material.BOOK, "test2", lore));
-        }
-
-        @Override
-        public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
-            LuckPerms luckPerms = LuckPermsProvider.get();
-            User user = luckPerms.getUserManager().getUser(player.getName());
-            CachedPermissionData permissionData = user.getCachedData().getPermissionData();
-            FLPlayer nplayer = FLPlayer.get(player);
-            switch (slot) {
-                case 10:
-                    if (player.isPermissionSet("join.1")) {
-                        //if (permissionData.checkPermission("join.1").asBoolean() == permissionData.checkPermission("join.1").asBoolean()) return;
-                        if (!permissionData.checkPermission("join.1").asBoolean()) {
-                            for (String strings : test) {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set " + strings + " false");
-                            }
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set join.1 true");
-                        } else {
-                            return;
-                        }
-                    } else {
-                        nplayer.takeCoins(50);
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set join.1 false");
-                        Utilities.msg(player, "&aВы купили это");
-                    }
-                    break;
-                case 11:
-                    if (player.isPermissionSet("join.2")) {
-                        //if (permissionData.checkPermission("join.1").asBoolean() == permissionData.checkPermission("join.1").asBoolean()) return;
-                        if (!permissionData.checkPermission("join.2").asBoolean()) {
-                            for (String strings : test) {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set " + strings + " false");
-                            }
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set join.2 true");
-                        } else {
-                            return;
-                        }
-                    } else {
-                        nplayer.takeCoins(50);
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + player.getName() + " permission set join.2 false");
-                        Utilities.msg(player, "&aВы купили это");
-                    }
-                    break;
-            }
-        }
-
-        @Override
-        public Inventory getInventory() {
-            return inv;
-        }
-    }
-
-    private static class ArrowTrailMenu implements InvMenu {
-
-        private final Inventory inv;
-        private final FLPlayer player;
-        private final Inventory prev;
-
-        public ArrowTrailMenu(Inventory prev, NetworkPlayer nplayer) {
-            this.prev = prev;
-            this.player = (FLPlayer) nplayer;
-            this.inv = Bukkit.createInventory(this, 36, "Следы за стрелой");
-            int index = 0;
-            for (ArrowTrail trail : ArrowTrail.values()) {
-                String color, lore;
-                ItemStack is = trail.getItem();
-                if (player.availableArrowTrails.contains(trail.getId())) {
-                    if (player.getArrowTrail() == trail) {
-                        color = "&b";
-                        lore = "&bВыбрано";
-                    } else {
-                        color = "&6";
-                        lore = "&cНажмите для выбора";
-                    }
-                } else {
-                    color = "&c";
-                    lore = "&cНужно купить за флекс-коины";
-                }
-                Items.name(is, color + trail.getName(), lore);
-                this.inv.setItem(getSlot(index++), is);
-            }
-        }
-
-        private int getSlot(int index) {
-            return 10 + 9 * index / 7 + index % 7;
-        }
-
-        private int getIndex(int slot) {
-            if (slot % 9 == 0 || (slot + 1) % 9 == 0)
-                return -1;
-            slot -= 10;
-            if (slot < 0)
-                return -1;
-            int row = slot / 9;
-            return row * 7 + (slot - row * 9) % 7;
-        }
-
-        @Override
-        public void onClick(ItemStack is, Player bukkitPlayer, int slot, ClickType clickType) {
-            if (this.prev != null && slot == 4) {
-                Invs.forceOpen(bukkitPlayer, this.prev);
-                return;
-            }
-            int index = getIndex(slot);
-            if (index < 0 || index >= ArrowTrail.values().length)
-                return;
-            ArrowTrail selected = ArrowTrail.values()[index];
-            if (this.player.availableArrowTrails.contains(selected.getId()) && this.player.getArrowTrail() != selected) {
-                this.player.setArrowTrail(selected);
-                bukkitPlayer.closeInventory();
-            }
-        }
-
-        @Override
-        public Inventory getInventory() {
-            return inv;
         }
     }
 }

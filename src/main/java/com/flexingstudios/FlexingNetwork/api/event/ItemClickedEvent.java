@@ -50,4 +50,5 @@ public class ItemClickedEvent extends PlayerEvent implements Cancellable {
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
+
 }

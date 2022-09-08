@@ -1,7 +1,5 @@
 package com.flexingstudios.Commons.player;
 
-import com.flexingstudios.FlexingNetwork.api.player.Language;
-
 import java.util.EnumSet;
 
 public enum Rank {

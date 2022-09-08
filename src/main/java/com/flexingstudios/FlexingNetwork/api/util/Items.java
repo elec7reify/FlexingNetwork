@@ -27,9 +27,12 @@ public class Items {
     public static ItemStack name(ItemStack is, String name, String... lore) {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Utilities.colored(name));
+
         if (lore.length > 0)
             im.setLore(Arrays.asList(Utilities.colored(lore)));
+
         is.setItemMeta(im);
+
         return is;
     }
 
@@ -40,9 +43,12 @@ public class Items {
     public static ItemStack name(ItemStack is, String name, List<String> lore) {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Utilities.colored(name));
+
         if (!lore.isEmpty())
             im.setLore(Utilities.colored(lore));
+
         is.setItemMeta(im);
+
         return is;
     }
 
@@ -58,11 +64,14 @@ public class Items {
         ItemMeta im = is.getItemMeta();
         if (!im.hasLore())
             return null;
+
         List<String> lore = im.getLore();
         if (index < 0)
             index += lore.size();
+
         if (index < 0 || index >= lore.size())
             return null;
+
         return lore.get(index);
     }
 
@@ -71,25 +80,30 @@ public class Items {
         SkullMeta sm = (SkullMeta) is.getItemMeta();
         sm.setOwner(player);
         is.setItemMeta(sm);
+
         return is;
     }
 
     public static ItemStack appendLore(ItemStack is, String... lore) {
         if (lore.length == 0)
             return is;
+
         return appendLore(is, Arrays.asList(lore));
     }
 
     public static ItemStack appendLore(ItemStack is, List<String> lore) {
         ItemMeta im = is.getItemMeta();
         List<String> lore0 = im.getLore();
+
         if (lore0 == null) {
             lore0 = Utilities.colored(lore);
         } else {
             lore0.addAll(Utilities.colored(lore));
         }
+
         im.setLore(lore0);
         is.setItemMeta(im);
+
         return is;
     }
 
@@ -112,8 +126,10 @@ public class Items {
     public static ItemStack enchant(ItemStack is, Object... params) {
         if (params.length % 2 == 1)
             throw new IllegalArgumentException("params must be as pairs of {Enchantment, level}");
+
         for (int i = 0; i < params.length; i += 2)
-            is.addUnsafeEnchantment((Enchantment) params[i], ((Integer)params[i + 1]).intValue());
+            is.addUnsafeEnchantment((Enchantment) params[i], (Integer) params[i + 1]);
+
         return is;
     }
 
@@ -130,14 +146,18 @@ public class Items {
             if (path.contains(".")) {
                 String[] parts = path.split("\\.");
                 NBTTagCompound t = nms.getTag();
+
                 for (int i = 0; i < parts.length; i++) {
                     NBTTagCompound t0 = t.getCompound(parts[i]);
+
                     if (write && t.hasKey(parts[i]))
                         t.set(parts[i], t0);
                     t = t0;
                 }
+
                 return t;
             }
+
             return nms.getTag();
         }
 

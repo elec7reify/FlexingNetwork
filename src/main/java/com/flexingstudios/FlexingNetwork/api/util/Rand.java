@@ -19,6 +19,7 @@ public class Rand {
         Iterator<T> it = collection.iterator();
         for (int i = 0; i < index; i++)
             it.next();
+
         return it.next();
     }
 
@@ -31,6 +32,7 @@ public class Rand {
         int var = 0;
         for (List<T> l : lists)
             var += l.size();
+
         var = nextInt(var);
         for (List<T> l : lists) {
             if (var >= l.size()) {
@@ -49,18 +51,21 @@ public class Rand {
     public static int intRange(int from, int to) {
         int min = Math.min(from, to);
         int max = Math.max(from, to);
+
         return min + nextInt(max - min + 1);
     }
 
     public static float floatRange(float from, float to) {
         float min = Math.min(from, to);
         float max = Math.max(from, to);
+
         return nextFloat() * (max - min) + min;
     }
 
     public static double doubleRange(double from, double to) {
         double min = Math.min(from, to);
         double max = Math.max(from, to);
+
         return nextDouble() * (max - min) + min;
     }
 

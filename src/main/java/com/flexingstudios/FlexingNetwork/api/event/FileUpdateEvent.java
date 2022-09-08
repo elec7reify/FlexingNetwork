@@ -18,23 +18,23 @@ public class FileUpdateEvent extends Event {
     }
 
     public boolean isDir() {
-        return this.old instanceof WatchedDir;
+        return old instanceof WatchedDir;
     }
 
     public boolean isFile() {
-        return this.old instanceof WatchedFile;
+        return old instanceof WatchedFile;
     }
 
     public WatchedEntry getOld() {
-        return this.old;
+        return old;
     }
 
     public WatchedEntry getCurrent() {
-        return this.curr;
+        return curr;
     }
 
     public Action getAction() {
-        return this.action;
+        return action;
     }
 
     public void setAction(Action action) {

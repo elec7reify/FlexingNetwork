@@ -65,6 +65,10 @@ public class Spectators implements Listener {
         return set.contains(player);
     }
 
+    /**
+     * Add player to spectator mode
+     * @param player player entity
+     */
     public void add(Player player) {
         if (contains(player))
             return;

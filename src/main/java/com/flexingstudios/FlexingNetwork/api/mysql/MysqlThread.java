@@ -36,8 +36,8 @@ public abstract class MysqlThread extends Thread {
         setName(plugin.getName() + " - Mysql");
         setDaemon(true);
         this.config = config;
-        this.queries = new ConcurrentLinkedDeque<>();
-        this.logger = plugin.getLogger();
+        queries = new ConcurrentLinkedDeque<>();
+        logger = plugin.getLogger();
         SafeRunnable.class.getName();
     }
 
@@ -46,16 +46,16 @@ public abstract class MysqlThread extends Thread {
     }
 
     public void select(String query, SelectCallback callback) {
-        this.queries.add(new Query(query, callback));
-        synchronized (this.lock) {
-            this.lock.notify();
+        queries.add(new Query(query, callback));
+        synchronized (lock) {
+            lock.notify();
         }
     }
 
     public void update(String query, UpdateCallback callback) {
-        this.queries.add(new Query(query, callback));
-        synchronized (this.lock) {
-            this.lock.notify();
+        queries.add(new Query(query, callback));
+        synchronized (lock) {
+            lock.notify();
         }
     }
 
@@ -74,21 +74,21 @@ public abstract class MysqlThread extends Thread {
     }
 
     public void start() {
-        if (this.running)
+        if (running)
             return;
-        this.running = true;
+        running = true;
         super.start();
     }
 
     public void finish() {
-        if (!this.running)
+        if (!running)
             return;
-        this.running = false;
+        running = false;
         safe(this::join);
-        if (this.db != null) {
+        if (db != null) {
             safe(this::checkConnection);
             safe(this::executeQueries);
-            safe(this.db::close);
+            safe(db::close);
         }
     }
 
@@ -101,7 +101,7 @@ public abstract class MysqlThread extends Thread {
     }
 
     public void useUnicode() {
-        this.useUnicode = true;
+        useUnicode = true;
     }
 
     protected void onConnect() {}
@@ -124,30 +124,30 @@ public abstract class MysqlThread extends Thread {
     @Override
     public void run() {
         checkConnection();
-        while (this.running) {
-            if (!this.queries.isEmpty())
+        while (running) {
+            if (!queries.isEmpty())
                 if (checkConnection()) {
                     executeQueries();
                 } else {
-                    this.queries.clear();
+                    queries.clear();
                 }
             try {
                 synchronized (lock) {
-                    this.lock.wait(1000L);
+                    lock.wait(1000L);
                 }
             } catch (InterruptedException e) {
-                this.running = false;
+                running = false;
             }
         }
     }
 
     private void executeQueries() {
-        while (!this.queries.isEmpty()) {
-            Query query = this.queries.poll();
+        while (!queries.isEmpty()) {
+            Query query = queries.poll();
             String q = onPreQuery(query.query);
             if (q == null)
                 continue;
-            try (Statement statement = this.db.createStatement()) {
+            try (Statement statement = db.createStatement()) {
                 boolean isSelect = statement.execute(q);
                 try {
                     if (isSelect) {
@@ -160,17 +160,17 @@ public abstract class MysqlThread extends Thread {
                         ((UpdateCallback)query.callback).done(statement.getUpdateCount());
                     }
                 } catch (Exception e) {
-                    this.logger.log(Level.SEVERE, "Query " + q + " is failed!", e);
+                    logger.log(Level.SEVERE, "Query " + q + " is failed!", e);
                 }
                 onPostQuery(q, true);
             } catch (Exception e) {
                 onPostQuery(q, false);
                 if (e.getMessage() != null && e.getMessage().contains("try restarting transaction")) {
-                    this.queries.add(query);
-                    this.logger.warning(" Query " + q + " is failed! Restarting: " + e.getMessage());
+                    queries.add(query);
+                    logger.warning(" Query " + q + " is failed! Restarting: " + e.getMessage());
                     continue;
                 }
-                this.logger.severe("Query " + q + " is failed! Message: " + e.getMessage());
+                logger.severe("Query " + q + " is failed! Message: " + e.getMessage());
             }
         }
     }
@@ -178,19 +178,19 @@ public abstract class MysqlThread extends Thread {
     private boolean checkConnection() {
         boolean state = false;
         try {
-            if (this.db != null && !isValid()) {
-                safe(this.db::close);
-                this.db = null;
+            if (db != null && !isValid()) {
+                safe(db::close);
+                db = null;
             }
-            if (this.db == null)
+            if (db == null)
                 connect();
-            state = (this.db != null && isValid());
+            state = (db != null && isValid());
         } catch (Exception e) {
-            this.logger.log(Level.WARNING, "Error while connecting to database: {0}", e.getMessage());
+            logger.log(Level.WARNING, "Error while connecting to database: {0}", e.getMessage());
         }
-        if (this.connected != state) {
-            this.connected = state;
-            if (!this.connected)
+        if (connected != state) {
+            connected = state;
+            if (!connected)
                 onDisconnect();
         }
         return state;
@@ -198,16 +198,16 @@ public abstract class MysqlThread extends Thread {
 
     private void connect() {
         try {
-            String url = this.config.getUrl();
-            if (this.useUnicode)
-                url = addUnicodeParams(this.config.getUrl());
-            this.db = DriverManager.getConnection(url, this.config.getUser(), this.config.getPass());
+            String url = config.getUrl();
+            if (useUnicode)
+                url = addUnicodeParams(config.getUrl());
+            db = DriverManager.getConnection(url, config.getUser(), config.getPass());
             if (isValid()) {
-                this.logger.info("Mysql connected.");
+                logger.info("Mysql connected.");
                 onConnect();
             }
         } catch (SQLException ex) {
-            this.logger.warning(ex.getMessage());
+            logger.warning(ex.getMessage());
         }
     }
 
@@ -223,7 +223,7 @@ public abstract class MysqlThread extends Thread {
     }
 
     private boolean isValid() throws SQLException {
-        return this.db.isValid(40);
+        return db.isValid(40);
     }
 
     private static long limit(long min, long value, long max) {
@@ -255,15 +255,15 @@ public abstract class MysqlThread extends Thread {
             this.pass = pass;
         }
         public String getUrl() {
-            return this.url;
+            return url;
         }
 
         public String getUser() {
-            return this.user;
+            return user;
         }
 
         public String getPass() {
-            return this.pass;
+            return pass;
         }
     }
 

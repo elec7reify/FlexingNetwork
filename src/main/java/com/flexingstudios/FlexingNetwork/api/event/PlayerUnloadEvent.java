@@ -15,11 +15,11 @@ public class PlayerUnloadEvent extends Event {
     }
 
     public Player getPlayer() {
-        return this.player.getBukkitPlayer();
+        return player.getBukkitPlayer();
     }
 
     public NetworkPlayer getNetworkPlayer() {
-        return this.player;
+        return player;
     }
 
     @Override

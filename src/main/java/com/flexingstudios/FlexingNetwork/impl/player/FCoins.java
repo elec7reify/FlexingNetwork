@@ -4,6 +4,7 @@ import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.list.linked.TIntLinkedList;
+import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,26 +24,26 @@ public class FCoins {
     private void flush() {
         waiting = false;
         int total = 0;
-        TIntObjectHashMap tIntObjectHashMap = new TIntObjectHashMap();
+        TIntObjectMap<TIntLinkedList> map = new TIntObjectHashMap<>();
         for (FLPlayer player : FLPlayer.PLAYERS.values()) {
             if (player.coinsAddBuffer != 0) {
                 total += player.coinsAddBuffer;
-                TIntLinkedList list = (TIntLinkedList) tIntObjectHashMap.get(player.coinsAddBuffer);
+                TIntLinkedList list = (TIntLinkedList) map.get(player.coinsAddBuffer);
                 if (list == null)
-                    tIntObjectHashMap.put(player.coinsAddBuffer, list = new TIntLinkedList());
+                    map.put(player.coinsAddBuffer, list = new TIntLinkedList());
                 list.add(player.id);
                 player.coinsAddBuffer = 0;
             }
         }
         FlexingNetwork.metrics().add("coins.added", total);
         waiting = true;
-        TIntObjectIterator<TIntLinkedList> it = tIntObjectHashMap.iterator();
+        TIntObjectIterator<TIntLinkedList> it = map.iterator();
         while (it.hasNext()) {
             it.advance();
-            String ids = (it.value()).toString();
+            String ids = it.value().toString();
             plugin.mysql.query("UPDATE authme SET coins=coins+" + it.key() + " WHERE id IN (" + ids.substring(1, ids.length() - 1) + ")");
         }
-        tIntObjectHashMap.clear();
+        map.clear();
     }
 
     public void saveNow(FLPlayer player) {
@@ -58,6 +59,7 @@ public class FCoins {
     public int addCoins(FLPlayer player, int amount, boolean simulate) {
         if (player == null || amount < 1)
             return -1;
+
         try {
             if (!simulate) {
                 if (waiting) {

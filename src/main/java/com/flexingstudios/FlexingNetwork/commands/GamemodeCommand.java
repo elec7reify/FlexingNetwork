@@ -18,7 +18,6 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 public class GamemodeCommand implements CommandExecutor {
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (FlexingNetwork.lobby().getServerType() == ServerType.BUILD) {
@@ -71,6 +70,7 @@ public class GamemodeCommand implements CommandExecutor {
                 changeGamemode(player, GameMode.SPECTATOR);
                 break;
         }
+
             return true;
     }
 
@@ -79,7 +79,8 @@ public class GamemodeCommand implements CommandExecutor {
             Utilities.msg(player, T.error("Error",Language.getMsg(player, Messages.COMMAND_GAMEMODE_ERROR).replace("{mode}", mode.name())));
             return;
         }
+
         player.setGameMode(mode);
-        Utilities.msg(player, T.success("GOT IT!", Language.getMsg(player, Messages.COMMAND_GAMEMODE_CHANGED).replace("{modename}", mode.name())));
+        Utilities.msg(player, T.success("GOT IT!", Language.getMsg(player, Messages.COMMAND_GAMEMODE_CHANGED).replace("{mode}", mode.name())));
     }
 }

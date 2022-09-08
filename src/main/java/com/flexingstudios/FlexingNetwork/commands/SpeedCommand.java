@@ -43,8 +43,10 @@ public class SpeedCommand implements CommandExecutor {
             player.setWalkSpeed(0.2F + 0.08F * (speed - 1));
             Utilities.msg(sender, T.success("GOT IT!", "&fСкорость &aходьбы &fустановлен на &a" + speed));
         }
+
         return true;
     }
+
     private void help(CommandSender sender) {
         Utilities.msg(sender, "&cИспользование: /speed <скорость ходьбы/полёта>");
     }

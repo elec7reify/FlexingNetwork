@@ -4,10 +4,7 @@ import com.flexingstudios.Commons.player.Leveling;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
-import com.flexingstudios.FlexingNetwork.api.player.Collectable;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.FlexingNetwork.api.player.*;
 import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
@@ -17,12 +14,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class FLPlayer implements NetworkPlayer {
     public static final ConcurrentHashMap<String, FLPlayer> PLAYERS = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<Integer, FLPlayer> IDS = new ConcurrentHashMap<>();
+    public Map<String, MysqlPlayer.MetaValue> meta = new ConcurrentHashMap<>();
     private static final String ARROW_SELECTED = "arr.sel";
     private static final String ARROW_AVAILABLE = "arr.open";
     protected final FlexingNetworkPlugin plugin = FlexingNetworkPlugin.getInstance();
@@ -33,9 +38,9 @@ public abstract class FLPlayer implements NetworkPlayer {
     public long loginTime = System.currentTimeMillis();
     public Rank rank = Rank.PLAYER;
     private ArrowTrail arrowTrail = null;
+    private MessageOnJoin messageOnJoin = null;
     public TIntHashSet availableArrowTrails;
     public TIntHashSet availableJoinMessages;
-    public TIntHashSet activeJoinMessage;
     public Collectable settings;
     public Player lastDamager = null;
     public Entity lastDamagerEntity = null;
@@ -51,16 +56,17 @@ public abstract class FLPlayer implements NetworkPlayer {
 
     FLPlayer(Player player) {
         this.player = player;
+        id = -1;
         username = player.getName();
         availableArrowTrails = new TIntHashSet();
         availableJoinMessages = new TIntHashSet();
-        activeJoinMessage = new TIntHashSet();
         settings = new Collectable(this, "settings", new boolean[] {true, true, true, true, true, true, false, true});
     }
 
     public void onMetaLoaded() {
         settings.load();
         loadArrows();
+        loadMessages();
     }
 
     public void onMetaUpdate(String key, String value) {
@@ -68,11 +74,14 @@ public abstract class FLPlayer implements NetworkPlayer {
             settings.load();
         } else if (key.equals("arr.sel") || key.equals("arr.open")) {
             loadArrows();
+        } else if (key.equals("msg.sel") || key.equals("msg.open")) {
+            loadMessages();
         }
     }
 
     public int addCoins(int amount) {
         addCoinsExact(amount);
+
         return amount;
     }
 
@@ -108,6 +117,9 @@ public abstract class FLPlayer implements NetworkPlayer {
         return username;
     }
 
+    /**
+     * @return player id
+     */
     public int getId() {
         return id;
     }
@@ -136,6 +148,10 @@ public abstract class FLPlayer implements NetworkPlayer {
         return arrowTrail;
     }
 
+    public MessageOnJoin getMessageOnJoin() {
+        return messageOnJoin;
+    }
+
     public void setArrowTrail(ArrowTrail arrowTrail) {
         if (arrowTrail != this.arrowTrail) {
             this.arrowTrail = arrowTrail;
@@ -147,9 +163,25 @@ public abstract class FLPlayer implements NetworkPlayer {
         }
     }
 
+    public void setMessageOnJoin(MessageOnJoin msg) {
+        if (msg != this.messageOnJoin) {
+            this.messageOnJoin = msg;
+            if (messageOnJoin == null) {
+                removeMeta("msg.sel");
+            } else {
+                setMeta("msg.sel", messageOnJoin.getId() + "");
+            }
+        }
+    }
+
     public void unlockArrowTrail(ArrowTrail trail) {
         if (availableArrowTrails.add(trail.getId()))
             saveAvailableArrowTrails();
+    }
+
+    public void unlockJoinMessage(MessageOnJoin msg) {
+        if (availableJoinMessages.add(msg.getId()))
+            saveAvailableMessagesOnJoin();
     }
 
     private void loadArrows() {
@@ -161,6 +193,7 @@ public abstract class FLPlayer implements NetworkPlayer {
                 plugin.getLogger().warning("[" + username + "] ArrowTrail " + val + " not exists [1]");
                 removeMeta("arr.sel");
             }
+
         val = getMeta("arr.open");
         if (val != null) {
             boolean changed = false;
@@ -174,6 +207,32 @@ public abstract class FLPlayer implements NetworkPlayer {
             }
             if (changed)
                 saveAvailableArrowTrails();
+        }
+    }
+
+    private void loadMessages() {
+        String val = getMeta("msg.sel");
+        if (val != null)
+            try {
+                messageOnJoin = messageOnJoin.byId(Integer.parseInt(val));
+            } catch (Exception ex) {
+                plugin.getLogger().warning("[" + username + "] ArrowTrail " + val + " not exists [1]");
+                removeMeta("msg.sel");
+            }
+
+        val = getMeta("msg.open");
+        if (val != null) {
+            boolean changed = false;
+            for (String str : val.split(",")) {
+                try {
+                    availableJoinMessages.add(Integer.parseInt(str));
+                } catch (Exception ex) {
+                    plugin.getLogger().warning("[" + username + "] ArrowTrail " + val + " not exists [2]");
+                    changed = true;
+                }
+            }
+            if (changed)
+                saveAvailableMessagesOnJoin();
         }
     }
 
@@ -191,6 +250,23 @@ public abstract class FLPlayer implements NetworkPlayer {
         setMeta("arr.open", sb.toString());
     }
 
+    private void saveAvailableMessagesOnJoin() {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (int id : availableJoinMessages.toArray()) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append(',');
+            }
+            sb.append(id);
+        }
+        setMeta("msg.open", sb.toString());
+    }
+
+    /**
+     * @return player login time
+     */
     public long getLoginTime() {
         return loginTime;
     }
@@ -210,8 +286,9 @@ public abstract class FLPlayer implements NetworkPlayer {
     public void giveExp(int exp) {
         if (exp <= 0)
             return;
+
         this.exp += exp;
-        this.expBuffer += exp;
+        expBuffer += exp;
         updateExp(exp);
     }
 
@@ -229,12 +306,12 @@ public abstract class FLPlayer implements NetworkPlayer {
             boolean launchFirework = true;
 
             if (launchFirework)
-                Fireworks.playRandom(this.player.getLocation());
+                Fireworks.playRandom(player.getLocation());
         }
     }
 
     public boolean equals(Object obj) {
-        return (obj == this);
+        return obj == this;
     }
 
     public int hashCode() {
@@ -243,26 +320,32 @@ public abstract class FLPlayer implements NetworkPlayer {
 
     public String toString() {
         return "FLPlayer{" +
-                "name='" + username + "'}";
+                "name='" + username +
+                "'}";
     }
 
     public static Function<Player, FLPlayer> CONSTRUCTOR = null;
 
     public static FLPlayer get(String player) {
         FLPlayer val = PLAYERS.get(player);
+
         if (val == null) {
             Player bukkitPlayer = Bukkit.getPlayerExact(player);
             if (bukkitPlayer == null)
                 throw new IllegalArgumentException("Player with name '" + player + "' not exists on server");
+
             val = PLAYERS.computeIfAbsent(player, name -> CONSTRUCTOR.apply(bukkitPlayer));
         }
+
         return val;
     }
 
     public static FLPlayer get(Player player) {
         FLPlayer val = PLAYERS.get(player.getName());
+
         if (val == null)
             val = PLAYERS.computeIfAbsent(player.getName(), name -> CONSTRUCTOR.apply(player));
+
         return val;
     }
 }

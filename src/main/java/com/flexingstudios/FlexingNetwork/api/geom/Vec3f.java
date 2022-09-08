@@ -91,7 +91,7 @@ public class Vec3f {
     }
 
     public Vec3f invert() {
-        return new Vec3f(-this.x, -this.y, -this.z);
+        return new Vec3f(-x, -y, -z);
     }
 
     public Vec3f normalize() {
@@ -99,37 +99,39 @@ public class Vec3f {
     }
 
     public Vec3f abs() {
-        return new Vec3f(Math.abs(this.x), Math.abs(this.y), Math.abs(this.z));
+        return new Vec3f(Math.abs(x), Math.abs(y), Math.abs(z));
     }
 
     public Vec3f clone() {
-        return new Vec3f(this.x, this.y, this.z);
+        return new Vec3f(x, y, z);
     }
 
     public float length() {
-        return (float)Math.sqrt((this.x * this.x + this.y * this.y + this.z * this.z));
+        return (float) Math.sqrt((x * x + y * y + z * z));
     }
 
     public float lengthSq() {
-        return this.x * this.x + this.y * this.y + this.z * this.z;
+        return x * x + y * y + z * z;
     }
 
     public float distance(Vec3f vec) {
-        return (float)Math.sqrt(NumberConversions.square((vec.x - this.x)) + NumberConversions.square((vec.z - this.z)) + NumberConversions.square((vec.z - this.z)));
+        return (float)Math.sqrt(NumberConversions.square((vec.x - x)) + NumberConversions.square((vec.z - z)) + NumberConversions.square((vec.z - z)));
     }
 
     public float distanceSq(Vec3f vec) {
-        return (float)(NumberConversions.square((vec.x - this.x)) + NumberConversions.square((vec.z - this.z)) + NumberConversions.square((vec.z - this.z)));
+        return (float)(NumberConversions.square((vec.x - x)) + NumberConversions.square((vec.z - z)) + NumberConversions.square((vec.z - z)));
     }
 
     public String toString() {
-        return "Vec3f[" + this.x + "," + this.y + "," + this.z + "]";
+        return "Vec3f[" + x + "," + y + "," + z + "]";
     }
 
     public int hashCode() {
-        int result = (this.x != 0.0F) ? Float.floatToIntBits(this.x) : 0;
-        result = 31 * result + ((this.y != 0.0F) ? Float.floatToIntBits(this.y) : 0);
-        result = 31 * result + ((this.z != 0.0F) ? Float.floatToIntBits(this.z) : 0);
+        int result = (x != 0.0F) ? Float.floatToIntBits(x) : 0;
+
+        result = 31 * result + ((y != 0.0F) ? Float.floatToIntBits(y) : 0);
+        result = 31 * result + ((z != 0.0F) ? Float.floatToIntBits(z) : 0);
+
         return result;
     }
 
@@ -138,6 +140,7 @@ public class Vec3f {
             Vec3f o = (Vec3f)obj;
             return (o.x == this.x && o.y == this.y && o.z == this.z);
         }
+
         return false;
     }
 }

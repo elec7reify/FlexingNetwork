@@ -31,16 +31,17 @@ public class VanishCommand implements CommandExecutor {
         } else {
             enableVanish(player);
         }
+
         return true;
     }
 
     public void purge(Player player) {
-        this.data.remove(player.getName());
+        data.remove(player.getName());
     }
 
     public void disableVanish(Player player) {
         if (Spectators.instance().contains(player)) {
-            VanishData vanishData = this.data.remove(player.getName());
+            VanishData vanishData = data.remove(player.getName());
 
             Spectators.instance().remove(player);
             player.getInventory().setContents(vanishData.inventory);
@@ -58,7 +59,7 @@ public class VanishCommand implements CommandExecutor {
 
     public void enableVanish(Player player) {
         if (!Spectators.instance().contains(player)) {
-            this.data.put(player.getName(), new VanishData(player));
+            data.put(player.getName(), new VanishData(player));
             Spectators.instance().add(player);
             Invs.clear(player);
             player.setAllowFlight(true);
@@ -78,14 +79,14 @@ public class VanishCommand implements CommandExecutor {
         public double health;
 
         public VanishData(Player player) {
-            this.inventory = player.getInventory().getContents();
-            this.armor = player.getInventory().getArmorContents();
-            this.lastLoc = player.getLocation();
-            this.allowFlight = player.getAllowFlight();
-            this.flying = player.isFlying();
-            this.flyspeed = player.getFlySpeed();
-            this.walkspeed = player.getWalkSpeed();
-            this.health = player.getHealth();
+            inventory = player.getInventory().getContents();
+            armor = player.getInventory().getArmorContents();
+            lastLoc = player.getLocation();
+            allowFlight = player.getAllowFlight();
+            flying = player.isFlying();
+            flyspeed = player.getFlySpeed();
+            walkspeed = player.getWalkSpeed();
+            health = player.getHealth();
         }
     }
 }

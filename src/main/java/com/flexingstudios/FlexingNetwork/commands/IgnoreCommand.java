@@ -25,8 +25,7 @@ public class IgnoreCommand implements CommandExecutor {
 
             if (args[0].equals("@all")) {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
-                //flplayer.ignoreAll = true;
-                (FLPlayer.get(sender.getName())).settings.set(1, false);
+                FLPlayer.get(sender.getName()).settings.set(1, false);
                 return true;
             }
 
@@ -59,8 +58,7 @@ public class IgnoreCommand implements CommandExecutor {
 
             if (args[0].equals("@all")) {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения теперь принимаются"));
-                //flplayer.ignoreAll = false;
-                (FLPlayer.get(sender.getName())).settings.set(1, true);
+                FLPlayer.get(sender.getName()).settings.set(1, true);
                 return true;
             }
 
@@ -81,14 +79,15 @@ public class IgnoreCommand implements CommandExecutor {
         if (command.getName().equals("msgtoggle")) {
             MysqlPlayer flplayer = (MysqlPlayer) FLPlayer.get(sender.getName());
 
-            if (!flplayer.ignoreAll) {
+            if (!FLPlayer.get(sender.getName()).settings.get(1)) {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
-                flplayer.ignoreAll = true;
+                FLPlayer.get(sender.getName()).settings.set(1, false);
             } else {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения теперь принимаются"));
-                flplayer.ignoreAll = false;
+                FLPlayer.get(sender.getName()).settings.set(1, true);
             }
         }
+
         return true;
     }
 }

@@ -5,6 +5,8 @@ import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,7 +31,7 @@ public class MessageCommand implements CommandExecutor {
                 }
 
                 if (args[0].equalsIgnoreCase(sender.getName())) {
-                    Utilities.msg(sender, "boy next door");
+                    Utilities.msg(sender, "&dОчень умный ход, пожалуй слишком умный для того, чтобы сервер смог это понять");
                     return true;
                 }
 
@@ -66,22 +68,23 @@ public class MessageCommand implements CommandExecutor {
                 trySendPrivateMessage(senderInfo, lastWriter, message);
                 break;
         }
+
         return true;
     }
 
     private void trySendPrivateMessage(MysqlPlayer sender, MysqlPlayer reciever, String message) {
-        if (!sender.rank.has(Rank.ADMIN) && reciever.ignoreAll) {
+        if (!sender.rank.has(Rank.ADMIN) && !FLPlayer.get(reciever.getBukkitPlayer()).settings.get(1)) {
             Utilities.msg(sender.player, reciever.getName() + " Отключил приватные сообщения");
             return;
         }
 
-        if (sender.ignoreAll) {
+        if (!FLPlayer.get(sender.getBukkitPlayer()).settings.get(1)) {
             Utilities.msg(sender.player, T.error(sender.username, "Вы отключили личные сообщения"));
             return;
         }
 
         if (sender.ignored.contains(reciever.getName())) {
-            Utilities.msg(sender.player, T.error("FlexingWorld", "Игрок " + reciever.getName() + " у вас в игноре."));
+            Utilities.msg(sender.player, T.error("FlexingWorld", "Игрок " + reciever.getName() + " у Вас в игноре."));
             return;
         }
 
@@ -89,8 +92,32 @@ public class MessageCommand implements CommandExecutor {
             Utilities.msg(sender.player, T.error(reciever.getName(),"&cВы в игноре у этого игрока"));
             return;
         }
-        sender.player.sendMessage(Utilities.colored("[&6Вы&r -> &6" + reciever.player.getDisplayName() + "&r] ") + message);
-        reciever.player.sendMessage(Utilities.colored("[&6" + sender.player.getDisplayName() + "&r -> &6Вы&r] ") + message);
+
+        TextComponent componentMessage = new TextComponent(message);
+
+        //reply
+        TextComponent reply = new TextComponent(new ComponentBuilder(Utilities.colored("&7[↩] &8⇢ "))
+                .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + sender.getName() + " "))
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§7Нажмите для ответа")))
+                .create());
+
+        TextComponent part = new TextComponent(Utilities.colored("[&6" + sender.player.getDisplayName() + "&r -> &6Вы&r] "));
+        BaseComponent[] components = new BaseComponent[]{ part, reply, componentMessage };
+
+        // formatted player name
+        TextComponent playerName = new TextComponent(new ComponentBuilder(Utilities.colored("&6" + reciever.getName()))
+                .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/actions " + reciever.getName()))
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§7Нажмите, чтобы открыть меню быстрых действий")))
+                .create());
+
+        TextComponent part0 = new TextComponent(Utilities.colored("[&6Вы&r -> "));
+        TextComponent part1 = new TextComponent(playerName);
+        TextComponent part2 = new TextComponent(Utilities.colored("&r] "));
+
+        BaseComponent[] components1 = new BaseComponent[]{ part0, part1, part2, componentMessage };
+
+        sender.player.spigot().sendMessage(components1);
+        reciever.player.spigot().sendMessage(components);
         reciever.lastWriter = sender.getName();
         sender.lastWriter = sender.getName();
     }

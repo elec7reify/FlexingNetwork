@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Set;
 
 public class GroupsMenu implements InvMenu {
-    private static final Set<Integer> GLASS_PANE_SLOTS = ImmutableSet.of(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(13), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(22), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(31), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(49), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
+    private static final Set<Integer> GLASS_PANE_SLOTS = ImmutableSet.of(0, 1, 2, 3, 4, 5, 6, 7, 9, 13, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 31, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53);
     public final Inventory inv;
 
     public GroupsMenu(Player player) {
@@ -29,7 +29,7 @@ public class GroupsMenu implements InvMenu {
         ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
         GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
         GLASS_PANE.setItemMeta(GLASS_PANE_META);
-        GLASS_PANE_SLOTS.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE));
+        GLASS_PANE_SLOTS.forEach(slot -> this.inv.setItem(slot, GLASS_PANE));
 
         this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), Language.getMsg(player, Messages.CLOSE_DONATE_INVENTORY)));
         this.inv.setItem(10, Items.name(Items.glow(Material.GRASS), "&f&lВы просматриваете возможности на &a&lВыживании"));

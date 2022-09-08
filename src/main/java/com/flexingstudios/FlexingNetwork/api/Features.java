@@ -10,7 +10,6 @@ public class Features {
 
     public static class Feature {
         private final String name;
-
         private boolean enabled;
 
         Feature(String name, boolean enabled) {

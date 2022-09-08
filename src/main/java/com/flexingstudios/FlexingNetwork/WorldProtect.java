@@ -4,9 +4,11 @@ import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
+import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.FlexingNetwork.api.util.JaroWinkler;
 import com.flexingstudios.FlexingNetwork.api.util.Particles;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
@@ -34,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,27 +77,21 @@ class WorldProtect implements Listener {
         event.setJoinMessage(null);
         FLPlayer nplayer = FLPlayer.get(player);
         plugin.mysql.addLoadPlayer(nplayer);
+
+        //nplayer.onMetaLoaded();
         ((CraftPlayer) player).addChannel("BungeeCord");
         ((CraftPlayer) player).addChannel("FlexingBungee");
+    }
 
-        LuckPerms luckPerms = LuckPermsProvider.get();
-        User user = luckPerms.getUserManager().getUser(player.getName());
-        CachedPermissionData permissionData = user.getCachedData().getPermissionData();
-        Particles.HEART.play(player.getLocation(), 0.0F, 0.0F, 0.0F, 0.0F, 5);
-        for (Player player1 : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission("join.1") && permissionData.queryPermission("join.1").result().asBoolean()) {
-                player1.sendMessage(Utilities.colored("&8&l[&c&l+&8&l] " + nplayer.getRank().getDisplayName() + " &7" + player.getDisplayName() + " &aзалетел на тусу"));
-            }
-        }
-        /*if (FlexingNetwork.isDevelopment() && !Bukkit.getOnlinePlayers().equals(FlexingNetworkPlugin.getInstance().config.onDevCanJoin)) {
-                player.kickPlayer("§cВы были кикнуты с сервера \n" + "§cВы не включены в список разрешённых игроков");
-        }*/
+    @EventHandler
+    public void onPlayerLoaded(PlayerLoadedEvent event) {
+        FLPlayer flPlayer = FLPlayer.get(event.getNetworkPlayer().getName());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player p = event.getPlayer();
-        event.setQuitMessage(null);
+        event.setQuitMessage(fireLeaveEvent(FLPlayer.get(p), event.getQuitMessage(), false));
 
         //Save preferred language
         if (Language.getLangByPlayer().containsKey(p.getUniqueId())) {
@@ -102,11 +99,16 @@ class WorldProtect implements Listener {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                 String iso = Language.getLangByPlayer().get(u).getIso();
                 if (Language.isLanguageExist(iso)) {
-                    MysqlPlayer.get(p).setLanguage(u, iso);
+                    MysqlPlayer.get(p).setLanguage(p, iso);
                 }
                 Language.getLangByPlayer().remove(u);
             });
         }
+    }
+
+    @EventHandler
+    public void onLeave(PlayerLeaveEvent event) {
+        event.setLeaveMessage(null);
     }
 
     @EventHandler
@@ -130,39 +132,11 @@ class WorldProtect implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChatLowest(AsyncPlayerChatEvent event) {
-        Rank rank = FlexingNetwork.getPlayer(event.getPlayer()).getRank();
-        if (rank == Rank.PLAYER) {
-            Matcher matcher = URL_PATTERN.matcher(event.getMessage());
-            if (matcher.find()) {
-                boolean replaced = false;
-                StringBuffer sb = new StringBuffer();
-                while (true) {
-                    String host = matcher.group(2);
-                    if (host == null || !host.endsWith("flexingworld.ru")) {
-                        matcher.appendReplacement(sb, "<ссылка удалена>");
-                        replaced = true;
-                    }
-                    if (!matcher.find()) {
-                        if (replaced) {
-                            matcher.appendTail(sb);
-                            event.setMessage(sb.toString());
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> Utilities.msg(event.getPlayer(), "&cЗапрещено отправлять сторонние ссылки в чат"));
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
         final String messageToPlayeer = checkMessage(event.getPlayer().getName(), event.getMessage());
 
         if (messageToPlayeer != null) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
-                @Override
-                public void run() {
-                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', messageToPlayeer));
-                }
-            }, 1);
+            event.setCancelled(true);
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', messageToPlayeer)), 1);
         }
     }
 
@@ -176,17 +150,17 @@ class WorldProtect implements Listener {
             } else if (player.has(Rank.CHIKIBAMBONYLA)) {
                 event.setMessage(Utilities.colored(event.getMessage()));
             }
-            event.setFormat(Utilities.colored("&7«&r" + player.getRank().getDisplayName() + "&r&7»&r" + " %1$s&r&7: " + msgColor) + "%2$s");
+            event.setFormat(Utilities.colored("&7«&r" + player.getRank().getDisplayName() + "&7»&r" + " %1$s&r&7: " + msgColor) + "%2$s");
         }
     }
-
-
 
     @EventHandler
     public void onUnload(PlayerUnloadEvent event) {
         FLPlayer player = (FLPlayer) event.getNetworkPlayer();
         plugin.coins.saveNow(player);
         plugin.expBuffer.saveNow(player);
+        if (plugin.metaSaver != null)
+            plugin.metaSaver.saveNow(player);
         if (player.has(Rank.ADMIN))
             plugin.vanishCommand.purge(player.getBukkitPlayer());
     }
@@ -203,7 +177,7 @@ class WorldProtect implements Listener {
         Bukkit.getPluginManager().callEvent(event);
         Bukkit.getPluginManager().callEvent(new PlayerUnloadEvent(player));
         FLPlayer.PLAYERS.remove(player.getName());
-        FLPlayer.IDS.remove(Integer.valueOf(player.getId()));
+        FLPlayer.IDS.remove(player.getId());
 
         return event.getLeaveMessage();
     }
@@ -229,12 +203,12 @@ class WorldProtect implements Listener {
         for (MessageInfo prev : player.messages) {
             long diff = curr.time - prev.time;
             if (checkSimilarity) {
-                /*if (prev.message.length() > 4) {
+                if (prev.message.length() > 4) {
                     double similarity = JaroWinkler.similarity(prev.message, curr.message);
                     double treshold = 1 - 0.02 / (0.2 + diff / (5 * 60000));
                     if (similarity >= treshold)
                         similar++;
-                }*/
+                }
             }
             if (diff < 5000)
                 fastMsgs++;
@@ -252,7 +226,10 @@ class WorldProtect implements Listener {
         }
 
         if (similar == 0 && fastMsgs >= 2) {
-            if (!player.lastMsgIsTooFast) {
+            if (player.lastMsgIsTooFast) {
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mute " + name + " 5m Флуд"), 1);
+                return null;
+            } else {
                 player.lastMsgIsTooFast = true;
                 returnMessage = "&fВы слишком часто отправляете сообщения в чат.";
             }
@@ -263,7 +240,7 @@ class WorldProtect implements Listener {
         return returnMessage;
     }
 
-    public static class PlayerInfo{
+    public static class PlayerInfo {
         public Deque<MessageInfo> messages = new ArrayDeque<>();
         public boolean lastMsgIsSimilar;
         public boolean lastMsgIsTooFast;
@@ -275,7 +252,7 @@ class WorldProtect implements Listener {
         }
     }
 
-    public static class MessageInfo{
+    public static class MessageInfo {
         public String message;
         public long time;
 

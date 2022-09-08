@@ -242,7 +242,7 @@ public class TrailMenu implements InvMenu {
                         a = -player.ticks * 0.2F;
                         x = MathHelper.sin(a) * 0.5F;
                         f1 = MathHelper.cos(a) * 0.5F;
-                        Particles.HEART.play(w, (float)loc.getX() + x, (float)loc.getY() + 2.4F, (float)loc.getZ() + f1, 0.0F, 0.0F, 0.0F, 0.0F, 1, new Player[0]);
+                        Particles.HEART.play(w, (float)loc.getX() + x, (float)loc.getY() + 2.4F, (float)loc.getZ() + f1, 0.0F, 0.0F, 0.0F, 0.0F, 1);
                 }
             }
         }

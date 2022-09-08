@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class Restart {
     private static final int RESTART_HOUR = 48;
@@ -54,17 +55,17 @@ public class Restart {
 
         ScheduledExecutorService executor = FlexingNetworkPlugin.getInstance().scheduledExecutorService;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "4min")), 60L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "3min")), 120L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "2min")), 180L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "1min")), 240L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "30sec")), 270L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "10sec")), 290L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "5sec")), 295L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "4sec")), 296L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "3sec")), 297L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "2sec")), 298L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_BROADCAST + "1sec")), 299L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "4min")), 60L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "3min")), 120L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "2min")), 180L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "1min")), 240L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "30sec")), 270L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "10sec")), 290L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "5sec")), 295L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "4sec")), 296L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "3sec")), 297L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "2sec")), 298L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "1sec")), 299L, TimeUnit.SECONDS);
         }
         executor.schedule(() -> Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), Restart::doRestart), 300L, TimeUnit.SECONDS);
     }
@@ -76,7 +77,8 @@ public class Restart {
 
     private static void bcast(String time) {
         for (Player player : Bukkit.getOnlinePlayers())
-            Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> Utilities.bcast(Language.getMsg(player, Messages.RESTART_BROADCAST_SCHEDULED).replace("{time}", time)));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> Utilities.msg(player, Language.getMsg(player, Messages.RESTART_BROADCAST_SCHEDULED).replace("{time}", time)));
+        Logger.getGlobal().info("&fThe Server will restart in &3" + time +"&f!");
     }
 
     private static void doRestart() {

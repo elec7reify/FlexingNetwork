@@ -128,39 +128,46 @@ public class Vec3i {
     }
 
     public float length() {
-        return (float)Math.sqrt((x * x + y * y + z * z));
+        return (float)Math.sqrt(x * x + y * y + z * z);
     }
 
     public float lengthSq() {
-        return (x * x + y * y + z * z);
+        return x * x + y * y + z * z;
     }
 
     public float distance(Vec3f vec) {
-        return (float)Math.sqrt(NumberConversions.square((vec.x - x)) + NumberConversions.square((vec.z - z)) + NumberConversions.square((vec.z - z)));
+        return (float) Math.sqrt(NumberConversions.square((vec.x - x)) + NumberConversions.square((vec.z - z)) + NumberConversions.square((vec.z - z)));
     }
 
     public float distanceSq(Vec3f vec) {
-        return (float)(NumberConversions.square((vec.x - x)) + NumberConversions.square((vec.z - z)) + NumberConversions.square((vec.z - z)));
+        return (float) (NumberConversions.square((vec.x - x)) + NumberConversions.square((vec.z - z)) + NumberConversions.square((vec.z - z)));
     }
 
     public String toString() {
-        return "Vec3i[" + x + ", " + y + ", " + z + "]";
+        return "Vec3i["
+                + x + ", "
+                + y + ", "
+                + z + "]";
     }
 
     public int hashCode() {
         int result = x;
+
         result = 31 * result + y;
         result = 31 * result + z;
+
         return result;
     }
 
     public boolean equals(Object obj) {
         if (obj == this)
             return true;
+
         if (obj instanceof Vec3i) {
             Vec3i o = (Vec3i) obj;
             return (o.x == x && o.y == y && o.z == z);
         }
+
         return false;
     }
 }

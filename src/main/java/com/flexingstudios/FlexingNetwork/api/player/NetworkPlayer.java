@@ -25,7 +25,7 @@ public interface NetworkPlayer {
     /**
      * Set a player language.
      */
-    void setLanguage(UUID uuid, String iso);
+    void setLanguage(Player player, String iso);
 
     /**
      * Get a player language.
@@ -64,8 +64,12 @@ public interface NetworkPlayer {
     Player getBukkitPlayer();
     boolean isOnline();
     ArrowTrail getArrowTrail();
+    MessageOnJoin getMessageOnJoin();
     void setArrowTrail(ArrowTrail arrowTrail);
+
+    void setMessageOnJoin(MessageOnJoin msg);
     void unlockArrowTrail(ArrowTrail trail);
+    void unlockJoinMessage(MessageOnJoin msg);
     long getLoginTime();
     int getLevel();
     int getTotalExp();

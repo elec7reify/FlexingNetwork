@@ -20,7 +20,7 @@ public class FMetrics implements Metrics {
 
     @Override
     public void add(String key, int amount) {
-        (map.computeIfAbsent(key, k -> new Value())).value += amount;
+        map.computeIfAbsent(key, k -> new Value()).value += amount;
     }
 
     public void flush() {

@@ -13,6 +13,8 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.logging.Logger;
+
 public class ServiceItems implements Listener {
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event) {
@@ -37,10 +39,9 @@ public class ServiceItems implements Listener {
         if (IC.isRightClick(event)) {
             Material id = event.getItem().getType();
             int meta = event.getItem().getDurability();
-
-            if (id == ItemsDef.ITEM_TO_LOBBY.getType()) {
+            if (id == new ItemsDef(event.getPlayer()).ITEM_TO_LOBBY.getType() && meta == 0) {
                 FlexingNetwork.toLobby(event.getPlayer());
-            } else if (id == ItemsDef.ITEM_GAME_SELECT.getType()) {
+            } else if (id == new ItemsDef(event.getPlayer()).ITEM_GAME_SELECT.getType() && meta == 0) {
                 event.getPlayer().chat("/bw gui");
             }
         }

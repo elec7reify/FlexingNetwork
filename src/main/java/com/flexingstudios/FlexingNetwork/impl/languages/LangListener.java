@@ -17,7 +17,7 @@ public class LangListener implements Listener {
             Bukkit.getScheduler().runTaskLater(FlexingNetworkPlugin.getInstance(), () -> {
                 // save to db
                 //MysqlPlayer.get(e.getPlayer()).setLanguage(e.getPlayer().getUniqueId(), e.getNewLang());
-                Bukkit.getScheduler().runTaskAsynchronously(FlexingNetworkPlugin.getInstance(), () -> MysqlPlayer.get(e.getPlayer()).setLanguage(e.getPlayer().getUniqueId(), e.getNewLang()));
+                Bukkit.getScheduler().runTaskAsynchronously(FlexingNetworkPlugin.getInstance(), () -> MysqlPlayer.get(e.getPlayer()).setLanguage(e.getPlayer(), e.getNewLang()));
             }, 10L);
     }
 }

@@ -1,6 +1,6 @@
 name: FlexingNetwork
 author: FlexingStudios, Elec7reify
-version: '0.5.1'
+version: '0.5.2'
 
 main: com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
 

@@ -3,6 +3,7 @@ package com.flexingstudios.FlexingNetwork;
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.ItemsDef;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.Lobby;
 import com.flexingstudios.FlexingNetwork.api.updater.UpdateWatcher;
@@ -37,7 +38,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public final class FlexingNetworkPlugin extends JavaPlugin {
-
     static FlexingNetworkPlugin instance;
     public ScheduledExecutorService scheduledExecutorService;
     public HelpCommand help;
@@ -100,7 +100,11 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new LangListener(), this);
+        getServer().getPluginManager().registerEvents(new FlexingChat(), this);
 
+        /**
+         * Block - commands
+         */
         MessageCommand messageCommand = new MessageCommand();
         CommandExecutor executor = new GamemodeCommand();
         IgnoreCommand ignoreCommand = new IgnoreCommand();
@@ -127,7 +131,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("help").setExecutor(help);
 
         //getServer().getScheduler().scheduleSyncRepeatingTask(this, new MemoryFix(), 100L, 100L);
-        //getServer().getScheduler().scheduleSyncRepeatingTask(this, this.metaSaver = new PlayerMetaSaver(this), 20L, 20L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             help.addCommand("banlist", "Банлист", Permission.BAN);
@@ -164,17 +167,21 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         } catch (SQLException e) {
             e.printStackTrace();
         }*/
+
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayerMetaSaver(this), 20L, 20L);
+
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             if (!FlexingNetwork.isDevelopment() && (FlexingNetwork.features()).AUTO_RESTART.isEnabled())
                 Restart.schedule();
         });
-
     }
 
     @Override
     public void onDisable() {
         getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         getServer().getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord", new BungeeBridge());
+        if (this.metaSaver != null)
+            this.metaSaver.finish();
         coins.finish();
         expBuffer.finish();
         metrics.flush();

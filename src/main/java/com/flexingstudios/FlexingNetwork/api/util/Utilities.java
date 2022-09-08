@@ -25,14 +25,18 @@ public class Utilities {
     public static String plurals(int n, String form1, String form2, String form3) {
         if (n == 0)
             return form3;
+
         n = Math.abs(n) % 100;
         if (n > 10 && n < 20)
             return form3;
+
         n %= 10;
         if (n > 1 && n < 5)
             return form2;
+
         if (n == 1)
             return form1;
+
         return form3;
     }
 
@@ -53,14 +57,17 @@ public class Utilities {
     public static String colored(String str) {
         if (str == null)
             return null;
+
         return ChatColor.translateAlternateColorCodes('&', str);
     }
 
     public static String[] colored(String... lines) {
         if (lines == null)
             return null;
+
         for (int i = 0; i < lines.length; i++)
             lines[i] = colored(lines[i]);
+
         return lines;
     }
 
@@ -68,6 +75,7 @@ public class Utilities {
         ListIterator<String> it = lines.listIterator();
         while (it.hasNext())
             it.set(colored(it.next()));
+
         return lines;
     }
 
@@ -82,7 +90,7 @@ public class Utilities {
     }
 
     public static void sendPacket(Player player, Packet packet) {
-        (((CraftPlayer)player).getHandle()).playerConnection.sendPacket(packet);
+        (((CraftPlayer) player).getHandle()).playerConnection.sendPacket(packet);
     }
 
     public static Location parseLocation(World world, String loc) {
@@ -93,6 +101,7 @@ public class Utilities {
                 bloc.setYaw(Float.parseFloat(data[3].trim()));
             if (data.length > 4)
                 bloc.setPitch(Float.parseFloat(data[4].trim()));
+
             return bloc;
         } catch (Exception e) {
             FlexingNetworkPlugin.getInstance().getLogger().log(Level.SEVERE, (String)null, e);
@@ -114,10 +123,12 @@ public class Utilities {
         for (Location loc : locs) {
             if (w == null)
                 w = loc.getWorld();
+
             x += loc.getX();
             y += loc.getY();
             z += loc.getZ();
         }
+
         return new Location(w, x / locs.size(), y / locs.size(), z / locs.size());
     }
 
@@ -125,6 +136,7 @@ public class Utilities {
         StringBuilder sb = new StringBuilder(length + 4);
         sb.append(colored(filled));
         boolean filled0 = false;
+
         for (int i = 0; i < length; i++) {
             if (!filled0 &&
                     length * progress <= i) {
@@ -133,6 +145,7 @@ public class Utilities {
             }
             sb.append(c);
         }
+
         return sb.toString();
     }
 }

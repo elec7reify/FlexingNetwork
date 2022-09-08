@@ -5,9 +5,7 @@ import org.bukkit.event.HandlerList;
 
 public class ServerRestartEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
-
     private State state;
-
     private boolean forced;
 
     public ServerRestartEvent(State state, boolean forced) {
@@ -16,11 +14,11 @@ public class ServerRestartEvent extends Event {
     }
 
     public boolean isForced() {
-        return this.forced;
+        return forced;
     }
 
     public State getState() {
-        return this.state;
+        return state;
     }
 
     public HandlerList getHandlers() {
