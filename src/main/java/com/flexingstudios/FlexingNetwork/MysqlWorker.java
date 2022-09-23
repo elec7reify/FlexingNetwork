@@ -7,23 +7,14 @@ import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
 import com.flexingstudios.FlexingNetwork.api.mysql.SelectCallback;
 import com.flexingstudios.FlexingNetwork.api.mysql.UpdateCallback;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import com.flexingstudios.Commons.F;
-import com.mysql.jdbc.log.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.logging.Logger;
 
 public class MysqlWorker extends MysqlThread {
     private final FlexingNetworkPlugin plugin;
