@@ -15,11 +15,23 @@ public class Config extends Configuration {
     public boolean updaterEnabled;
     public boolean development;
     public String language;
-    public List<String> onDevCanJoin;
 
     public Config(FlexingNetworkPlugin plugin) {
         super(plugin);
         this.plugin = plugin;
+
+        addDefault("mysql.host", "localhost");
+        addDefault("mysql.port", "3306");
+        addDefault("mysql.database", "minecraft");
+        addDefault("mysql.username", "root");
+        addDefault("mysql.password", "");
+        addDefault("lobby.enabled", false);
+        addDefault("lobby.serverHost", "localhost");
+        addDefault("lobby.serverId", null);
+        addDefault("development", false);
+        addDefault("updater.enabled", true);
+        addDefault("language", "ru");
+
         plugin.saveDefaultConfig();
         loadConfig();
     }
@@ -34,6 +46,5 @@ public class Config extends Configuration {
         development = getBoolean("development", false);
         updaterEnabled = getBoolean("updater.enabled", true);
         language = getString("language", "ru");
-        onDevCanJoin = getStringList("ifDevCanJoin");
     }
 }

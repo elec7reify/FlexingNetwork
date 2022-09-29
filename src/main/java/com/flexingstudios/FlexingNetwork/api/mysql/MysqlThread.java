@@ -153,11 +153,11 @@ public abstract class MysqlThread extends Thread {
                     if (isSelect) {
                         if (query.callback != null) {
                             ResultSet rs = statement.getResultSet();
-                            ((SelectCallback)query.callback).done(rs);
+                            ((SelectCallback) query.callback).done(rs);
                             rs.close();
                         }
                     } else if (query.callback != null) {
-                        ((UpdateCallback)query.callback).done(statement.getUpdateCount());
+                        ((UpdateCallback) query.callback).done(statement.getUpdateCount());
                     }
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, "Query " + q + " is failed!", e);
@@ -177,6 +177,7 @@ public abstract class MysqlThread extends Thread {
 
     private boolean checkConnection() {
         boolean state = false;
+
         try {
             if (db != null && !isValid()) {
                 safe(db::close);
@@ -193,6 +194,7 @@ public abstract class MysqlThread extends Thread {
             if (!connected)
                 onDisconnect();
         }
+
         return state;
     }
 
@@ -231,6 +233,7 @@ public abstract class MysqlThread extends Thread {
             return min;
         if (value > max)
             return max;
+
         return value;
     }
 
@@ -279,15 +282,15 @@ public abstract class MysqlThread extends Thread {
         }
 
         public String getUrl() {
-            return this.url.get();
+            return url.get();
         }
 
         public String getUser() {
-            return this.user.get();
+            return user.get();
         }
 
         public String getPass() {
-            return this.pass.get();
+            return pass.get();
         }
     }
 
@@ -301,5 +304,4 @@ public abstract class MysqlThread extends Thread {
             this.callback = callback;
         }
     }
-
 }

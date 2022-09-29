@@ -2,6 +2,7 @@ package com.flexingstudios.FlexingNetwork.commands;
 
 import com.flexingstudios.Commons.F;
 import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
 import com.flexingstudios.FlexingNetwork.Config;
 import com.flexingstudios.FlexingNetwork.Debug;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
@@ -72,14 +73,16 @@ public class FlexingNetworkCommand extends UpCommand {
 
     @CmdSub(value = {"toserver"}, rank = Rank.ADMIN)
     private void toServer(dataCommand data) {
+
         if((data.getArgs().length != 2)) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <сервер>");
             return;
         }
-        Player player = this.plugin.getServer().getPlayerExact(data.getArgs()[0]);
+        Player player = plugin.getServer().getPlayerExact(data.getArgs()[0]);
         if (player != null) {
             FlexingNetwork.toServer(data.getArgs()[1], player);
         } else {
+            new BungeeBridge().toServerOther(data.getArgs()[0], data.getArgs()[1]);
             Utilities.msg(data.getSender(), "&cИгрок " + data.getArgs()[0] + " не найден");
         }
     }

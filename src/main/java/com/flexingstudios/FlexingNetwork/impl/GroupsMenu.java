@@ -43,7 +43,7 @@ public class GroupsMenu implements InvMenu {
         // Статус VIP (Чикибамбвипка)
         ItemStack vip = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/2b6a97ba2793fe1fc83fd261e6de8ac3299f9f646f322bb8d40554baaecff", 1)).build();
 
-        this.inv.setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.", "",
+        inv.setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.", "",
                 "&a• §fПрефикс в чат и таб: &7«&a&lЧикибамбвипка&7» &7" + player.getDisplayName(), "&a• &fПример сообщения в чате:",
                 "&7«&a&lЧикибамбвипка&7» &7" + player.getDisplayName() + " &8→ &7Hello World!", "",
                 "&a◆ &fВозможность получить набор &a&lVIP: &a/kit vip", "&a◆ &fВозможность включить режим полёта: &a/fly",
@@ -111,14 +111,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус sponsor (Спонсорбамбони)
         ItemStack sponsor = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/c1df70dc9885e418b58d8e7486a81ed4ec2e7963c42569c468084d4f567c6", 1)).build();
-        this.inv.setItem(33, Items.name(sponsor, "&fПривилегия &d&lСпонсорбамбони &f- &a&l299 Руб.",
-                "&d• &fПрефикс в чат и таб: &7«&d&lСпонсорбамбони&7» &7" + player.getDisplayName(), "&d• &fПример сообщения в чате:", "",
-                "&7«&d&lСпонсорбамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!", "", "&c▪ Донат выдается на &c&lвсе &cсервера.",
-                "&6▪ Возможности &6&lпредыдущих &6донатов.", "&a▪ Донат &a&lостается &aпосле вайпа.", "", "&fПокупать донат на сайте: &ewww.FlexingWorld.ru"));
+        inv.setItem(33, Items.name(sponsor, Language.getMsg(player, Messages.RANK_SPONSOR_TITLE), Language.getList(player, Messages.RANK_SPONSOR_LORE_SURVIVAL.replace("{player_name}", player.getName()))));
 
         // Статус owner (Чикивладелец)
         ItemStack owner = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/6c92e3f45b49e405670224892f93ebc84fa7f8c96c36aab24a8854f2cbf0b8", 1)).build();
-        this.inv.setItem(34, Items.name(owner, "&fПривилегия &6&lЧикивладелец &f- &a&l449 Руб.",
+        inv.setItem(34, Items.name(owner, "&fПривилегия &6&lЧикивладелец &f- &a&l449 Руб.",
                 "&6• &fПрефикс в чат и таб: &7«&6&lЧикивладелец&7» &7" + player.getDisplayName(), "&6• &fПример сообщения в чате:", "",
                 "&7«&6&lЧикивладелец&7» &7" + player.getDisplayName() + " &8→ &7Hello World!", "", "&6• &fВключен &6&n&lиммунитет&f от бана/кика/мута &7(Но админ сервера сможет забанить)", "", "&c▪ Донат выдается на &c&lвсе &cсервера.",
                 "&6▪ Возможности &6&lпредыдущих &6донатов.", "&a▪ Донат &a&lостается &aпосле вайпа.", "", "&fПокупать донат на сайте: &ewww.FlexingWorld.ru"));

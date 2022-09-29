@@ -1,12 +1,22 @@
 package com.flexingstudios.FlexingNetwork.api.Language;
 
 public class Messages {
+
     /**  */
     public static final String COMMAND_LANG_AVAILABLE = "available-lang";
     public static final String COMMAND_LANG_LIST_FORMAT = "lang-list-format";
     public static final String COMMAND_LANG_SELECTED_SUCCESSFULLY = "lang-selected";
-
     public static final String PLAYER_NOT_FOUND = "player-not-found";
+
+    /** BAN/KICK/MUTE Messages + SHADE */
+    public static final String REASON_NOT_SPECIFIED = "reason-not-specified";
+    public static final String COMMAND_KICK_USAGE = "cmd-kick-usage";
+    public static final String COMMAND_SHADEKICK_USAGE = "cmd-shadekick-usage";
+    public static final String KICKED_BY_SHADEADMIN = "kicked-by-shadeadmin";
+    public static final String KICKED_BY_ADMIN = "kicked-by-admin";
+    public static final String KICK_MESSAGE = "kick-message";
+    public static final String BAN_MESSAGE = "ban-message";
+    public static final String OFFICIAL_DATE_FORMAT = "date-format";
 
     /** Gamemode Command Messages */
     public static final String COMMAND_GAMEMODE_USAGE = "cmd-gamemode-usage";
@@ -31,6 +41,7 @@ public class Messages {
     public static final String RESTART_BROADCAST = "restart-broadcast";
     public static final String RESTART_BROADCAST_SCHEDULED = "restart-broadcast-scheduled";
     public static final String RESTART_TIME = "restart-time-";
+    public static final String RESTART_KICK_REASON = "restart-kick-reason";
 
     /** Permission & Status */
     public static final String NO_PERMISSION = "no-permission";
@@ -38,4 +49,11 @@ public class Messages {
 
     /** Donate Inventory */
     public static final String CLOSE_DONATE_INVENTORY = "inventory-donate-close";
+    public static final String RANK_VIP_MENU = "inventory-rank-vip";
+    public static final String RANK_SPONSOR_MENU = "inventory-rank-sponsor";
+
+    public static final String RANK_VIP_TITLE = RANK_VIP_MENU + ".title";
+    public static final String RANK_VIP_LORE_SURVIVAL = RANK_VIP_MENU + ".lore";
+    public static final String RANK_SPONSOR_TITLE = RANK_SPONSOR_MENU + ".title";
+    public static final String RANK_SPONSOR_LORE_SURVIVAL = RANK_SPONSOR_MENU + ".lore";
 }

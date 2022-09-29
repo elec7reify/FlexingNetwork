@@ -92,18 +92,6 @@ class WorldProtect implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         Player p = event.getPlayer();
         event.setQuitMessage(fireLeaveEvent(FLPlayer.get(p), event.getQuitMessage(), false));
-
-        //Save preferred language
-        if (Language.getLangByPlayer().containsKey(p.getUniqueId())) {
-            final UUID u = p.getUniqueId();
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                String iso = Language.getLangByPlayer().get(u).getIso();
-                if (Language.isLanguageExist(iso)) {
-                    MysqlPlayer.get(p).setLanguage(p, iso);
-                }
-                Language.getLangByPlayer().remove(u);
-            });
-        }
     }
 
     @EventHandler
@@ -143,15 +131,15 @@ class WorldProtect implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onChatHigh(AsyncPlayerChatEvent event) {
         NetworkPlayer player = FlexingNetwork.getPlayer(event.getPlayer());
-        if ((FlexingNetwork.features()).CHANGE_CHAT.isEnabled()) {
-            String msgColor = "&f";
-            if (player.has(Rank.PLAYER)) {
-                event.setMessage(event.getMessage());
-            } else if (player.has(Rank.CHIKIBAMBONYLA)) {
-                event.setMessage(Utilities.colored(event.getMessage()));
-            }
-            event.setFormat(Utilities.colored("&7«&r" + player.getRank().getDisplayName() + "&7»&r" + " %1$s&r&7: " + msgColor) + "%2$s");
-        }
+//        if ((FlexingNetwork.features()).CHANGE_CHAT.isEnabled()) {
+//            String msgColor = "&f";
+//            if (player.has(Rank.PLAYER)) {
+//                event.setMessage(event.getMessage());
+//            } else if (player.has(Rank.CHIKIBAMBONYLA)) {
+//                event.setMessage(Utilities.colored(event.getMessage()));
+//            }
+//            event.setFormat(Utilities.colored("&7«&r" + player.getRank().getDisplayName() + "&7»&r" + " %1$s&r&7: " + msgColor) + "%2$s");
+//        }
     }
 
     @EventHandler

@@ -79,7 +79,7 @@ public class IgnoreCommand implements CommandExecutor {
         if (command.getName().equals("msgtoggle")) {
             MysqlPlayer flplayer = (MysqlPlayer) FLPlayer.get(sender.getName());
 
-            if (!FLPlayer.get(sender.getName()).settings.get(1)) {
+            if (FLPlayer.get(sender.getName()).settings.get(1)) {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
                 FLPlayer.get(sender.getName()).settings.set(1, false);
             } else {

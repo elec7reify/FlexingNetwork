@@ -1,5 +1,6 @@
 package com.flexingstudios.FlexingNetwork.impl.player;
 
+import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
@@ -37,7 +38,7 @@ public class ArrowTrailMenu implements InvMenu {
             } else {
                 color = "&c";
                 lore = "&cНужно купить";
-                withPrice = "Стоимость: " + trail.getPrice();
+                withPrice = "&fСтоимость: &6" + trail.getPrice();
             }
             Items.name(is, color + trail.getName(), lore, withPrice);
             inv.setItem(getSlot(index++), is);
@@ -71,10 +72,11 @@ public class ArrowTrailMenu implements InvMenu {
 
         if (!player.availableArrowTrails.contains(selected.getId())) {
             if (player.getCoins() >= selected.getPrice()) {
-                player.takeCoins(selected.getPrice());
-                player.unlockArrowTrail(selected);
-                bukkitPlayer.closeInventory();
-                bukkitPlayer.openInventory(inv);
+                ConfirmMenu confirmMenu = new ConfirmMenu(getInventory(), () -> {
+                    player.takeCoins(selected.getPrice());
+                    player.unlockArrowTrail(selected);
+                }, selected.getName());
+                bukkitPlayer.openInventory(confirmMenu.getInventory());
             } else {
                 bukkitPlayer.closeInventory();
                 Utilities.msg(bukkitPlayer, "&cУ Вас недостаточно Флекс-Коинов для покупки этого следа от стрелы.");

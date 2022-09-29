@@ -48,6 +48,7 @@ com/flexingstudios/FlexingNetwork/commands/HelpCommand$Desc.class
 com/flexingstudios/FlexingNetwork/tasks/Restart.class
 com/flexingstudios/FlexingNetwork/api/util/Reflect$MethodMapKey.class
 org/slf4j/MDC$1.class
+com/flexingstudios/FlexingNetwork/commands/BanCommand.class
 com/flexingstudios/FlexingNetwork/friends/listeners/PlayerJoin.class
 com/flexingstudios/Commons/season/GameSeason.class
 com/flexingstudios/FlexingNetwork/impl/player/FLPlayer.class
@@ -85,6 +86,7 @@ com/flexingstudios/FlexingNetwork/FlexingChat.class
 com/flexingstudios/FlexingNetwork/api/geom/Vec3d.class
 com/flexingstudios/FlexingNetwork/commands/FlexingNetworkCommand.class
 com/flexingstudios/FlexingNetwork/friends/listeners/GUIListener.class
+com/flexingstudios/FlexingNetwork/commands/KickCommand.class
 com/flexingstudios/FlexingNetwork/api/player/goals/GoalQuery.class
 com/flexingstudios/FlexingNetwork/listeners/InventoryListener.class
 com/flexingstudios/FlexingNetwork/listeners/MessageOnJoinListener$1.class
@@ -173,6 +175,8 @@ com/flexingstudios/FlexingNetwork/impl/FMetrics$1.class
 com/flexingstudios/FlexingNetwork/api/mysql/MysqlThread$MysqlConfigSupplier.class
 com/flexingstudios/Commons/season/GameSeason$MonthlyGameSeason.class
 com/flexingstudios/FlexingNetwork/api/util/Rand.class
+com/flexingstudios/FlexingNetwork/commands/ShadeKickCommand.class
+com/flexingstudios/FlexingNetwork/listeners/ShulkerCrasherFixListener.class
 org/slf4j/impl/StaticMarkerBinder.class
 com/flexingstudios/FlexingNetwork/listeners/ArrowTrailListener$1.class
 com/flexingstudios/FlexingNetwork/commands/DonateCommand.class
@@ -215,6 +219,7 @@ com/flexingstudios/FlexingNetwork/commands/ProfileCommand.class
 com/flexingstudios/FlexingNetwork/api/event/PlayerLangChangeEvent.class
 com/flexingstudios/FlexingNetwork/commands/GamemodeCommand.class
 com/flexingstudios/FlexingNetwork/api/mysql/MysqlThread$Query.class
+com/flexingstudios/FlexingNetwork/api/menu/ConfirmMenu.class
 org/slf4j/helpers/MarkerIgnoringBase.class
 com/flexingstudios/FlexingNetwork/api/menu/TrailMenu$1.class
 com/flexingstudios/FlexingNetwork/api/util/T.class

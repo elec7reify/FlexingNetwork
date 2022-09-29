@@ -101,6 +101,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new LangListener(), this);
         getServer().getPluginManager().registerEvents(new FlexingChat(), this);
+        getServer().getPluginManager().registerEvents(new ShulkerCrasherFixListener(), this);
 
         /**
          * Block - commands
@@ -122,6 +123,9 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("speed").setExecutor(new SpeedCommand());
         getCommand("tp").setExecutor(new TpCommand());
         getCommand("flexingnetwork").setExecutor(new FlexingNetworkCommand(this));
+        getCommand("kick").setExecutor(new KickCommand());
+        getCommand("shadekick").setExecutor(new ShadeKickCommand());
+        getCommand("ban").setExecutor(new BanCommand());
         getCommand("hub").setExecutor(new HubCommand());
         getCommand("stp").setExecutor(new StpCommand());
         getCommand("donate").setExecutor(new DonateCommand());
@@ -158,6 +162,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
             help.addCommand("flex", "Админские команды", Rank.ADMIN);
         });
 
+
         /*getLogger().info("Starting Up...");
         try {
             openConnection();
@@ -171,7 +176,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayerMetaSaver(this), 20L, 20L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            if (!FlexingNetwork.isDevelopment() && (FlexingNetwork.features()).AUTO_RESTART.isEnabled())
+            if (!FlexingNetwork.isDevelopment() && FlexingNetwork.features().AUTO_RESTART.isEnabled())
                 Restart.schedule();
         });
     }

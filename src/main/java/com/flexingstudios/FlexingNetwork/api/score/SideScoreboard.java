@@ -20,68 +20,70 @@ public class SideScoreboard {
     private Scoreboard nmsScoreboard;
 
     public SideScoreboard(String name) {
-        this.records = (Set<Record>) new ConcurrentSet();
-        this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.objective = this.scoreboard.registerNewObjective("score", "dummy");
-        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        this.nmsObjective = Reflect.get(this.objective, "objective");
-        this.nmsScoreboard = ((CraftScoreboard) this.scoreboard).getHandle();
+        records = new ConcurrentSet<>();
+        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        objective = scoreboard.registerNewObjective("score", "dummy");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        nmsObjective = Reflect.get(objective, "objective");
+        nmsScoreboard = ((CraftScoreboard) scoreboard).getHandle();
         setDisplayName(name);
     }
 
     public void setDisplayName(String name) {
-        this.objective.setDisplayName(name);
+        objective.setDisplayName(name);
     }
 
     public void unbind(Player player) {
         try {
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        } catch (IllegalStateException illegalStateException) {}
+        } catch (IllegalStateException ex) {}
     }
 
     public void bind(Player player) {
         try {
-            player.setScoreboard(this.scoreboard);
-        } catch (IllegalStateException illegalStateException) {}
+            player.setScoreboard(scoreboard);
+        } catch (IllegalStateException ex) {}
     }
 
     public Record create() {
-        return create("", 0);
+        return create("", 1);
     }
 
     public Record create(String name) {
-        return create(name, 0);
+        return create(name, 1);
     }
 
     public Record create(String name, int value) {
         if (name == null)
             throw new IllegalArgumentException("Name cannot be null");
+
         Record rec = new Record(this, name);
         rec.value = value;
-        this.records.add(rec);
+        records.add(rec);
+
         return rec;
     }
 
     public void remove(Record record) {
-        this.records.remove(record);
+        records.remove(record);
         removeScore(record.name);
     }
 
     public void reset() {
-        for (Record record : this.records)
+        for (Record record : records)
             removeScore(record.name);
-        this.records.clear();
+        records.clear();
     }
 
     void setScore(String name, int score) {
-        this.nmsScoreboard.getPlayerScoreForObjective(name, this.nmsObjective).setScore(score);
+        nmsScoreboard.getPlayerScoreForObjective(name, nmsObjective).setScore(score);
     }
 
     void removeScore(String name) {
-        this.nmsScoreboard.resetPlayerScores(name, nmsObjective);
+        nmsScoreboard.resetPlayerScores(name, nmsObjective);
     }
 
     public Scoreboard getScoreboard() {
-        return (Scoreboard) this.scoreboard;
+        return (Scoreboard) scoreboard;
     }
 }

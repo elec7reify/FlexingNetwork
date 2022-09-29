@@ -38,3 +38,7 @@ commands:
     aliases: [flexingworld, flex, flexing, fn, fw]
   language:
     aliases: [lang]
+  kick:
+  shadekick:
+    aliases: [shkick]
+  ban:

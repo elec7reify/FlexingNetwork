@@ -1,21 +1,17 @@
 package com.flexingstudios.FlexingNetwork.tasks;
 
-import com.flexingstudios.FlexingNetwork.Config;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.ServerType;
-import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.event.ServerRestartEvent;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -50,7 +46,7 @@ public class Restart {
         Bukkit.getPluginManager().callEvent(new ServerRestartEvent(ServerRestartEvent.State.COUNTDOWN, forced));
         Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers())
-                Utilities.bcast(Language.getList(player, Messages.RESTART_BROADCAST));
+                Utilities.msg(player, Language.getList(player, Messages.RESTART_BROADCAST));
         });
 
         ScheduledExecutorService executor = FlexingNetworkPlugin.getInstance().scheduledExecutorService;
@@ -67,6 +63,7 @@ public class Restart {
             executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "2sec")), 298L, TimeUnit.SECONDS);
             executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "1sec")), 299L, TimeUnit.SECONDS);
         }
+
         executor.schedule(() -> Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), Restart::doRestart), 300L, TimeUnit.SECONDS);
     }
 
@@ -77,8 +74,8 @@ public class Restart {
 
     private static void bcast(String time) {
         for (Player player : Bukkit.getOnlinePlayers())
-            Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> Utilities.msg(player, Language.getMsg(player, Messages.RESTART_BROADCAST_SCHEDULED).replace("{time}", time)));
-        Logger.getGlobal().info("&fThe Server will restart in &3" + time +"&f!");
+            Utilities.msg(player, Language.getMsg(player, Messages.RESTART_BROADCAST_SCHEDULED).replace("{time}", time));
+        Logger.getGlobal().info("The Server will restart in " + time +"!");
     }
 
     private static void doRestart() {
@@ -87,13 +84,13 @@ public class Restart {
         Bukkit.getPluginManager().callEvent(new ServerRestartEvent(ServerRestartEvent.State.RESTART, forced));
         if (FlexingNetwork.lobby().getServerType() == ServerType.LOBBY) {
             for (Player player : Bukkit.getOnlinePlayers())
-                player.kickPlayer(ChatColor.RED + "Перезагрузка сервера");
+                player.kickPlayer(Utilities.colored(Language.getMsg(player, Messages.RESTART_KICK_REASON)));
         } else if (forced) {
             for (Player player : Bukkit.getOnlinePlayers())
                 FlexingNetwork.toLobby(player);
         } else {
             for (Player player : Bukkit.getOnlinePlayers())
-                player.kickPlayer(ChatColor.RED + "Перезагрузка сервера");
+                player.kickPlayer(Utilities.colored(Language.getMsg(player, Messages.RESTART_KICK_REASON)));
         }
         
         Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), Bukkit::shutdown, 5L);

@@ -49,3 +49,15 @@ CREATE TABLE `stream_channels` (
   `channel` varchar(255) NOT NULL,
   PRIMARY KEY (`username`,`channel`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `bans` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `banto` bigint(20) NOT NULL,
+  `banfrom` bigint(20) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `admin` varchar(20) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users` (`username`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;

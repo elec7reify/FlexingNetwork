@@ -7,20 +7,20 @@ import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
 import com.flexingstudios.FlexingNetwork.api.mysql.SelectCallback;
 import com.flexingstudios.FlexingNetwork.api.mysql.UpdateCallback;
+import com.flexingstudios.FlexingNetwork.api.util.T;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import com.flexingstudios.Commons.F;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.LogManager;
 
 public class MysqlWorker extends MysqlThread {
     private final FlexingNetworkPlugin plugin;
     private int queryCounter = 0;
     private long queryStartTime = 0L;
-    private Map<String, MysqlPlayer.MetaValue> metaMap = new ConcurrentHashMap<>();
 
     MysqlWorker(FlexingNetworkPlugin plugin) {
         super(plugin, new MysqlThread.MysqlConfigSupplier(() -> plugin.config.mysqlUrl, () -> plugin.config.mysqlUsername, () -> plugin.config.mysqlPassword));
@@ -28,6 +28,7 @@ public class MysqlWorker extends MysqlThread {
         this.plugin = plugin;
         SelectCallback.class.getName();
         UpdateCallback.class.getName();
+
     }
 
     @Override
@@ -63,7 +64,32 @@ public class MysqlWorker extends MysqlThread {
     }
 
     void addLoadPlayer(FLPlayer player) {
-        loadPlayer(player);
+        select("SELECT `username`, banto, reason, `admin` FROM bans WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
+            long currtime;
+            long banto;
+            String banned;
+            String string;
+            String admin;
+            String bantime1;
+            String banreason;
+            if (rs.next()) {
+                currtime = System.currentTimeMillis();
+                banned = rs.getString("username");
+                banto = rs.getLong("banto");
+                admin = rs.getString("admin");
+
+                if (banto > 0L && banto < currtime) {
+                    query("UPDATE bans SET status = 0 WHERE username = '" + player.getName() + "'");
+                } else {
+                    String bantime = (banto == 0L) ? "навсегда" : ("на " + (1 + (int)Math.ceil(((banto - currtime) / 60000L))) + " мин");
+                    banreason = rs.getString("reason");
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.player.kickPlayer(Utilities.colored(T.BanMessage(player.player, banreason, (int) banto, admin))));
+                    return;
+                }
+            }
+
+            loadPlayer(player);
+        });
     }
 
     private void loadPlayer(FLPlayer player) {

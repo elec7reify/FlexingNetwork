@@ -14,6 +14,7 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/MarkerFactory.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/util/JaroWinkler.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/FlexingChat.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/ShadeKickCommand.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/MysqlWorker.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/player/gamemetric/GameMetricType.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/HelpCommand.java
@@ -27,8 +28,10 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/score/SideScoreboard.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/MDC.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/updater/WatchedFile.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/KickCommand.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/event/Level.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/player/MsgJoinMenu.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/listeners/ShulkerCrasherFixListener.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/spi/LoggerFactoryBinder.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/Config.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/player/LevelingRewards.java

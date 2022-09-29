@@ -25,7 +25,7 @@ public class GameMetrics {
     public GameMetrics(String game, NetworkPlayer player) {
         this.game = game;
         this.player = player;
-        this.metrics = new ArrayList<>();
+        metrics = new ArrayList<>();
     }
 
     public void addMetrics(GameMetricValue... metrics) {
@@ -45,14 +45,14 @@ public class GameMetrics {
     }
 
     public boolean isLoaded() {
-        return (this.loadCounter.get() == 0);
+        return loadCounter.get() == 0;
     }
 
     public void runWhenLoaded(Consumer<GameMetrics> callback) {
         if (isLoaded()) {
             callback.accept(this);
         } else {
-            this.callbacks.add(callback);
+            callbacks.add(callback);
         }
     }
 

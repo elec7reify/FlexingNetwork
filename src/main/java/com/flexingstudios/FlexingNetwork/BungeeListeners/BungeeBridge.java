@@ -2,6 +2,7 @@ package com.flexingstudios.FlexingNetwork.BungeeListeners;
 
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -10,16 +11,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 
 public class BungeeBridge implements PluginMessageListener {
-    public static final Map<String, Integer> counts = new HashMap<>();
-    public static int total = 0;
-    public static final Map<String, Integer> servers = new ConcurrentHashMap<>();
+    private static final Map<String, Queue<CompletableFuture<?>>> callbackMap = new HashMap<>();
+
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (channel.equals("FlexingBungee")) {
@@ -27,28 +27,29 @@ public class BungeeBridge implements PluginMessageListener {
             if (msg.startsWith("bcast"))
                 Bukkit.broadcastMessage(Utilities.colored(msg.substring(6)));
         }
-        ByteArrayDataInput in = ByteStreams.newDataInput(message);
-        switch (in.readUTF()) {
-            case "PlayerCount":
-                this.counts.put(in.readUTF(), in.readInt());
-                break;
-        }
 
-        DataInputStream in2 = new DataInputStream(new ByteArrayInputStream(message));
-        try {
-            String subChannel = in2.readUTF();
-            if (subChannel.equals("PlayerCount")) {
-                String server = in2.readUTF();
-                if (in2.available() > 0) {
-                    int count = in2.readInt();
-                    if (server.equals("ALL")) {
-                        this.total = count;
-                    } else {
-                        this.servers.put(server, count);
-                    }
-                }
+        ByteArrayDataInput in = ByteStreams.newDataInput(message);
+
+        Queue<CompletableFuture<?>> callbacks;
+        String subchannel = in.readUTF();
+
+        if (subchannel.equals("PlayerCount") || subchannel.equals("PlayerList") ||
+                subchannel.equals("UUIDOther") || subchannel.equals("ServerIP")) {
+            String identifier = in.readUTF(); // Server/player name
+            callbacks = callbackMap.get(subchannel + "-" + identifier);
+
+            if (callbacks == null || callbacks.isEmpty()) {
+                return;
             }
-        } catch (IOException ioException) {}
+
+            CompletableFuture<?> callback = callbacks.poll();
+
+            switch (in.readUTF()) {
+                case "PlayerCount":
+                    ((CompletableFuture<Integer>) callback).complete(Integer.valueOf(in.readUTF()));
+                    break;
+            }
+        }
     }
 
     public static void toLobby(Player player) {
@@ -58,23 +59,86 @@ public class BungeeBridge implements PluginMessageListener {
         player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
     }
 
-    public static void toServer(Player player, String server) {
+    public static void toServer(Player player, String serverName) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
         try {
             out.writeUTF("Connect");
-            out.writeUTF(server);
+            out.writeUTF(serverName);
             out.flush();
         } catch (IOException ioException) {}
         player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", b.toByteArray());
     }
 
-    public static Collection<Integer> getPlayers(String server) {
-        ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("PlayerCount");
-        out.writeUTF(server);
-        (Bukkit.getOnlinePlayers().iterator().next()).sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", out.toByteArray());
-        ByteArrayDataInput in = ByteStreams.newDataInput(out.toByteArray());
-        return counts.values();
+    public static void toServerOther(String playerName, String server) {
+        Player player = getFirstPlayer();
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        output.writeUTF("ConnectOther");
+        output.writeUTF(playerName);
+        output.writeUTF(server);
+        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
+    }
+
+    public void kickPlayer(String playerName, String kickMessage) {
+        Player player = getFirstPlayer();
+        CompletableFuture<InetSocketAddress> future = new CompletableFuture<>();
+
+        synchronized (callbackMap) {
+            callbackMap.compute("KickPlayer", this.computeQueueValue(future));
+        }
+
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        output.writeUTF("KickPlayer");
+        output.writeUTF(playerName);
+        output.writeUTF(kickMessage);
+        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
+    }
+
+    public static CompletableFuture<Integer> getPlayerCount(String serverName) {
+        Player player = getFirstPlayer();
+        CompletableFuture<Integer> future = new CompletableFuture<>();
+
+        synchronized (callbackMap) {
+            callbackMap.compute("PlayerCount-" + serverName, computeQueueValue(future));
+        }
+
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        output.writeUTF("PlayerCount");
+        output.writeUTF(serverName);
+        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
+        return future;
+    }
+
+
+    private static BiFunction<String, Queue<CompletableFuture<?>>, Queue<CompletableFuture<?>>> computeQueueValue(CompletableFuture<?> queueValue) {
+        return (key, value) -> {
+            if (value == null) value = new ArrayDeque<>();
+            value.add(queueValue);
+
+            return value;
+        };
+    }
+
+    private static Player getFirstPlayer() {
+        /**
+         * if Bukkit Version < 1.7.10 then Bukkit.getOnlinePlayers() will return
+         * a Player[] otherwise it'll return a Collection<? extends Player>.
+         */
+        Player firstPlayer = getFirstPlayer0(Bukkit.getOnlinePlayers());
+
+        if (firstPlayer == null) {
+            throw new IllegalArgumentException("Bungee Messaging Api requires at least one player to be online.");
+        }
+
+        return firstPlayer;
+    }
+
+    @SuppressWarnings("unused")
+    private static Player getFirstPlayer0(Player[] playerArray) {
+        return playerArray.length > 0 ? playerArray[0] : null;
+    }
+
+    private static Player getFirstPlayer0(Collection<? extends Player> playerCollection) {
+        return Iterables.getFirst(playerCollection, null);
     }
 }

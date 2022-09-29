@@ -118,6 +118,7 @@ public class Language extends Configuration {
         for (String line : lines) {
             result.add(ChatColor.translateAlternateColorCodes('&', line));
         }
+
         return result;
     }
 

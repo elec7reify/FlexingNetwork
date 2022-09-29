@@ -1,6 +1,6 @@
 name: FlexingNetwork
 author: FlexingStudios, Elec7reify
-version: '0.5.2'
+version: '0.6'
 
 main: com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
 
@@ -38,3 +38,7 @@ commands:
     aliases: [flexingworld, flex, flexing, fn, fw]
   language:
     aliases: [lang]
+  kick:
+  shadekick:
+    aliases: [shkick]
+  ban:

@@ -33,7 +33,6 @@ public class Utilities {
         n %= 10;
         if (n > 1 && n < 5)
             return form2;
-
         if (n == 1)
             return form1;
 
@@ -64,7 +63,6 @@ public class Utilities {
     public static String[] colored(String... lines) {
         if (lines == null)
             return null;
-
         for (int i = 0; i < lines.length; i++)
             lines[i] = colored(lines[i]);
 
@@ -82,7 +80,6 @@ public class Utilities {
     public static void msg(CommandSender cs, String... msg) {
         cs.sendMessage(colored(msg));
     }
-
 
     public static void msg(CommandSender cs, List<String> msg) {
         for (String str : msg)
@@ -104,7 +101,7 @@ public class Utilities {
 
             return bloc;
         } catch (Exception e) {
-            FlexingNetworkPlugin.getInstance().getLogger().log(Level.SEVERE, (String)null, e);
+            FlexingNetworkPlugin.getInstance().getLogger().log(Level.SEVERE, null, e);
             return new Location(world, 0.0D, 0.0D, 0.0D);
         }
     }
@@ -135,11 +132,10 @@ public class Utilities {
     public static String genBar(int length, float progress, char c, String background, String filled) {
         StringBuilder sb = new StringBuilder(length + 4);
         sb.append(colored(filled));
-        boolean filled0 = false;
 
+        boolean filled0 = false;
         for (int i = 0; i < length; i++) {
-            if (!filled0 &&
-                    length * progress <= i) {
+            if (!filled0 && length * progress <= i) {
                 sb.append(colored(background));
                 filled0 = true;
             }

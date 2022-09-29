@@ -3,7 +3,6 @@ package com.flexingstudios.Commons.player;
 import java.util.EnumSet;
 
 public enum Rank {
-    NULL(null, null, null, null),
     PLAYER("&7", "Чикибамбонёнок", null, ""),
     VIP("&a&l", "Чикибамбвипка", "", ""),
     PREMIUM("&5&l", "Премиумбамбони", "", ""),
@@ -17,9 +16,11 @@ public enum Rank {
     CHIKIBOMBASTER("&c&l", "Чикибомбастер", "", ""),
     GOD("&4&l", "Чикибамбог", "", ""),
     TEAM("&9&l", "Кибербамбонёнок", "", ""),
+    SHADEADMIN("", "", "", ""),
     VADMIN("&4&l", "Младший кибербамбони", "Мл. кибербамбони", ""),
     SADMIN("&4&l", "Старший кибербамбони", "Ст. кибербамбони", ""),
-    ADMIN("&4&l", "Главный кибербамбони", "Гл. кибербамбони", "");
+    ADMIN("&4&l", "Главный кибербамбони", "Гл. кибербамбони", ""),
+    ;
 
     private String color;
     private String name;
@@ -58,7 +59,7 @@ public enum Rank {
     }
 
     public boolean has(Rank rank) {
-        return (compareTo(rank) >= 0);
+        return compareTo(rank) >= 0;
     }
 
     public boolean has(Permission permission) {

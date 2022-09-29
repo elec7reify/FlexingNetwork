@@ -4,7 +4,6 @@ import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.api.geom.Cuboid;
 import com.flexingstudios.FlexingNetwork.api.geom.Vec3f;
 import com.flexingstudios.FlexingNetwork.api.geom.Vec3i;
-import org.apache.logging.log4j.core.config.json.JsonConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,7 +13,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -47,15 +45,22 @@ public class Configuration {
 
     public Configuration(Plugin plugin, String file) {
         cfg = new File(plugin.getDataFolder(), file + ".yml");
-        if (!cfg.exists())
+        if (!cfg.exists()) {
+            plugin.getLogger().log(Level.INFO, "Creating " + cfg.getPath());
             try {
                 plugin.getDataFolder().mkdir();
-                Files.copy(plugin.getResource(file + ".yml"), cfg.toPath(), new java.nio.file.CopyOption[0]);
+
+                if (!cfg.createNewFile()) {
+                    plugin.getLogger().log(Level.SEVERE, "Could not create " + cfg.getPath());
+                    return;
+                }
             } catch (IOException e) {
                 plugin.getLogger().log(Level.SEVERE, null, e);
             }
+        }
 
         yml = YamlConfiguration.loadConfiguration(cfg);
+        yml.options().copyDefaults(true);
     }
 
     public Configuration(Plugin plugin, String name, String dir) {
@@ -116,22 +121,22 @@ public class Configuration {
     }
 
     public Set<String> getKeys(boolean deep) {
-        return config.getKeys(deep);
+        return yml.getKeys(deep);
     }
 
     public Map<String, Object> getValues(boolean deep) {
-        return config.getValues(deep);
+        return yml.getValues(deep);
     }
 
     public List<Configuration> getConfigList(String path) {
         List<Configuration> list = new LinkedList<>();
-        for (Map<?, ?> map : config.getMapList(path))
-            list.add(new Configuration(config.createSection(path, map)));
+        for (Map<?, ?> map : yml.getMapList(path))
+            list.add(new Configuration(yml.createSection(path, map)));
         return list;
     }
 
     public boolean contains(String path) {
-        return config.contains(path);
+        return yml.contains(path);
     }
 
     public Object get(String path) {
@@ -139,7 +144,7 @@ public class Configuration {
     }
 
     public Object get(String path, Object def) {
-        return config.get(path, def);
+        return yml.get(path, def);
     }
 
     public boolean getBoolean(String path) {
@@ -155,7 +160,7 @@ public class Configuration {
     }
 
     public int getInt(String path, int def) {
-        return config.getInt(path, def);
+        return yml.getInt(path, def);
     }
 
     public long getLong(String path) {
@@ -163,7 +168,7 @@ public class Configuration {
     }
 
     public long getLong(String path, long def) {
-        return config.getLong(path, def);
+        return yml.getLong(path, def);
     }
 
     public double getDouble(String path) {
@@ -171,7 +176,7 @@ public class Configuration {
     }
 
     public double getDouble(String path, double def) {
-        return config.getDouble(path, def);
+        return yml.getDouble(path, def);
     }
 
     public float getFloat(String path) {
@@ -179,25 +184,25 @@ public class Configuration {
     }
 
     public float getFloat(String path, float def) {
-        String str = config.getString(path, null);
+        String str = yml.getString(path, null);
         if (str == null)
             return def;
         return Float.parseFloat(str);
     }
 
     public Configuration getSection(String path) {
-        ConfigurationSection sec = config.getConfigurationSection(path);
+        ConfigurationSection sec = yml.getConfigurationSection(path);
         if (sec == null)
             return null;
         return new Configuration(sec);
     }
 
     public Configuration createSection(String path, Map<?, ?> map) {
-        return new Configuration(config.createSection(path, map));
+        return new Configuration(yml.createSection(path, map));
     }
 
     public Configuration createSection(String path) {
-        return new Configuration(config.createSection(path));
+        return new Configuration(yml.createSection(path));
     }
 
     public String getString(String path) {

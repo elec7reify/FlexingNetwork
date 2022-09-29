@@ -73,11 +73,11 @@ public class Invs {
             ItemStack is = entry.getValue();
 
             if (is.getAmount() <= amount) {
-                inv.setItem(entry.getKey().intValue(), null);
+                inv.setItem(entry.getKey(), null);
                 amount -= is.getAmount();
             } else {
                 is.setAmount(is.getAmount() - amount);
-                inv.setItem(entry.getKey().intValue(), is);
+                inv.setItem(entry.getKey(), is);
                 amount = 0;
             }
 

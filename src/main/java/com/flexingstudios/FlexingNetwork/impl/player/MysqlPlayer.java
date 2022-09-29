@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 public class MysqlPlayer extends FLPlayer {
     public Set<String> ignored = new HashSet<>();
