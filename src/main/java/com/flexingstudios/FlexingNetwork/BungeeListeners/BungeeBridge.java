@@ -79,12 +79,12 @@ public class BungeeBridge implements PluginMessageListener {
         player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
     }
 
-    public void kickPlayer(String playerName, String kickMessage) {
+    public static void kickPlayer(String playerName, String kickMessage) {
         Player player = getFirstPlayer();
         CompletableFuture<InetSocketAddress> future = new CompletableFuture<>();
 
         synchronized (callbackMap) {
-            callbackMap.compute("KickPlayer", this.computeQueueValue(future));
+            callbackMap.compute("KickPlayer", computeQueueValue(future));
         }
 
         ByteArrayDataOutput output = ByteStreams.newDataOutput();

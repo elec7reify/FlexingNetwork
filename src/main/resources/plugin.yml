@@ -42,3 +42,4 @@ commands:
   shadekick:
     aliases: [shkick]
   ban:
+  actions:

@@ -6,7 +6,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 public enum MessageOnJoin {
-    TEST(1, "", new ItemStack(Material.INK_SACK, 1, (short) 1), 60);
+    TEST(1, "132", new ItemStack(Material.INK_SACK, 1, (short) 1), 60);
 
     private static final TIntObjectHashMap<MessageOnJoin> byId;
     private final int id;
@@ -19,7 +19,7 @@ public enum MessageOnJoin {
         for (MessageOnJoin message : values()) {
             MessageOnJoin old = byId.put(message.id, message);
             if (old != null)
-                throw new RuntimeException("Duplicate trail id " + old + " and " + message);
+                throw new RuntimeException("Duplicate msg id " + old + " and " + message);
         }
     }
 
@@ -30,7 +30,7 @@ public enum MessageOnJoin {
         this.price = price;
     }
 
-    public String getName() {
+    public String getText() {
         return text;
     }
 

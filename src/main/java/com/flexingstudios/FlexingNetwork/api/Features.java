@@ -4,7 +4,7 @@ import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 
 public class Features {
     static final Features inst = new Features();
-    public final Feature CHANGE_CHAT = new Feature("Change Chat", false);
+    public final Feature CHANGE_CHAT = new Feature("Change Chat", true);
     public final Feature CHANGE_PLAYER_LIST_NAMES = new Feature("Change Player List Names", false);
     public final Feature AUTO_RESTART = new Feature("Auto Restart", true);
 

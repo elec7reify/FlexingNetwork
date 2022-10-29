@@ -1,6 +1,7 @@
 package com.flexingstudios.FlexingNetwork.api.mysql;
 
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,18 +42,18 @@ public abstract class MysqlThread extends Thread {
         SafeRunnable.class.getName();
     }
 
-    public void query(String query) {
+    public void query(@NotNull String query) {
         update(query, null);
     }
 
-    public void select(String query, SelectCallback callback) {
+    public void select(@NotNull String query, SelectCallback callback) {
         queries.add(new Query(query, callback));
         synchronized (lock) {
             lock.notify();
         }
     }
 
-    public void update(String query, UpdateCallback callback) {
+    public void update(@NotNull String query, UpdateCallback callback) {
         queries.add(new Query(query, callback));
         synchronized (lock) {
             lock.notify();
@@ -63,7 +64,7 @@ public abstract class MysqlThread extends Thread {
         safe(() -> execute(new FileInputStream(file)));
     }
 
-    public void execute(InputStream is) {
+    public void execute(@NotNull InputStream is) {
         try (Scanner s = new Scanner(is).useDelimiter(";")){
             while (s.hasNext()) {
                 String query = s.next().trim();

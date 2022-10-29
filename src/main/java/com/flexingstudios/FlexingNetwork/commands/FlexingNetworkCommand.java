@@ -57,7 +57,7 @@ public class FlexingNetworkCommand extends UpCommand {
             Utilities.msg(data.getSender(), "&cИспользование /" + data.getLabel() + " " + data.getSub() + " <игрок>");
             return;
         }
-        Player player = this.plugin.getServer().getPlayerExact(data.getArgs()[0]);
+        Player player = plugin.getServer().getPlayerExact(data.getArgs()[0]);
         if (player != null) {
             FlexingNetwork.toLobby(player);
         } else {
@@ -78,11 +78,12 @@ public class FlexingNetworkCommand extends UpCommand {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <сервер>");
             return;
         }
+
         Player player = plugin.getServer().getPlayerExact(data.getArgs()[0]);
         if (player != null) {
             FlexingNetwork.toServer(data.getArgs()[1], player);
         } else {
-            new BungeeBridge().toServerOther(data.getArgs()[0], data.getArgs()[1]);
+            BungeeBridge.toServerOther(data.getArgs()[0], data.getArgs()[1]);
             Utilities.msg(data.getSender(), "&cИгрок " + data.getArgs()[0] + " не найден");
         }
     }
@@ -109,7 +110,7 @@ public class FlexingNetworkCommand extends UpCommand {
             for (Player player : Bukkit.getOnlinePlayers())
                 FlexingNetwork.getPlayer(player).addCoins(coins);
         } else {
-            Player player = this.plugin.getServer().getPlayerExact(data.getArgs()[0]);
+            Player player = plugin.getServer().getPlayerExact(data.getArgs()[0]);
             if (player != null)
                 FlexingNetwork.getPlayer(player).addCoins(coins);
         }
@@ -126,7 +127,7 @@ public class FlexingNetworkCommand extends UpCommand {
             for (Player player : Bukkit.getOnlinePlayers())
                 FlexingNetwork.getPlayer(player).giveExp(exp);
         } else {
-            Player player = this.plugin.getServer().getPlayerExact(data.getArgs()[0]);
+            Player player = plugin.getServer().getPlayerExact(data.getArgs()[0]);
             if (player != null) {
                 FlexingNetwork.getPlayer(player).giveExp(exp);
             }
@@ -156,8 +157,8 @@ public class FlexingNetworkCommand extends UpCommand {
         lines.add("&3------------ &fСтатистика &3------------");
         lines.add("&bВремя работы: &f" + (new ParsedTime(System.currentTimeMillis() - ManagementFactory.getRuntimeMXBean().getStartTime())).format());
         lines.add("&bПамять: &f" + ((runtime.totalMemory() - runtime.freeMemory()) / 1024L / 1024L) + " MB / " + (runtime.totalMemory() / 1024L / 1024L) + " MB up to " + (runtime.maxMemory() / 1024L / 1024L) + " MB");
-        lines.add("&bПодключение к бд: " + (this.plugin.mysql.isConnected() ? "&aактивно" : "&cразорвано"));
-        lines.add("&bЗапросов к бд: &f" + this.plugin.mysql.getExecutedQueries());
+        lines.add("&bПодключение к бд: " + (plugin.mysql.isConnected() ? "&aактивно" : "&cразорвано"));
+        lines.add("&bЗапросов к бд: &f" + plugin.mysql.getExecutedQueries());
         Utilities.msg(data.getSender(), lines);
     }
 

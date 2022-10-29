@@ -25,7 +25,7 @@ public class GUI {
 
         ItemStack currentFriends = new ItemStack(Material.BOOK_AND_QUILL);
         ItemMeta currentFriendsMeta = currentFriends.getItemMeta();
-        ArrayList<String> cfLore = new ArrayList<String>();
+        ArrayList<String> cfLore = new ArrayList<>();
 
         currentFriendsMeta.setDisplayName(Colour.translate("&6&lFriends List"));
         cfLore.add(Colour.translate("&9Click to view/manage your friends list."));
@@ -36,7 +36,7 @@ public class GUI {
 
         ItemStack incomingRequests = new ItemStack(Material.GOLDEN_APPLE);
         ItemMeta incomingRequestsMeta = incomingRequests.getItemMeta();
-        ArrayList<String> irLore = new ArrayList<String>();
+        ArrayList<String> irLore = new ArrayList<>();
 
         incomingRequestsMeta.setDisplayName(Colour.translate("&6&lIncoming Friend Requests"));
         irLore.add(Colour.translate("&9Click to view/manage your incoming friend requests."));
@@ -45,7 +45,7 @@ public class GUI {
 
         ItemStack outgoingRequests = new ItemStack(Material.APPLE);
         ItemMeta outgoingRequestsMeta = incomingRequests.getItemMeta();
-        ArrayList<String> orLore = new ArrayList<String>();
+        ArrayList<String> orLore = new ArrayList<>();
 
         outgoingRequestsMeta.setDisplayName(Colour.translate("&6&lOutgoing Friend Requests"));
         orLore.add(Colour.translate("&9Click to view/manage your outgoing friend requests."));
@@ -104,7 +104,7 @@ public class GUI {
 
             ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
             SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            ArrayList<String> skullLore = new ArrayList<String>();
+            ArrayList<String> skullLore = new ArrayList<>();
 
             meta.setDisplayName(Colour.translate("&6" + player1.getName()));
             skullLore.add(Colour.translate("&9Left-Click to accept."));

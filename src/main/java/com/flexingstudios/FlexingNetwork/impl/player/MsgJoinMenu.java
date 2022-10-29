@@ -41,7 +41,7 @@ public class MsgJoinMenu implements InvMenu {
                 lore = "&cНужно купить";
                 withPrice = "Стоимость: " + msg.getPrice();
             }
-            Items.name(is, color + msg.getName(), lore, withPrice);
+            Items.name(is, color + msg.getText(), lore, withPrice);
             inv.setItem(getSlot(index++), is);
         }
     }

@@ -4,15 +4,22 @@ import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.FlexingNetwork.api.util.T;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
 import com.google.gson.Gson;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.Date;
 
 public class FlexingNetwork {
 
@@ -68,6 +75,50 @@ public class FlexingNetwork {
             return getPlayer(who.getName()).hasAndNotify(permission);
 
         return getPlayer(who.getName()).has(permission);
+    }
+
+    public static void ban(String player, int time, String reason, String admin, boolean shadeBan) {
+
+    }
+
+    public static void unban(String player, String admin, boolean shadeUnban) {
+        
+    }
+
+    public static void kick(String target, String reason, String kicked, boolean shadeKick) {
+        Player player = Bukkit.getPlayer(target);
+        if (shadeKick) {
+            BungeeBridge.kickPlayer(target, Utilities.colored(T.formattedKickMessage(player)
+                    .replace("{targetName}", target)
+                    .replace("{kicked}", "&cТеневой админ")
+                    .replace("{reason}", reason)
+                    .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                            .format(new Date(System.currentTimeMillis())))));
+        }
+
+        BungeeBridge.kickPlayer(target, Utilities.colored(T.formattedKickMessage(player)
+                .replace("{targetName}", target)
+                .replace("{kicked}", "&3" + kicked)
+                .replace("{reason}", reason)
+                .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .format(new Date(System.currentTimeMillis())))));
+    }
+
+    public static void logAction(final String username, final String action) {
+        logAction(username, action, null, null);
+    }
+
+    public static void logAction(final String username, final String action, final String target) {
+        logAction(username, action, target, null);
+    }
+
+    public static void logAction(final String username, final String action, String target, String comment) {
+        if (action == null || username == null) {
+            return;
+        }
+        target = ((target == null) ? "NULL" : ("'" + StringEscapeUtils.escapeSql(target) + "'"));
+        comment = ((comment == null) ? "NULL" : ("'" + StringEscapeUtils.escapeSql(comment) + "'"));
+        mysql().query("INSERT INTO `user_log_actions` (`username`, `time`, `action`, `data`, `comment`) VALUES ('" + username + "', " + System.currentTimeMillis() / 1000L + ", '" + action + "', " + target + ", " + comment + ")");
     }
 
     /**

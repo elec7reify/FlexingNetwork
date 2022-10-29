@@ -81,7 +81,6 @@ public abstract class FLPlayer implements NetworkPlayer {
 
     public int addCoins(int amount) {
         addCoinsExact(amount);
-
         return amount;
     }
 
@@ -164,8 +163,8 @@ public abstract class FLPlayer implements NetworkPlayer {
     }
 
     public void setMessageOnJoin(MessageOnJoin msg) {
-        if (msg != this.messageOnJoin) {
-            this.messageOnJoin = msg;
+        if (msg != messageOnJoin) {
+            messageOnJoin = msg;
             if (messageOnJoin == null) {
                 removeMeta("msg.sel");
             } else {
@@ -214,9 +213,9 @@ public abstract class FLPlayer implements NetworkPlayer {
         String val = getMeta("msg.sel");
         if (val != null)
             try {
-                messageOnJoin = messageOnJoin.byId(Integer.parseInt(val));
+                messageOnJoin = MessageOnJoin.byId(Integer.parseInt(val));
             } catch (Exception ex) {
-                plugin.getLogger().warning("[" + username + "] ArrowTrail " + val + " not exists [1]");
+                plugin.getLogger().warning("[" + username + "] MessageOnJoin " + val + " not exists [1]");
                 removeMeta("msg.sel");
             }
 
@@ -227,7 +226,7 @@ public abstract class FLPlayer implements NetworkPlayer {
                 try {
                     availableJoinMessages.add(Integer.parseInt(str));
                 } catch (Exception ex) {
-                    plugin.getLogger().warning("[" + username + "] ArrowTrail " + val + " not exists [2]");
+                    plugin.getLogger().warning("[" + username + "] MessageOnJoin " + val + " not exists [2]");
                     changed = true;
                 }
             }

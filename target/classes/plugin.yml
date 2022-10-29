@@ -1,6 +1,6 @@
 name: FlexingNetwork
 author: FlexingStudios, Elec7reify
-version: '0.6'
+version: '0.6.1'
 
 main: com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
 
@@ -42,3 +42,4 @@ commands:
   shadekick:
     aliases: [shkick]
   ban:
+  actions:

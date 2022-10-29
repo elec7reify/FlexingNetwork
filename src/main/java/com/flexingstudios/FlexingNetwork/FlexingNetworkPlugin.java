@@ -3,13 +3,11 @@ package com.flexingstudios.FlexingNetwork;
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.ItemsDef;
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.Lobby;
 import com.flexingstudios.FlexingNetwork.api.updater.UpdateWatcher;
 import com.flexingstudios.FlexingNetwork.api.util.Reflect;
 import com.flexingstudios.FlexingNetwork.commands.*;
-import com.flexingstudios.FlexingNetwork.friends.commands.FriendCommand;
+import com.flexingstudios.FlexingNetwork.commands.FriendCommand;
 import com.flexingstudios.FlexingNetwork.friends.listeners.GUIListener;
 import com.flexingstudios.FlexingNetwork.impl.FMetrics;
 import com.flexingstudios.FlexingNetwork.impl.languages.Deutsch;
@@ -24,7 +22,6 @@ import com.flexingstudios.FlexingNetwork.tasks.PlayerMetaSaver;
 import com.flexingstudios.FlexingNetwork.tasks.Restart;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -56,21 +53,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public void onLoad() {
         instance = this;
 
-        Class<?> cEntity = Reflect.findClass("net.minecraft.server.v1_12_R1.Entity");
-        if (((Integer)Reflect.get(cEntity, "entityCount")).intValue() == 0)
-            Reflect.set(cEntity, "entityCount", Integer.valueOf(1));
-        String vmname = ManagementFactory.getRuntimeMXBean().getName();
-        String pid = vmname.split("@")[0];
-        File pidfile = new File("pid");
-        if (pidfile.exists())
-            pidfile.delete();
-        try {
-            Files.write(pidfile.toPath(), pid.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Runtime.getRuntime().addShutdownHook(new Thread(pidfile::delete, "FlexingNetwork pid deleter"));
-
         new English();
         new Russian();
         new Deutsch();
@@ -97,11 +79,12 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PerWorldTablist(), this);
         getServer().getPluginManager().registerEvents(new ServiceItems(), this);
         getServer().getPluginManager().registerEvents(new ArrowTrailListener(), this);
+        getServer().getPluginManager().registerEvents(new MessageOnJoinListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new LangListener(), this);
         getServer().getPluginManager().registerEvents(new FlexingChat(), this);
-        getServer().getPluginManager().registerEvents(new ShulkerCrasherFixListener(), this);
+        getServer().getPluginManager().registerEvents(new ShulkerDispenseFix(), this);
 
         /**
          * Block - commands
@@ -132,6 +115,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("profile").setExecutor(new ProfileCommand());
         getCommand("friend").setExecutor(new FriendCommand());
         getCommand("language").setExecutor(new LanguageCommand());
+        getCommand("actions").setExecutor(new ActionsCommand());
         getCommand("help").setExecutor(help);
 
         //getServer().getScheduler().scheduleSyncRepeatingTask(this, new MemoryFix(), 100L, 100L);

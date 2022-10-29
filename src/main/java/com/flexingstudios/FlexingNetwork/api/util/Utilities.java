@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class Utilities {
 
     private Utilities() {
-        // no instances
+        throw new UnsupportedOperationException("This class cannot be instantiated");
     }
 
     public static String plurals(int n, String form1, String form2, String form3) {
@@ -53,11 +53,17 @@ public class Utilities {
         }
     }
 
-    public static String colored(String str) {
-        if (str == null)
+    /**
+     * Format a string to contain Bukkit colour codes
+     *
+     * @param msg The message to colour
+     * @return The formatted colour coded string
+     */
+    public static String colored(String msg) {
+        if (msg == null)
             return null;
 
-        return ChatColor.translateAlternateColorCodes('&', str);
+        return ChatColor.translateAlternateColorCodes('&', msg);
     }
 
     public static String[] colored(String... lines) {

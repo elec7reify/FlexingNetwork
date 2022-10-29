@@ -50,6 +50,7 @@ public class Reflect {
             params[0] = name;
             params[1] = values.size();
             System.arraycopy(args, 0, params, 2, args.length);
+
             ReflectionFactory rFactory = ReflectionFactory.getReflectionFactory();
             Enum enum_ = (Enum)rFactory.newConstructorAccessor(data.findConstructor(params)).newInstance(params);
             values.add((T)enum_);
@@ -69,7 +70,6 @@ public class Reflect {
             return getClass(clazz).construct(args);
         } catch (Exception e) {
             error(e, "Constructor error");
-
             return null;
         }
     }
@@ -79,17 +79,15 @@ public class Reflect {
             return (E)getClass(clazz).get(null, field);
         } catch (Exception e) {
             error(e, "Get static field error");
-
             return null;
         }
     }
 
     public static <R> R get(Object instance, String field) {
         try {
-            return (R)getClass(instance.getClass()).get(instance, field);
+            return (R) getClass(instance.getClass()).get(instance, field);
         } catch (Exception e) {
             error(e, "Get field error");
-
             return null;
         }
     }
@@ -99,7 +97,6 @@ public class Reflect {
             return (E)getClass(clazz).get(instance, field);
         } catch (Exception e) {
             error(e, "Get field error");
-
             return null;
         }
     }
@@ -157,7 +154,6 @@ public class Reflect {
             return (E)getClass(clazz).invoke(null, method, args);
         } catch (Throwable e) {
             error(e, "Invoke static error");
-
             return null;
         }
     }
@@ -167,7 +163,6 @@ public class Reflect {
             return (E)getClass(instance.getClass()).invoke(instance, method, args);
         } catch (Throwable e) {
             error(e, "Invoke error");
-
             return null;
         }
     }
@@ -177,7 +172,6 @@ public class Reflect {
             return (E)getClass(clazz).invoke(instance, method, args);
         } catch (Throwable e) {
             error(e, "Invoke error");
-
             return null;
         }
     }
@@ -422,7 +416,7 @@ public class Reflect {
                         fields.put(name, field);
                         break;
                     } catch (Exception e) {
-                        clazz0 = (Class)clazz0.getSuperclass();
+                        clazz0 = (Class) clazz0.getSuperclass();
                     }
                 }
                 if (field == null)

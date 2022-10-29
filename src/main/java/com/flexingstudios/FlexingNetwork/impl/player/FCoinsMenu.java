@@ -24,8 +24,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Set;
 
 public class FCoinsMenu implements InvMenu {
-    private static final Set<Integer> GLASS_PANE_SLOTS = ImmutableSet.of(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(15), Integer.valueOf(16), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(22), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(29), Integer.valueOf(31), Integer.valueOf(33), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(38), Integer.valueOf(40), Integer.valueOf(42), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
-    private static final Set<Integer> INFO_BOOK_SLOTS = ImmutableSet.of(Integer.valueOf(12), Integer.valueOf(13), Integer.valueOf(14));
+    private static final Set<Integer> GLASS_PANE_SLOTS = ImmutableSet.of(0, 1, 2, 3, 4, 5, Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(15), Integer.valueOf(16), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(22), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(29), Integer.valueOf(31), Integer.valueOf(33), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(38), Integer.valueOf(40), Integer.valueOf(42), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
+    private static final Set<Integer> INFO_BOOK_SLOTS = ImmutableSet.of(12, 13, 14);
     private final Inventory inv;
 
     public FCoinsMenu(Player player) {

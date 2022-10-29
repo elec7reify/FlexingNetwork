@@ -76,7 +76,7 @@ public class GamemodeCommand implements CommandExecutor {
 
     private void changeGamemode(Player player, GameMode mode) {
         if (player.getGameMode() == mode) {
-            Utilities.msg(player, T.error("Error",Language.getMsg(player, Messages.COMMAND_GAMEMODE_ERROR).replace("{mode}", mode.name())));
+            Utilities.msg(player, T.error("Error", Language.getMsg(player, Messages.COMMAND_GAMEMODE_ERROR).replace("{mode}", mode.name())));
             return;
         }
 

@@ -12,6 +12,7 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/event/LoggingEvent.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/conf/Configuration.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/MarkerFactory.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/listeners/ShulkerDispenseFix.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/util/JaroWinkler.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/FlexingChat.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/ShadeKickCommand.java
@@ -31,8 +32,8 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/KickCommand.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/event/Level.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/player/MsgJoinMenu.java
-/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/listeners/ShulkerCrasherFixListener.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/spi/LoggerFactoryBinder.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/ActionsCommand.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/Config.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/player/LevelingRewards.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/IgnoreCommand.java
@@ -57,7 +58,6 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/event/SubstituteLoggingEvent.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/event/ServerRestartEvent.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/impl/StaticLoggerBinder.java
-/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/friends/commands/FriendCommand.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/friends/listeners/PlayerJoin.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/updater/UpdateWatcher.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/player/ArrowTrailMenu.java
@@ -74,6 +74,7 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/listeners/ServiceItems.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/event/PlayerLoadedEvent.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/GamemodeCommand.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/BanCommand.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/helpers/BasicMarker.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/util/Utilities.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/holo/Holograms.java
@@ -94,7 +95,6 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/util/Fireworks.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/command/dataCommand.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/spi/MDCAdapter.java
-/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/friends/commands/FriendGUI.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/listeners/MessageOnJoinListener.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/player/goals/GoalQuery.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/player/goals/Goal.java
@@ -117,6 +117,7 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/helpers/NOPLoggerFactory.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/util/LobbyProtector.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/helpers/SubstituteLoggerFactory.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/commands/FriendCommand.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/Commons/player/Leveling.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/languages/LangListener.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/player/Collectable.java
@@ -132,6 +133,7 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/tasks/MemoryFix.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/spi/MarkerFactoryBinder.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/spi/LocationAwareLogger.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/player/ActionsMenu.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/Lobby.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/player/FLPlayer.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/tasks/Restart.java
@@ -146,7 +148,6 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/player/Language.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/org/slf4j/Marker.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/mysql/SelectCallback.java
-/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/friends/listeners/PlayerLeave.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/mysql/UpdateCallback.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/Features.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/geom/Vec3d.java
@@ -163,5 +164,6 @@
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/player/gamemetric/GameMetrics.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/mysql/MysqlThread.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/languages/Russian.java
+/Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/api/menu/ConfirmMenu.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/friends/utils/FriendsManager.java
 /Users/vladislav/IdeaProjects/FlexingNetwork/src/main/java/com/flexingstudios/FlexingNetwork/impl/GroupsMenu.java

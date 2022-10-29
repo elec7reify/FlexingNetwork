@@ -11,6 +11,8 @@ import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.JaroWinkler;
 import com.flexingstudios.FlexingNetwork.api.util.Particles;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.FlexingNetwork.friends.utils.Colour;
+import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
@@ -24,6 +26,7 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.util.Tristate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -90,8 +93,12 @@ class WorldProtect implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        Player p = event.getPlayer();
-        event.setQuitMessage(fireLeaveEvent(FLPlayer.get(p), event.getQuitMessage(), false));
+        Player player = event.getPlayer();
+        event.setQuitMessage(fireLeaveEvent(FLPlayer.get(player), event.getQuitMessage(), false));
+        for (String friend : FriendsManager.getPlayerFriends(event.getPlayer().getName())) {
+            OfflinePlayer player1 = Bukkit.getServer().getOfflinePlayer(friend);
+                player1.getPlayer().sendMessage(Colour.translate("&7Your friend &6" + player.getName() + " &7is now &coffline&7!"));
+        }
     }
 
     @EventHandler

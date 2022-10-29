@@ -20,21 +20,14 @@ public class T {
         return system("&3" + title, "&c" + text);
     }
 
-    public static String BanMessage(Player banned, String reason, int timeSeconds, String admin) {
-        String bantime;
+    public static String BanMessage(Player banned) {
+        String message = Language.getMsg(banned, Messages.BAN_MESSAGE);
 
-        if (timeSeconds == 0) {
-            bantime = "навсегда";
-        } else {
-            bantime = F.formatSecondsShort(timeSeconds);
-        }
-        List<String> message = Language.getList(banned, Messages.BAN_MESSAGE);
-
-        return String.valueOf(message);
+        return message;
     }
 
     public static String formattedKickMessage(Player player) {
-        List<String> message = Language.getList(player, Messages.KICK_MESSAGE);
+        String message = Language.getMsg(player, Messages.KICK_MESSAGE);
 //                "&fСлужба безопастности &9&lFlexing&f&lWorld" +
 //                "\n&fВы были кикнуты" +
 //                "\n" +
@@ -50,6 +43,6 @@ public class T {
 //                "\n" +
 //                "\n&8{date}";
 
-        return String.valueOf(message);
+        return message;
     }
 }

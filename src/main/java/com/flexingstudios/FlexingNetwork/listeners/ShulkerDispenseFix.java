@@ -4,7 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 
-public class ShulkerCrasherFixListener implements Listener {
+public class ShulkerDispenseFix implements Listener {
     @EventHandler
     public void onBlockDispense(BlockDispenseEvent event) {
         if (event.getBlock().getLocation().getBlockY() >= 253 && event.getItem().getType().name().endsWith("SHULKER_BOX")) {

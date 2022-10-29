@@ -10,10 +10,10 @@ public class dataCommand {
     private String[] args;
 
     public dataCommand(CommandSender sender, String label, String sub, String[] args) {
-    this.sender =sender;
-    this.label =label;
-    this.sub =sub;
-    this.args =args;
+    this.sender = sender;
+    this.label = label;
+    this.sub = sub;
+    this.args = args;
 }
 
     public Player getPlayer() {
@@ -37,6 +37,6 @@ public class dataCommand {
     }
 
     public boolean hasArgs() {
-        return (args.length != 0);
+        return args.length != 0;
     }
 }

@@ -9,12 +9,14 @@ import com.flexingstudios.FlexingNetwork.api.mysql.SelectCallback;
 import com.flexingstudios.FlexingNetwork.api.mysql.UpdateCallback;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.FlexingNetwork.commands.BanCommand;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import com.flexingstudios.Commons.F;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
 
 public class MysqlWorker extends MysqlThread {
@@ -65,25 +67,20 @@ public class MysqlWorker extends MysqlThread {
 
     void addLoadPlayer(FLPlayer player) {
         select("SELECT `username`, banto, reason, `admin` FROM bans WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
-            long currtime;
-            long banto;
-            String banned;
-            String string;
-            String admin;
-            String bantime1;
-            String banreason;
             if (rs.next()) {
-                currtime = System.currentTimeMillis();
-                banned = rs.getString("username");
-                banto = rs.getLong("banto");
-                admin = rs.getString("admin");
+                long currtime = System.currentTimeMillis();
+                long banto = rs.getLong("banto");
+                String username = rs.getString("username");
 
                 if (banto > 0L && banto < currtime) {
                     query("UPDATE bans SET status = 0 WHERE username = '" + player.getName() + "'");
                 } else {
-                    String bantime = (banto == 0L) ? "навсегда" : ("на " + (1 + (int)Math.ceil(((banto - currtime) / 60000L))) + " мин");
-                    banreason = rs.getString("reason");
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.player.kickPlayer(Utilities.colored(T.BanMessage(player.player, banreason, (int) banto, admin))));
+                    String bantime = banto == 0L ? "навсегда" : (1 + (F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(banto - currtime / 1000)))) + "";
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
+                            player.player.kickPlayer(Utilities.colored(T.BanMessage(player.player)
+                            .replace("{username}", username)
+                            .replace("{time}", bantime))));
+
                     return;
                 }
             }
@@ -103,11 +100,9 @@ public class MysqlWorker extends MysqlThread {
                 player.exp = rs.getInt("exp");
                 player.level = Leveling.getLevel(player.exp);
                 select("SELECT `key`, `value` FROM `users_meta` WHERE `userid` = " + player.id, rs1 -> {
-                    String key;
-                    MysqlPlayer.MetaValue value;
                     while (rs1.next()) {
-                        key = rs1.getString("key");
-                        value = new MysqlPlayer.MetaValue(rs1.getString("value"));
+                        String key = rs1.getString("key");
+                        MysqlPlayer.MetaValue value = new MysqlPlayer.MetaValue(rs1.getString("value"));
                         value.saved = true;
                         value.prev = value.value;
                         player.meta.put(key, value);
@@ -125,7 +120,6 @@ public class MysqlWorker extends MysqlThread {
                 select("SELECT `id` FROM authme WHERE username = '" + player.getName() + "'", rs1 -> {
                     rs1.next();
                     player.id = rs1.getInt("id");
-                    return;
                 });
                 player.coins = 0;
             }

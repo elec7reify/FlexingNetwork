@@ -1,25 +1,18 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
 import com.flexingstudios.Commons.player.Rank;
-import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
-import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class KickCommand implements CommandExecutor {
-    private SimpleDateFormat dateFormat;
-
     @Override
     public boolean onCommand(CommandSender commandSender, Command cmd, String s, String[] args) {
         if (!FlexingNetwork.hasRank(commandSender, Rank.CHIKIBAMBONYLA, true)) {
@@ -32,35 +25,76 @@ public class KickCommand implements CommandExecutor {
             if (args.length == 0) {
                 Utilities.msg(commandSender, Language.getMsg(sender, Messages.COMMAND_KICK_USAGE));
             } else {
-                String kickmessage = null;
+                String reason = "";
 
                 if (args.length > 1) {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 1; i < args.length; i++)
                         sb.append(args[i]).append(' ');
-                    kickmessage = sb.substring(0, sb.length() - 1);
+                    reason = sb.substring(0, sb.length() - 1);
                 } else {
                     for (Player players : Bukkit.getOnlinePlayers())
-                        kickmessage = Language.getMsg(players, Messages.REASON_NOT_SPECIFIED);
+                        reason = Language.getMsg(players, Messages.REASON_NOT_SPECIFIED);
                 }
 
                 Player targetPlayer = Bukkit.getPlayerExact(args[0]);
-                dateFormat = new SimpleDateFormat(Language.getMsg(targetPlayer, Messages.OFFICIAL_DATE_FORMAT));
+                FLPlayer flPlayer = FLPlayer.get(sender);
+
+                if (targetPlayer == sender) {
+                    Utilities.msg(sender, "&3" + sender.getName() + " &fкикнул игрока &3" + targetPlayer.getName() + " &fпо причине: &6Слишком умный для этого сервера");
+                    return true;
+                }
 
                 if (targetPlayer != null) {
-                        for (Player players : Bukkit.getOnlinePlayers()) {
-                            Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
-                                    .replace("{kicker}", sender.getName())
-                                    .replace("{target}", targetPlayer.getName())
-                                    .replace("{reason}", kickmessage));
+                    for (Player players : Bukkit.getOnlinePlayers())
+                        Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
+                                .replace("{kicked}", sender.getName())
+                                .replace("{targetName}", targetPlayer.getName())
+                                .replace("{reason}", reason));
+
+                    if (flPlayer.has(Rank.ADMIN)) {
+                        FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                    } else if (flPlayer.has(Rank.SADMIN)) {
+                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN)) {
+                            FlexingNetwork.kick(args[0], reason, sender.getName(), false);
                         }
-                        targetPlayer.kickPlayer(Utilities.colored(T.formattedKickMessage(targetPlayer)
-                                .replace("{username}", targetPlayer.getName())
-                                .replace("{kicker}", "&3" + sender.getName())
-                                .replace("{reason}", kickmessage)
-                                .replace("{date}", dateFormat.format(new Date(System.currentTimeMillis())))));
+                    } else if (flPlayer.has(Rank.VADMIN)) {
+                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN)) {
+                            FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                        }
+                    } else if (flPlayer.has(Rank.TEAM)) {
+                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.VADMIN)) {
+                            FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                        }
+                    } else if (flPlayer.has(Rank.GOD) && !FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.VADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.TEAM)) {
+                        FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                    }
+                } else {
+                    for (Player players : Bukkit.getOnlinePlayers())
+                        Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
+                                .replace("{kicked}", sender.getName())
+                                .replace("{targetName}", targetPlayer.getName())
+                                .replace("{reason}", reason));
+
+                    if (flPlayer.has(Rank.ADMIN)) {
+                        FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                    } else if (flPlayer.has(Rank.SADMIN)) {
+                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN)) {
+                            FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                        }
+                    } else if (flPlayer.has(Rank.VADMIN)) {
+                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN)) {
+                            FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                        }
+                    } else if (flPlayer.has(Rank.TEAM)) {
+                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.VADMIN)) {
+                            FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                        }
+                    } else if (flPlayer.has(Rank.GOD) && !FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.VADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.TEAM)) {
+                        FlexingNetwork.kick(args[0], reason, sender.getName(), false);
                     }
                 }
+            }
         }
 
         return true;

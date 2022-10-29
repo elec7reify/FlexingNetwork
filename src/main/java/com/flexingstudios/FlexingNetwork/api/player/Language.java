@@ -2,6 +2,7 @@ package com.flexingstudios.FlexingNetwork.api.player;
 
 import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLangChangeEvent;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -100,9 +101,9 @@ public class Language extends Configuration {
         String message = getString(path);
         if (message == null) {
             System.err.println("Missing message key " + path + " in language " + getIso());
-            message = "MISSING_LANG";
+            message = Language.getDefaultLanguage().getString(path);
         }
-        return ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", prefix));
+        return Utilities.colored(message.replace("{prefix}", prefix));
     }
 
     /**
@@ -116,7 +117,7 @@ public class Language extends Configuration {
             lines = Collections.emptyList();
         }
         for (String line : lines) {
-            result.add(ChatColor.translateAlternateColorCodes('&', line));
+            result.add(Utilities.colored(line));
         }
 
         return result;

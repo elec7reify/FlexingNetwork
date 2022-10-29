@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Lobby {
     default void setMenuText(List<String> lines) {
-        setMenuText(lines.<String>toArray(new String[lines.size()]));
+        setMenuText(lines.toArray(new String[lines.size()]));
     }
 
     void setMenuText(String... paramVarArgs);

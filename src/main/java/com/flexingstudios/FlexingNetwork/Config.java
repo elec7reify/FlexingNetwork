@@ -2,8 +2,6 @@ package com.flexingstudios.FlexingNetwork;
 
 import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 
-import java.util.List;
-
 public class Config extends Configuration {
     private final FlexingNetworkPlugin plugin;
     public String mysqlUrl;

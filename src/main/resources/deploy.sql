@@ -61,3 +61,14 @@ CREATE TABLE `bans` (
   PRIMARY KEY (`id`),
   KEY `users` (`username`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
+
+CREATE TABLE `friends` (
+    `user` varchar(20) NOT NULL,
+    `target` varchar(20) NOT NULL,
+    PRIMARY KEY (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
+
+CREATE TABLE `friends_requests` (
+    `user` varchar(20) NOT NULL,
+    `target` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;

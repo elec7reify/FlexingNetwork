@@ -1,6 +1,7 @@
 package com.flexingstudios.FlexingNetwork.friends.utils;
 
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
+import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,43 +12,42 @@ import java.util.Date;
 
 public class FriendsManager {
 
-    public static void addFriendToPlayer(String playera, String playerb) throws SQLException {
-        FlexingNetworkPlugin.connection.createStatement().execute("INSERT INTO friends (playera, playerb) VALUES ('" + playera + "', '" + playerb + "')");
+    public static void addFriendToPlayer(String sender, String targetName) {
+        FlexingNetwork.mysql().query("INSERT INTO friends (user, target) VALUES ('" + sender + "', '" + targetName + "')");
     }
 
-    public static void removeFriendFromPlayer(String playera, String playerb) throws SQLException {
-        FlexingNetworkPlugin.connection.createStatement().execute("DELETE FROM friends WHERE playera='" + playera + "' AND playerb='" + playerb + "'");
+    public static void removeFriendFromPlayer(String user, String targetName) {
+        FlexingNetwork.mysql().query("DELETE FROM friends WHERE user'" + user + "' AND target='" + targetName + "'");
     }
 
-    public static ArrayList<String> getPlayerFriends(String playeruuid) throws SQLException {
-        ArrayList<String> playerFriends = new ArrayList<String>();
-        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM friends WHERE playera='" + playeruuid + "'");
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            playerFriends.add(rs.getString("playerb"));
-        }
-        rs.close();
-        st.close();
+    public static ArrayList<String> getPlayerFriends(String sender) {
+        ArrayList<String> playerFriends = new ArrayList<>();
+        FlexingNetwork.mysql().select("SELECT * FROM friends WHERE user='" + sender + "'", rs -> {
+            while (rs.next()) {
+                playerFriends.add(rs.getString("target"));
+            }
+        });
+
         return playerFriends;
     }
 
-    public static void addFriendRequest(String triggeredRequest, String receivedRequest) throws SQLException {
+    public static void addFriendRequest(String sender, String targetName) {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date = new Date();
         String dateString = formatter.format(date);
-        FlexingNetworkPlugin.connection.createStatement().execute("INSERT INTO requests (thatrequested, other, whenrequested) VALUES ('" + triggeredRequest + "', '" + receivedRequest + "', '" + dateString + "')");
+        FlexingNetwork.mysql().query("INSERT INTO friends_requests (user, target) VALUES ('" + sender + "', '" + targetName + "')");
     }
 
-    public static void removeFriendRequest(String playera, String playerb) throws SQLException {
-        FlexingNetworkPlugin.connection.createStatement().execute("DELETE FROM requests WHERE thatrequested='" + playera + "' AND other='" + playerb + "'");
+    public static void removeFriendRequest(String sender, String targetName) {
+        FlexingNetwork.mysql().query("DELETE FROM friends_requests WHERE user='" + sender + "' AND target='" + targetName + "'");
     }
 
     public static ArrayList<String> incomingRequests(String player) throws SQLException {
-        ArrayList<String> requestsReceived = new ArrayList<String>();
-        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM requests WHERE other='" + player + "'");
+        ArrayList<String> requestsReceived = new ArrayList<>();
+        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM friends_requests WHERE target='" + player + "'");
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
-            requestsReceived.add(rs.getString("thatrequested"));
+            requestsReceived.add(rs.getString("user"));
         }
         rs.close();
         st.close();
@@ -55,11 +55,11 @@ public class FriendsManager {
     }
 
     public static ArrayList<String> outgoingRequests(String player) throws SQLException {
-        ArrayList<String> requestsSent = new ArrayList<String>();
-        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM requests WHERE thatrequested='" + player + "'");
+        ArrayList<String> requestsSent = new ArrayList<>();
+        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM friends_requests WHERE user='" + player + "'");
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
-            requestsSent.add(rs.getString("other"));
+            requestsSent.add(rs.getString("target"));
         }
         rs.close();
         st.close();
