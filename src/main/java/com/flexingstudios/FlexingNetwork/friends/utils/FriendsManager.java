@@ -42,27 +42,27 @@ public class FriendsManager {
         FlexingNetwork.mysql().query("DELETE FROM friends_requests WHERE user='" + sender + "' AND target='" + targetName + "'");
     }
 
-    public static ArrayList<String> incomingRequests(String player) throws SQLException {
-        ArrayList<String> requestsReceived = new ArrayList<>();
-        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM friends_requests WHERE target='" + player + "'");
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            requestsReceived.add(rs.getString("user"));
-        }
-        rs.close();
-        st.close();
-        return requestsReceived;
-    }
-
-    public static ArrayList<String> outgoingRequests(String player) throws SQLException {
-        ArrayList<String> requestsSent = new ArrayList<>();
-        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM friends_requests WHERE user='" + player + "'");
-        ResultSet rs = st.executeQuery();
-        while (rs.next()) {
-            requestsSent.add(rs.getString("target"));
-        }
-        rs.close();
-        st.close();
-        return requestsSent;
-    }
+//    public static ArrayList<String> incomingRequests(String player) throws SQLException {
+//        ArrayList<String> requestsReceived = new ArrayList<>();
+//        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM friends_requests WHERE target='" + player + "'");
+//        ResultSet rs = st.executeQuery();
+//        while (rs.next()) {
+//            requestsReceived.add(rs.getString("user"));
+//        }
+//        rs.close();
+//        st.close();
+//        return requestsReceived;
+//    }
+//
+//    public static ArrayList<String> outgoingRequests(String player) throws SQLException {
+//        ArrayList<String> requestsSent = new ArrayList<>();
+//        PreparedStatement st = FlexingNetworkPlugin.connection.prepareStatement("SELECT * FROM friends_requests WHERE user='" + player + "'");
+//        ResultSet rs = st.executeQuery();
+//        while (rs.next()) {
+//            requestsSent.add(rs.getString("target"));
+//        }
+//        rs.close();
+//        st.close();
+//        return requestsSent;
+//    }
 }

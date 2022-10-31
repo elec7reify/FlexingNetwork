@@ -99,23 +99,23 @@ public class GUI {
     public static Inventory incomingRequestsGUIInventory(Player player) throws SQLException {
         Inventory incominglistguiinv = Bukkit.getServer().createInventory(player, 36, Colour.translate("&9&lIncoming Friend Requests"));
 
-        for(String frienduuid : FriendsManager.incomingRequests(player.getUniqueId().toString())) {
-            OfflinePlayer player1 = Bukkit.getServer().getOfflinePlayer(UUID.fromString(frienduuid));
-
-            ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            ArrayList<String> skullLore = new ArrayList<>();
-
-            meta.setDisplayName(Colour.translate("&6" + player1.getName()));
-            skullLore.add(Colour.translate("&9Left-Click to accept."));
-            skullLore.add(Colour.translate("&9Right-Click to deny."));
-            meta.setLore(skullLore);
-            meta.setOwningPlayer(player1);
-            skull.setItemMeta(meta);
-
-            incominglistguiinv.setItem(irguislots, skull);
-            irguislots = irguislots + 1;
-        }
+//        for(String frienduuid : FriendsManager.incomingRequests(player.getUniqueId().toString())) {
+//            OfflinePlayer player1 = Bukkit.getServer().getOfflinePlayer(UUID.fromString(frienduuid));
+//
+//            ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+//            SkullMeta meta = (SkullMeta) skull.getItemMeta();
+//            ArrayList<String> skullLore = new ArrayList<>();
+//
+//            meta.setDisplayName(Colour.translate("&6" + player1.getName()));
+//            skullLore.add(Colour.translate("&9Left-Click to accept."));
+//            skullLore.add(Colour.translate("&9Right-Click to deny."));
+//            meta.setLore(skullLore);
+//            meta.setOwningPlayer(player1);
+//            skull.setItemMeta(meta);
+//
+//            incominglistguiinv.setItem(irguislots, skull);
+//            irguislots = irguislots + 1;
+//        }
 
         ItemStack close = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = close.getItemMeta();
@@ -131,22 +131,22 @@ public class GUI {
     public static Inventory outgoingRequestsGUIInventory(Player player) throws SQLException {
         Inventory outgoinglistguiinv = Bukkit.getServer().createInventory(player, 36, Colour.translate("&9&lOutgoing Friend Requests"));
 
-        for(String frienduuid : FriendsManager.outgoingRequests(player.getUniqueId().toString())) {
-            OfflinePlayer player1 = Bukkit.getServer().getOfflinePlayer(UUID.fromString(frienduuid));
-
-            ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
-            SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            ArrayList<String> skullLore = new ArrayList<String>();
-
-            meta.setDisplayName(Colour.translate(player1.getName()));
-            skullLore.add(Colour.translate("&9Left-Click to delete."));
-            meta.setLore(skullLore);
-            meta.setOwningPlayer(player1);
-            skull.setItemMeta(meta);
-
-            outgoinglistguiinv.setItem(orguislots, skull);
-            orguislots = orguislots + 1;
-        }
+//        for(String frienduuid : FriendsManager.outgoingRequests(player.getUniqueId().toString())) {
+//            OfflinePlayer player1 = Bukkit.getServer().getOfflinePlayer(UUID.fromString(frienduuid));
+//
+//            ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+//            SkullMeta meta = (SkullMeta) skull.getItemMeta();
+//            ArrayList<String> skullLore = new ArrayList<String>();
+//
+//            meta.setDisplayName(Colour.translate(player1.getName()));
+//            skullLore.add(Colour.translate("&9Left-Click to delete."));
+//            meta.setLore(skullLore);
+//            meta.setOwningPlayer(player1);
+//            skull.setItemMeta(meta);
+//
+//            outgoinglistguiinv.setItem(orguislots, skull);
+//            orguislots = orguislots + 1;
+//        }
 
         ItemStack close = new ItemStack(Material.BARRIER);
         ItemMeta closeMeta = close.getItemMeta();

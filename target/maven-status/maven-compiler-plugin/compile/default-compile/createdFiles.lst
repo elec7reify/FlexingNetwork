@@ -16,6 +16,7 @@ com/flexingstudios/FlexingNetwork/api/player/MessageOnJoin.class
 com/flexingstudios/FlexingNetwork/api/updater/WatchedEntry.class
 com/flexingstudios/FlexingNetwork/api/mysql/SelectCallback.class
 com/flexingstudios/FlexingNetwork/api/command/UpCommand$RegisteredSub.class
+com/flexingstudios/FlexingNetwork/impl/player/actionsMenu/ActionsMenu.class
 com/flexingstudios/FlexingNetwork/api/menu/TrailMenu$TrailListener.class
 com/flexingstudios/FlexingNetwork/api/menu/TrailMenu.class
 org/slf4j/impl/SimpleLogger$1.class
@@ -32,6 +33,7 @@ com/flexingstudios/FlexingNetwork/Debug.class
 org/slf4j/spi/MarkerFactoryBinder.class
 com/flexingstudios/FlexingNetwork/Config.class
 com/flexingstudios/FlexingNetwork/api/menu/TrailMenu$TrailPlayer.class
+com/flexingstudios/FlexingNetwork/impl/languages/Ukrainian.class
 com/flexingstudios/FlexingNetwork/api/updater/WatchedFile.class
 org/slf4j/MarkerFactory.class
 com/flexingstudios/FlexingNetwork/impl/languages/Deutsch.class
@@ -53,6 +55,7 @@ org/slf4j/MDC$1.class
 com/flexingstudios/FlexingNetwork/commands/BanCommand.class
 com/flexingstudios/FlexingNetwork/friends/listeners/PlayerJoin.class
 com/flexingstudios/Commons/season/GameSeason.class
+com/flexingstudios/FlexingNetwork/impl/player/profileMenu/FPlayerMenu.class
 com/flexingstudios/FlexingNetwork/impl/player/FLPlayer.class
 com/flexingstudios/Commons/player/Leveling.class
 com/flexingstudios/FlexingNetwork/api/event/PlayerUnloadEvent.class
@@ -61,6 +64,7 @@ org/slf4j/spi/LocationAwareLogger.class
 com/flexingstudios/FlexingNetwork/api/Metrics.class
 org/slf4j/impl/SimpleLoggerFactory.class
 com/flexingstudios/FlexingNetwork/impl/player/ExpBuffer.class
+com/flexingstudios/FlexingNetwork/impl/player/actionsMenu/subMenu/TimeValueMenu.class
 org/slf4j/IMarkerFactory.class
 org/slf4j/MDC.class
 org/slf4j/event/LoggingEvent.class
@@ -69,14 +73,15 @@ com/flexingstudios/FlexingNetwork/api/mysql/Callback.class
 com/flexingstudios/FlexingNetwork/api/Lobby.class
 com/flexingstudios/FlexingNetwork/commands/LanguageCommand.class
 com/flexingstudios/FlexingNetwork/api/util/Items$1.class
-com/flexingstudios/FlexingNetwork/impl/player/ActionsMenu$TimeValueMenu.class
 com/flexingstudios/FlexingNetwork/api/util/Items$NBT.class
 com/flexingstudios/FlexingNetwork/api/util/EntityPersistor.class
+com/flexingstudios/FlexingNetwork/impl/player/profileMenu/subMenu/SettingsMenu$FlagTogglable.class
 com/flexingstudios/FlexingNetwork/api/util/Items.class
 com/flexingstudios/FlexingNetwork/api/player/goals/BedBreakGoal.class
 com/flexingstudios/FlexingNetwork/api/util/Particles.class
 com/flexingstudios/FlexingNetwork/impl/FMetrics$Value.class
 com/flexingstudios/FlexingNetwork/api/command/CmdSub.class
+com/flexingstudios/FlexingNetwork/commands/ReportsCommand$Report.class
 com/flexingstudios/FlexingNetwork/impl/languages/Russian.class
 com/flexingstudios/FlexingNetwork/WorldProtect$MessageInfo.class
 com/flexingstudios/FlexingNetwork/api/ItemsDef.class
@@ -91,6 +96,7 @@ com/flexingstudios/FlexingNetwork/commands/FlexingNetworkCommand.class
 com/flexingstudios/FlexingNetwork/friends/listeners/GUIListener.class
 com/flexingstudios/FlexingNetwork/commands/KickCommand.class
 com/flexingstudios/FlexingNetwork/api/player/goals/GoalQuery.class
+com/flexingstudios/FlexingNetwork/commands/ReportCommand.class
 com/flexingstudios/FlexingNetwork/listeners/InventoryListener.class
 org/slf4j/MDC$MDCCloseable.class
 com/flexingstudios/Commons/player/JoinMessages.class
@@ -106,6 +112,7 @@ com/flexingstudios/FlexingNetwork/api/FlexingNetwork.class
 org/slf4j/helpers/Util$1.class
 org/slf4j/Marker.class
 com/flexingstudios/FlexingNetwork/commands/SpeedCommand.class
+com/flexingstudios/FlexingNetwork/commands/ReportsCommand.class
 com/flexingstudios/FlexingNetwork/listeners/ArrowTrailListener.class
 com/flexingstudios/FlexingNetwork/api/event/PlayerLeaveEvent.class
 com/flexingstudios/FlexingNetwork/commands/HelpCommand$PermissionDesc.class
@@ -113,6 +120,7 @@ com/flexingstudios/FlexingNetwork/api/score/Record.class
 com/flexingstudios/FlexingNetwork/friends/utils/GUI.class
 com/flexingstudios/FlexingNetwork/api/Language/Messages.class
 com/flexingstudios/FlexingNetwork/api/geom/Vec3i.class
+com/flexingstudios/FlexingNetwork/commands/ReportsCommand$Violator.class
 com/flexingstudios/FlexingNetwork/api/score/SideScoreboard.class
 org/slf4j/helpers/MessageFormatter.class
 com/flexingstudios/FlexingNetwork/impl/player/MysqlPlayer.class
@@ -128,13 +136,15 @@ com/flexingstudios/Commons/season/GameSeason$1.class
 com/flexingstudios/FlexingNetwork/BungeeListeners/BungeeBridge.class
 org/slf4j/impl/SimpleLogger.class
 com/flexingstudios/FlexingNetwork/impl/GroupsMenu$AdminsMenu.class
+com/flexingstudios/FlexingNetwork/commands/ReportsCommand$ReportsInventory.class
 com/flexingstudios/FlexingNetwork/api/player/gamemetric/GameMetrics.class
 com/flexingstudios/FlexingNetwork/api/util/ItemBuilder.class
+com/flexingstudios/FlexingNetwork/impl/player/profileMenu/subMenu/Languages.class
 com/flexingstudios/FlexingNetwork/api/player/Language.class
 com/flexingstudios/FlexingNetwork/api/util/ParsedTime.class
 org/slf4j/impl/StaticMDCBinder.class
 org/slf4j/spi/LoggerFactoryBinder.class
-com/flexingstudios/FlexingNetwork/impl/player/ActionsMenu$BanMenu.class
+com/flexingstudios/FlexingNetwork/impl/player/actionsMenu/subMenu/BanMenu.class
 com/flexingstudios/FlexingNetwork/api/util/LobbyProtector$1.class
 com/flexingstudios/FlexingNetwork/api/menu/MenuClosable.class
 org/slf4j/ILoggerFactory.class
@@ -150,14 +160,15 @@ com/flexingstudios/FlexingNetwork/api/holo/Hologram.class
 org/slf4j/Logger.class
 com/flexingstudios/FlexingNetwork/commands/HelpCommand.class
 com/flexingstudios/FlexingNetwork/api/command/UpCommand.class
+com/flexingstudios/FlexingNetwork/impl/player/profileMenu/subMenu/SettingsMenu$Togglable.class
 org/slf4j/event/EventConstants.class
 com/flexingstudios/FlexingNetwork/listeners/PerWorldTablist.class
 com/flexingstudios/FlexingNetwork/api/util/Materials.class
 com/flexingstudios/FlexingNetwork/impl/player/LevelingRewards$LevelingReward.class
-com/flexingstudios/FlexingNetwork/impl/player/ActionsMenu$KickMenu.class
 com/flexingstudios/FlexingNetwork/impl/player/MysqlPlayer$MetaValue.class
 com/flexingstudios/FlexingNetwork/api/player/gamemetric/GameMetricValue.class
 com/flexingstudios/FlexingNetwork/api/geom/Cuboid$1.class
+com/flexingstudios/FlexingNetwork/impl/player/actionsMenu/subMenu/KickMenu.class
 com/flexingstudios/FlexingNetwork/api/conf/Configuration.class
 com/flexingstudios/FlexingNetwork/api/Features$Feature.class
 com/flexingstudios/FlexingNetwork/api/event/FileUpdateEvent.class
@@ -187,6 +198,7 @@ com/flexingstudios/FlexingNetwork/friends/utils/enums/Error.class
 com/flexingstudios/FlexingNetwork/MysqlWorker.class
 com/flexingstudios/FlexingNetwork/api/mysql/MysqlThread$MysqlConfigString.class
 com/flexingstudios/FlexingNetwork/WorldProtect$PlayerInfo.class
+com/flexingstudios/FlexingNetwork/impl/player/profileMenu/subMenu/LanguageMenu.class
 com/flexingstudios/FlexingNetwork/tasks/MemoryFix.class
 com/flexingstudios/FlexingNetwork/api/menu/InvMenu.class
 com/flexingstudios/FlexingNetwork/api/event/ServerRestartEvent$State.class
@@ -196,13 +208,13 @@ com/flexingstudios/FlexingNetwork/api/menu/TrailMenu$Trail.class
 com/flexingstudios/FlexingNetwork/api/util/Fireworks.class
 com/flexingstudios/FlexingNetwork/FlexingNetworkPlugin.class
 org/slf4j/helpers/BasicMarker.class
+com/flexingstudios/FlexingNetwork/impl/player/profileMenu/subMenu/SettingsMenu.class
 com/flexingstudios/FlexingNetwork/api/mysql/MysqlThread$MysqlConfig.class
 com/flexingstudios/FlexingNetwork/api/util/Reflect$AggressiveMethodMapKey.class
 com/flexingstudios/FlexingNetwork/commands/TpCommand.class
 com/flexingstudios/FlexingNetwork/commands/ActionsCommand.class
 com/flexingstudios/FlexingNetwork/impl/GroupsMenu$AnarchyMenu.class
 com/flexingstudios/Commons/player/Rank.class
-com/flexingstudios/FlexingNetwork/impl/player/FPlayerMenu.class
 com/flexingstudios/FlexingNetwork/friends/utils/FriendsManager.class
 org/slf4j/spi/MDCAdapter.class
 com/flexingstudios/FlexingNetwork/commands/StpCommand.class
@@ -212,7 +224,6 @@ com/flexingstudios/FlexingNetwork/api/util/JaroWinkler.class
 com/flexingstudios/FlexingNetwork/api/util/SkullBuilder.class
 org/slf4j/helpers/NOPLoggerFactory.class
 com/flexingstudios/FlexingNetwork/impl/player/FCoinsMenu$FlexCoinShop.class
-com/flexingstudios/FlexingNetwork/impl/player/ActionsMenu.class
 com/flexingstudios/FlexingNetwork/WorldProtect.class
 com/flexingstudios/FlexingNetwork/commands/VanishCommand.class
 com/flexingstudios/FlexingNetwork/api/util/IC.class

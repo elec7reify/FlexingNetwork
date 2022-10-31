@@ -70,7 +70,7 @@ public class ArrowTrailListener implements Listener {
                     break;
             }
 
-            if (arrow.isDead() || arrow.isOnGround() || tick++ > 600) {
+            if (arrow.isDead() || arrow.isOnGround() || tick++ > 600L) {
                 Bukkit.getScheduler().cancelTask(task);
                 task = -1;
             }

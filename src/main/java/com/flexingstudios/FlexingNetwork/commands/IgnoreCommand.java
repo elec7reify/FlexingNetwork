@@ -43,6 +43,8 @@ public class IgnoreCommand implements CommandExecutor {
                     Utilities.msg(sender, Language.getMsg((Player) sender, Messages.IGNORE_ALREADY));
                 } else {
                     Utilities.msg(sender, T.success("GOT IT!", "Теперь вы игнорируете игрока " + player.getName()));
+                    // TODO: save ignore player with user meta
+                    //flplayer.setMeta("ignored", "");
                     flplayer.ignored.add(player.getName());
                 }
             }

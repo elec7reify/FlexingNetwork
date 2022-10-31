@@ -1,5 +1,6 @@
 package com.flexingstudios.FlexingNetwork.api;
 
+import com.flexingstudios.Commons.F;
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
@@ -51,8 +52,7 @@ public class FlexingNetwork {
     }
 
     public static boolean hasRank(CommandSender who, Rank rank, boolean notify) {
-        if (who instanceof ConsoleCommandSender)
-            return true;
+        if (who instanceof ConsoleCommandSender) return true;
 
         if (notify)
             return getPlayer(who.getName()).hasAndNotify(rank);
@@ -68,8 +68,7 @@ public class FlexingNetwork {
      * @return Player's permission
      */
     public static boolean hasPermission(CommandSender who, Permission permission, boolean notify) {
-        if (who instanceof ConsoleCommandSender)
-            return true;
+        if (who instanceof ConsoleCommandSender) return true;
 
         if (notify)
             return getPlayer(who.getName()).hasAndNotify(permission);
@@ -77,12 +76,53 @@ public class FlexingNetwork {
         return getPlayer(who.getName()).has(permission);
     }
 
-    public static void ban(String player, int time, String reason, String admin, boolean shadeBan) {
+    public static void ban(String target, int time, String reason, String admin, boolean shadeBan) {
+        Player player = Bukkit.getPlayer(target);
+        if (shadeBan) {
+            BungeeBridge.kickPlayer(target, Utilities.colored(T.BanMessage(player)
+                    .replace("{username}", target)
+                    .replace("{admin}", "&cnТеневой админ")
+                    .replace("{time}", F.formatSecondsShort(time))
+                    .replace("{reason}", reason)
+                    .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                            .format(new Date(System.currentTimeMillis())))));
 
+            FlexingNetwork.mysql().query("INSERT INTO bans (username, banto, reason, banfrom, status, admin) VALUES('" +
+                    StringEscapeUtils.escapeSql(target) + "', " +
+                    (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", '" +
+                    StringEscapeUtils.escapeSql(reason) + "', " +
+                    System.currentTimeMillis() + ", 1, '" +
+                    StringEscapeUtils.escapeSql(admin) + "')");
+
+            logAction(admin, "shade.ban", target);
+        }
+
+        FlexingNetwork.mysql().query("INSERT INTO bans (username, banto, reason, banfrom, status, admin) VALUES('" +
+                StringEscapeUtils.escapeSql(target) + "', " +
+                (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", '" +
+                StringEscapeUtils.escapeSql(reason) + "', " +
+                System.currentTimeMillis() + ", 1, '" +
+                StringEscapeUtils.escapeSql(admin) + "')");
+
+        BungeeBridge.kickPlayer(target, Utilities.colored(T.BanMessage(player)
+                .replace("{username}", target)
+                .replace("{admin}", "&3" + admin)
+                .replace("{time}", F.formatSecondsShort(time))
+                .replace("{reason}", reason)
+                .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .format(new Date(System.currentTimeMillis())))));
     }
 
     public static void unban(String player, String admin, boolean shadeUnban) {
-        
+        mysql().update("UPDATE bans SET status = 0 WHERE username = '" + player + "' AND status = 1", amount -> {
+            if (amount > 0) {
+                for (Player players : Bukkit.getOnlinePlayers())
+                    Utilities.msg(players, "&3" + admin + " &fснял бан с игрока &3" + player);
+                logAction(admin, "unban", player);
+            } else {
+                Utilities.msg(Bukkit.getPlayer(admin), "&cИгрок &f" + player + " &cне забанен");
+            }
+        });
     }
 
     public static void kick(String target, String reason, String kicked, boolean shadeKick) {
@@ -113,11 +153,9 @@ public class FlexingNetwork {
     }
 
     public static void logAction(final String username, final String action, String target, String comment) {
-        if (action == null || username == null) {
-            return;
-        }
-        target = ((target == null) ? "NULL" : ("'" + StringEscapeUtils.escapeSql(target) + "'"));
-        comment = ((comment == null) ? "NULL" : ("'" + StringEscapeUtils.escapeSql(comment) + "'"));
+        if (action == null || username == null) return;
+        target = target == null ? "NULL" : "'" + StringEscapeUtils.escapeSql(target) + "'";
+        comment = comment == null ? "NULL" : "'" + StringEscapeUtils.escapeSql(comment) + "'";
         mysql().query("INSERT INTO `user_log_actions` (`username`, `time`, `action`, `data`, `comment`) VALUES ('" + username + "', " + System.currentTimeMillis() / 1000L + ", '" + action + "', " + target + ", " + comment + ")");
     }
 

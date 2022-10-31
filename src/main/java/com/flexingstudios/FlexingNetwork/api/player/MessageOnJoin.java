@@ -1,16 +1,17 @@
 package com.flexingstudios.FlexingNetwork.api.player;
 
+import com.flexingstudios.FlexingNetwork.api.util.Items;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 public enum MessageOnJoin {
-    TEST(1, "132", new ItemStack(Material.INK_SACK, 1, (short) 1), 60);
+    TEST(1, "132", Items.name(new ItemStack(Material.INK_SACK, 1, (short) 1), "123123", "1232"), 60);
 
     private static final TIntObjectHashMap<MessageOnJoin> byId;
     private final int id;
-    private final String text;
+    private final String msg;
     private final ItemStack itemStack;
     private final int price;
 
@@ -23,15 +24,15 @@ public enum MessageOnJoin {
         }
     }
 
-    MessageOnJoin(int id, String text, ItemStack itemStack, int price) {
+    MessageOnJoin(int id, String msg, ItemStack itemStack, int price) {
         this.id = id;
-        this.text = text;
+        this.msg = msg;
         this.itemStack = itemStack;
         this.price = price;
     }
 
     public String getText() {
-        return text;
+        return msg;
     }
 
     public int getId() {

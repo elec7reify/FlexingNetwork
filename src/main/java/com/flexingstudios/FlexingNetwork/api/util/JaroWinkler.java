@@ -3,7 +3,9 @@ package com.flexingstudios.FlexingNetwork.api.util;
 import java.util.Arrays;
 
 public class JaroWinkler {
-    private JaroWinkler() {}
+    private JaroWinkler() {
+        throw new UnsupportedOperationException("This class cannot be instantiated");
+    }
 
     /**
      * Compute Jaro-Winkler similarity.

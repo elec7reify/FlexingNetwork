@@ -17,7 +17,7 @@ import java.util.List;
 public class Items {
 
     private Items() {
-        // no instances
+        throw new UnsupportedOperationException("This class cannot be instantiated");
     }
 
     public static ItemStack name(Material mat, String name, String... lore) {
@@ -36,8 +36,8 @@ public class Items {
         return is;
     }
 
-    public static ItemStack name(Material mat, String name, List<String> lore) {
-        return name(new ItemStack(mat), name, lore);
+    public static ItemStack name(Material material, String name, List<String> lore) {
+        return name(new ItemStack(material), name, lore);
     }
 
     public static ItemStack name(ItemStack is, String name, List<String> lore) {

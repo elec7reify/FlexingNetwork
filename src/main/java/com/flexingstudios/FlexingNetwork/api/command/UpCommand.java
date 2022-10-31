@@ -28,6 +28,7 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
                 if (method.isAnnotationPresent(CmdSub.class)) {
                     RegisteredSub rsub = new RegisteredSub(method);
                     CmdSub asub = method.getAnnotation(CmdSub.class);
+
                     rsub.hidden = asub.hidden();
                     for (String name : asub.value()) {
                         if (!rsub.hidden)
@@ -47,7 +48,7 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
             }
         clazz = clazz.getSuperclass();
     } while (clazz != UpCommand.class);
-    Collections.sort(publicSubs);
+        Collections.sort(publicSubs);
     }
 
     protected void runCommand(Runnable action, CommandSender sender, Command cmd, String label, String[] args) {
@@ -64,6 +65,7 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
             String[] str = new String[args.length - 1];
             if (str.length != 0)
                 System.arraycopy(args, 1, str, 0, str.length);
+
             runCommand(() -> {
                 try {
                     rsub.method.invoke(this, new dataCommand(sender, label, args[0].toLowerCase(), str));
@@ -71,6 +73,7 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
                         e.printStackTrace();
                     }
                 }, sender, cmd, label, args);
+
             return true;
             }
         }
@@ -88,14 +91,15 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
                 if (sub.cmd.startsWith(begin) && sub.sub.isAvailableFor(rank, null))
                     list.add(sub.cmd);
             }
+
             return list;
         }
+
         return null;
     }
 
     protected Rank getRank(CommandSender sender) {
-        if (sender instanceof org.bukkit.command.ConsoleCommandSender)
-            return Rank.ADMIN;
+        if (sender instanceof org.bukkit.command.ConsoleCommandSender) return Rank.ADMIN;
         return FlexingNetwork.getPlayer(sender.getName()).getRank();
     }
 
@@ -118,15 +122,13 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
         public boolean isAvailableFor(Rank rank, CommandSender inform) {
             if (rankExact) {
                 for (Rank rank1 : ranks) {
-                    if (rank1 == rank)
-                        return true;
+                    if (rank1 == rank) return true;
                 }
                 if (inform != null)
                     Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + ranks[0].getDisplayName());
                 return false;
             }
-            if (rank.has(ranks[0]))
-                return true;
+            if (rank.has(ranks[0])) return true;
             if (inform != null)
                 Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + ranks[0].getDisplayName());
             return false;

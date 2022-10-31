@@ -10,7 +10,6 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.command.CmdSub;
 import com.flexingstudios.FlexingNetwork.api.command.UpCommand;
 import com.flexingstudios.FlexingNetwork.api.command.dataCommand;
-import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.ParsedTime;
@@ -24,6 +23,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FlexingNetworkCommand extends UpCommand {
@@ -35,7 +35,7 @@ public class FlexingNetworkCommand extends UpCommand {
 
     @Override
     protected void runCommand(Runnable action, CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof  Player)) {
+        if (!(sender instanceof Player)) {
             super.runCommand(action, sender, cmd, label, args);
             return;
         }
@@ -47,13 +47,13 @@ public class FlexingNetworkCommand extends UpCommand {
 
     @Override
     protected boolean main(CommandSender sender, Command command, String label, String[] args) {
-        help(new dataCommand(sender, label, "help", new String[0]));
+        help(new dataCommand(sender, label, "help", args));
         return false;
     }
 
-    @CmdSub(value = {"tolobby"}, rank = Rank.VADMIN)
+    @CmdSub(value = "tolobby", rank = Rank.VADMIN)
     private void toLobby(dataCommand data) {
-        if ((data.getArgs().length == 0)) {
+        if (data.getArgs().length == 0) {
             Utilities.msg(data.getSender(), "&cИспользование /" + data.getLabel() + " " + data.getSub() + " <игрок>");
             return;
         }
@@ -65,16 +65,15 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = {"tolobbyall"}, rank = Rank.ADMIN)
+    @CmdSub(value = "tolobbyall", rank = Rank.ADMIN)
     private void toLobbyAll(dataCommand data) {
         Utilities.msg(data.getSender(), "&aВсе игроки отправлены в лобби ");
         FlexingNetwork.toLobby((Player) Bukkit.getOnlinePlayers());
     }
 
-    @CmdSub(value = {"toserver"}, rank = Rank.ADMIN)
+    @CmdSub(value = "toserver", rank = Rank.ADMIN)
     private void toServer(dataCommand data) {
-
-        if((data.getArgs().length != 2)) {
+        if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <сервер>");
             return;
         }
@@ -88,9 +87,9 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = {"toserverall"}, rank = Rank.ADMIN)
+    @CmdSub(value = "toserverall", rank = Rank.ADMIN)
     private void toServerAll(dataCommand data) {
-        if ((data.getArgs()).length != 1) {
+        if (data.getArgs().length != 1) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <сервер>");
             return;
         }
@@ -99,9 +98,9 @@ public class FlexingNetworkCommand extends UpCommand {
             FlexingNetwork.toServer(data.getArgs()[0], player);
     }
 
-    @CmdSub(value = {"addcoins"}, rank = Rank.ADMIN)
+    @CmdSub(value = "addcoins", rank = Rank.ADMIN)
     private void addCoins(dataCommand data) {
-        if ((data.getArgs()).length != 2) {
+        if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
             return;
         }
@@ -116,7 +115,7 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = {"giveexp"}, rank = Rank.SADMIN)
+    @CmdSub(value = "giveexp", rank = Rank.SADMIN)
     private void giveExp(dataCommand data) {
         if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
@@ -135,14 +134,14 @@ public class FlexingNetworkCommand extends UpCommand {
     }
 
 
-    @CmdSub(value = {"givestatus"}, rank = Rank.ADMIN)
+    @CmdSub(value = "givestatus", rank = Rank.ADMIN)
     private void givestatus(dataCommand data) {
-        if ((data.getArgs().length != 2)) {
+        if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> [Статус]");
             return;
         }
         if (data.getArgs()[1] == null) {
-            Utilities.msg(data.getSender(), "&aВсе доступные статусы: &fPLAYER, VIP, PREMIUM, CREATIVE, MODERATOR, CHIKIBAMBONI,", " ADMINOBAMBONI, CHIKIBAMBONYLA, SPONSOR, OWNER, CHIKIBOMBASTER,", " GOD, TEAM, VADMIN, SADMIN, ADMIN");
+            Utilities.msg(data.getSender(), "&aВсе доступные статусы: &f" + Arrays.toString(Rank.values()));
         } else {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + data.getArgs()[0] + " parent set " + data.getArgs()[1]);
             FlexingNetwork.mysql().query("UPDATE authme SET status='" + data.getArgs()[1].toUpperCase() + "' WHERE username = '" + data.getArgs()[0] + "'");
@@ -150,54 +149,53 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = {"stats"}, aliases = {"status"}, rank = Rank.VADMIN)
+    @CmdSub(value = "stats", aliases = "status", rank = Rank.SADMIN)
     private void stats(dataCommand data) {
         Runtime runtime = Runtime.getRuntime();
         List<String> lines = new ArrayList<>();
         lines.add("&3------------ &fСтатистика &3------------");
-        lines.add("&bВремя работы: &f" + (new ParsedTime(System.currentTimeMillis() - ManagementFactory.getRuntimeMXBean().getStartTime())).format());
-        lines.add("&bПамять: &f" + ((runtime.totalMemory() - runtime.freeMemory()) / 1024L / 1024L) + " MB / " + (runtime.totalMemory() / 1024L / 1024L) + " MB up to " + (runtime.maxMemory() / 1024L / 1024L) + " MB");
+        lines.add("&bВремя работы: &f" + new ParsedTime(System.currentTimeMillis() - ManagementFactory.getRuntimeMXBean().getStartTime()).format());
+        lines.add("&bПамять: &f" + (runtime.totalMemory() - runtime.freeMemory() / 1024L / 1024L) + " MB / " + (runtime.totalMemory() / 1024L / 1024L) + " MB up to " + (runtime.maxMemory() / 1024L / 1024L) + " MB");
         lines.add("&bПодключение к бд: " + (plugin.mysql.isConnected() ? "&aактивно" : "&cразорвано"));
         lines.add("&bЗапросов к бд: &f" + plugin.mysql.getExecutedQueries());
         Utilities.msg(data.getSender(), lines);
     }
 
-    @CmdSub(value = {"gc"}, rank = Rank.ADMIN)
+    @CmdSub(value = "gc", rank = Rank.ADMIN)
     private void gc(dataCommand data) {
         long start = System.nanoTime();
         System.gc();
-        Utilities.msg(data.getSender(), "System " + F.formatFloat((float) (System.nanoTime() - start) / 1000000.0F, 2) + " мс.");
+        Utilities.msg(data.getSender(), "System " + F.formatFloat((float) (System.nanoTime() - start) / 1000000.0F, 2) + " ms.");
     }
 
-    @CmdSub(value = {"debug"}, rank = Rank.ADMIN)
+    @CmdSub(value = "debug", rank = Rank.ADMIN)
     private void debug(dataCommand data) {
         try {
             Debug group = Debug.valueOf(data.getArgs()[0].toUpperCase());
             if (group.isEnabled()) {
                 Utilities.msg(data.getSender(), "&e" + group.name() + " дебаг &cвыключен.");
                 group.setEnabled(false);
-                } else {
+            } else {
                     Utilities.msg(data.getSender(), "&e" + group.name() + " дебаг &aвключен.");
                     group.setEnabled(true);
-                    }
-                } catch (Exception e) {
-                    StringBuilder str = new StringBuilder("<");
-                    for (Debug group : Debug.values()) {
-                        if (str.length() != 1)
-                            str.append("&e, ");
-                        if (group.isEnabled()) {
-                            str.append("&a").append(group.name());
-                        } else {
-                            str.append("&c").append(group.name());
-                        }
-                    }
-                    str.append("&e>");
-                    Utilities.msg(data.getSender(), "&e/" + data.getLabel() + " debug " + str);
+            }
+        } catch (Exception e) {
+            StringBuilder str = new StringBuilder("<");
+            for (Debug group : Debug.values()) {
+                if (str.length() != 1)
+                    str.append("&e, ");
+                if (group.isEnabled()) {
+                    str.append("&a").append(group.name());
+                } else {
+                    str.append("&c").append(group.name());
                 }
             }
+            str.append("&e>");
+            Utilities.msg(data.getSender(), "&e/" + data.getLabel() + " debug " + str);
+        }
+    }
 
-
-     @CmdSub(value = {"restart"}, rank = Rank.ADMIN)
+     @CmdSub(value = "restart", rank = Rank.ADMIN)
      private void restart(dataCommand data) {
          if (data.hasArgs()) {
              Restart.restart();
@@ -206,7 +204,7 @@ public class FlexingNetworkCommand extends UpCommand {
          }
     }
 
-    @CmdSub(value = {"reload"}, rank = Rank.ADMIN)
+    @CmdSub(value = "reload", rank = Rank.ADMIN)
     private void reload(dataCommand data) {
         for (Language l : Language.getLanguages()){
             l.reload();
@@ -215,7 +213,7 @@ public class FlexingNetworkCommand extends UpCommand {
         new Config(FlexingNetworkPlugin.getInstance()).reload();
     }
 
-    @CmdSub(value = {"help"}, ranks = {Rank.ADMIN, Rank.SADMIN, Rank.VADMIN}, hidden = true)
+    @CmdSub(value = "help", ranks = {Rank.ADMIN, Rank.SADMIN, Rank.VADMIN}, hidden = true)
     private void help(dataCommand data) {
         List<String> cmds = new ArrayList<>();
         Rank rank = getRank(data.getSender());

@@ -12,10 +12,19 @@ public class English extends Language {
         super(FlexingNetworkPlugin.getInstance(), "en");
         YamlConfiguration yml = getYml();
 
-        yml.addDefault("name", "English");
+        yml.addDefault(Messages.LANGUAGE_NAME, "English");
         yml.addDefault(Messages.COMMAND_LANG_AVAILABLE, "&fAvailable languages:");
         yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&e{iso} - {name}");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "&aLanguage changed");
+        yml.addDefault(Messages.MENU_LANGUAGE_LORE , Arrays.asList(
+                "&7After applying: the",
+                "&7server interface language",
+                "&7will be changed to English.",
+                "",
+                "&aClick to change language",
+                "&ato English."));
+        yml.addDefault(Messages.NEW, "NEW");
+        yml.addDefault(Messages.COMMING_SOON, "COMMING SOON");
 
         yml.addDefault(Messages.PLAYER_NOT_FOUND, "&cPlayer {targetPlayer} not found");
 

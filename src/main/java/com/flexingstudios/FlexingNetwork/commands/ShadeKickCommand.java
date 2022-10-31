@@ -44,7 +44,7 @@ public class ShadeKickCommand implements CommandExecutor {
                 if (targetPlayer != null) {
                     for (Player players : Bukkit.getOnlinePlayers())
                         Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
-                                .replace("{kicked}", sender.getName())
+                                .replace("{kicked}", "&cТеневой админ")
                                 .replace("{targetName}", targetPlayer.getName())
                                 .replace("{reason}", reason));
 
@@ -68,8 +68,8 @@ public class ShadeKickCommand implements CommandExecutor {
                 } else {
                     for (Player players : Bukkit.getOnlinePlayers())
                         Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
-                                .replace("{kicked}", sender.getName())
-                                .replace("{targetName}", targetPlayer.getName())
+                                .replace("{kicked}", "&cТеневой админ")
+                                .replace("{targetName}", args[0])
                                 .replace("{reason}", reason));
 
                     if (flPlayer.has(Rank.ADMIN)) {

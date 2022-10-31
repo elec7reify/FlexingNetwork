@@ -13,12 +13,22 @@ public class Russian extends Language {
         super(FlexingNetworkPlugin.getInstance(), "ru");
         YamlConfiguration yml = getYml();
 
-        yml.addDefault("name", "Русский");
+        yml.addDefault(Messages.LANGUAGE_NAME, "Русский");
         yml.addDefault(Messages.COMMAND_LANG_AVAILABLE, "&fДоступные языки:");
         yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&e{iso} - {name}");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "&aЯзык изменён");
-
+        yml.addDefault(Messages.MENU_LANGUAGE_TITLE, "Сменить язык");
+        yml.addDefault(Messages.MENU_LANGUAGE_LORE , Arrays.asList(
+                "&7После применения: язык" +
+                "\n&7интерфейса сервера будет" +
+                "\n&7изменён на Русский." +
+                "\n" +
+                "\n&aНажмите, чтобы изменить язык" +
+                "\n&aна Русский."));
         yml.addDefault(Messages.PLAYER_NOT_FOUND, "&cИгрок {targetPlayer} не найден");
+
+        yml.addDefault(Messages.NEW, "НОВОЕ");
+        yml.addDefault(Messages.COMMING_SOON, "В РАЗРАБОТКЕ");
 
         yml.addDefault(Messages.COMMAND_GAMEMODE_USAGE, "&cИспользование: /{label} <режим>");
         yml.addDefault(Messages.COMMAND_GAMEMODE_CHANGED, "Ваш режим игры изменён на &a{mode}");
@@ -96,36 +106,37 @@ public class Russian extends Language {
         addDefault(Messages.KICKED_BY_SHADEADMIN, "&c&lТеневой админ &fкикнул игрока &3{target} &fпо причине: &6{reason}");
         addDefault(Messages.KICKED_BY_ADMIN, "&3{kicker} &fкикнул игрока &3{target} &fпо причине: &6{reason}");
         addDefault(Messages.KICK_MESSAGE, Arrays.asList(
-                "&fСлужба безопастности &9&lFlexing&f&lWorld" +
-                "\n&fВы были кикнуты" +
-                "\n" +
-                "\n&fВаш ник: &3{username}" +
-                "\n&fВас кикнул: {kicker}" +
-                "\n&fПо причине: &6{reason}" +
-                "\n" +
-                "\n&fПожалуйста, &3&lпрочитайте правила сервера&r&f, чтобы избежать дальнейших наказаний" +
-                "\n" +
-                "\n&fНе согласны с нашим наказанием? Подайте аппеляцию" +
-                "\n&fVK: &3https://vk.com/flexingworld" +
-                "\n&fDS: &3https://discord.gg/9X6QpjqSvG" +
-                "\n" +
-                "\n&8{date}"));
+                "&fСлужба безопастности &9&lFlexing&f&lWorld",
+                "&fВы были кикнуты",
+                "",
+                "&fВаш ник: &3{username}",
+                "&fВас кикнул: {kicker}",
+                "&fПо причине: &6{reason}",
+                "",
+                "&fПожалуйста, &3&lпрочитайте правила сервера&r&f, чтобы избежать дальнейших наказаний",
+                "",
+                "&fНе согласны с нашим наказанием? Подайте аппеляцию",
+                "&fVK: &3https://vk.com/flexingworld",
+                "&fDS: &3https://discord.gg/9X6QpjqSvG",
+                "",
+                "&8{date}"));
         addDefault(Messages.BAN_MESSAGE, Arrays.asList(
-                "&fСлужба безопастности &9&lFlexing&f&lWorld" +
-                        "\n&fВы были забанены" +
-                        "\n" +
-                        "\n&fВаш ник: &3{username}" +
-                        "\n&fВас забанил: {admin}" +
-                        "\nВремя бана: &6{time}" +
-                        "\n&fПо причине: &6{reason}" +
-                        "\n" +
-                        "\n&fПожалуйста, &3&lпрочитайте правила сервера&r&f, чтобы избежать дальнейших наказаний" +
-                        "\n" +
-                        "\n&fНе согласны с нашим наказанием? Подайте аппеляцию" +
-                        "\n&fVK: &3https://vk.com/flexingworld" +
-                        "\n&fDS: &3https://discord.gg/9X6QpjqSvG" +
-                        "\n" +
-                        "\n&8{date}"));
+                "&fСлужба безопастности &9&lFlexing&f&lWorld",
+                "&fВы были забанены",
+                "",
+                "&fВаш ник: &3{username}",
+                "&fВас забанил: {admin}",
+                "Время бана: &6{time}",
+                "&fПо причине: &6{reason}",
+                "",
+                "&fПожалуйста, &3&lпрочитайте правила сервера&r&f, чтобы избежать дальнейших наказаний",
+                "",
+                "&fНе согласны с нашим наказанием? Подайте аппеляцию",
+                "&fVK: &3https://vk.com/flexingworld",
+                "&fDS: &3https://discord.gg/9X6QpjqSvG",
+                "",
+                "&8{date}"));
+        yml.addDefault(Messages.OFFICIAL_DATE_FORMAT, "yyyy-MM-dd HH:mm");
 
         save();
     }

@@ -10,10 +10,13 @@ public class Deutsch extends Language {
         super(FlexingNetworkPlugin.getInstance(), "de");
 
         YamlConfiguration yml = getYml();
-        yml.addDefault("name", "Deutsch");
+        yml.addDefault(Messages.LANGUAGE_NAME, "Deutsch");
         yml.addDefault(Messages.COMMAND_LANG_AVAILABLE, "&fVerfügbare Sprachen:");
         yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&e{iso} - {name}");
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "&aSprache geändert");
+
+        yml.addDefault(Messages.NEW, "NEU");
+        yml.addDefault(Messages.COMMING_SOON, "BALD ERHÄLTLICH");
 
         yml.addDefault(Messages.COMMAND_GAMEMODE_USAGE, "&cVerwendung:");
         yml.addDefault(Messages.COMMAND_GAMEMODE_CHANGED, "Spielmodus geändert zu &a");

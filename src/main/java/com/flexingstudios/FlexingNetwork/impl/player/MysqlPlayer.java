@@ -19,7 +19,6 @@ public class MysqlPlayer extends FLPlayer {
     @Override
     public String getMeta(String key) {
         MetaValue value = meta.get(key);
-
         return value == null ? null : value.value;
     }
 
@@ -71,7 +70,6 @@ public class MysqlPlayer extends FLPlayer {
     public String getLanguage(UUID uuid) {
         Player player = Bukkit.getPlayer(uuid);
         FlexingNetwork.mysql().query("SELECT language FROM authme WHERE username = " + player.getName());
-
         return Language.getDefaultLanguage().getIso();
     }
 

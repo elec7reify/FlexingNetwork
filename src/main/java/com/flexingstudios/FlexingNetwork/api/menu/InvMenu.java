@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 public interface InvMenu extends InventoryHolder {
     void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType);
 
-    default void show(Player player) {
-        Invs.forceOpen(player, getInventory());
-    }
+//    default void show(Player player) {
+//        Invs.forceOpen(player, getInventory());
+//    }
 }

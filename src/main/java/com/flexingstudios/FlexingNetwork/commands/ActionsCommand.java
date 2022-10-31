@@ -1,7 +1,6 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.ActionsMenu;
+import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

@@ -22,7 +22,6 @@ public class T {
 
     public static String BanMessage(Player banned) {
         String message = Language.getMsg(banned, Messages.BAN_MESSAGE);
-
         return message;
     }
 

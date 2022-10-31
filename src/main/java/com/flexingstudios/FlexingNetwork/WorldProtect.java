@@ -2,28 +2,16 @@ package com.flexingstudios.FlexingNetwork;
 
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.JaroWinkler;
-import com.flexingstudios.FlexingNetwork.api.util.Particles;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.friends.utils.Colour;
 import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 
-import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
-import litebans.api.Entry;
-import litebans.api.Events;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.cacheddata.CachedMetaData;
-import net.luckperms.api.cacheddata.CachedPermissionData;
-import net.luckperms.api.model.user.User;
-import net.luckperms.api.util.Tristate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -34,13 +22,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class WorldProtect implements Listener {
@@ -127,7 +111,8 @@ class WorldProtect implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChatLowest(AsyncPlayerChatEvent event) {
-        final String messageToPlayeer = checkMessage(event.getPlayer().getName(), event.getMessage());
+        String messageToPlayeer = checkMessage(event.getPlayer().getName(), event.getMessage());
+        new PlayerInfo().limitMessages(3);
 
         if (messageToPlayeer != null) {
             event.setCancelled(true);
@@ -173,11 +158,10 @@ class WorldProtect implements Listener {
         Bukkit.getPluginManager().callEvent(new PlayerUnloadEvent(player));
         FLPlayer.PLAYERS.remove(player.getName());
         FLPlayer.IDS.remove(player.getId());
-
         return event.getLeaveMessage();
     }
 
-    public String checkMessage(final String name, String message){
+    public String checkMessage(String name, String message){
         MessageInfo curr = new MessageInfo(message, System.currentTimeMillis());
         String returnMessage = null;
 

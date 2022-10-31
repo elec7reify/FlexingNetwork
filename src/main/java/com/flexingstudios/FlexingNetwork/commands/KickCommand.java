@@ -15,12 +15,9 @@ import org.bukkit.entity.Player;
 public class KickCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command cmd, String s, String[] args) {
-        if (!FlexingNetwork.hasRank(commandSender, Rank.CHIKIBAMBONYLA, true)) {
-            return true;
-        }
+        if (!FlexingNetwork.hasRank(commandSender, Rank.CHIKIBAMBONYLA, true)) return true;
 
         Player sender = (Player) commandSender;
-
         if (cmd.getName().equals("kick")) {
             if (args.length == 0) {
                 Utilities.msg(commandSender, Language.getMsg(sender, Messages.COMMAND_KICK_USAGE));
@@ -39,6 +36,12 @@ public class KickCommand implements CommandExecutor {
 
                 Player targetPlayer = Bukkit.getPlayerExact(args[0]);
                 FLPlayer flPlayer = FLPlayer.get(sender);
+                int cooldown = 0;
+
+                if (cooldown++ > 6000L) {
+                    Utilities.msg(sender, "&cВы не можете кикать много игроков в короткое время.");
+                    return true;
+                }
 
                 if (targetPlayer == sender) {
                     Utilities.msg(sender, "&3" + sender.getName() + " &fкикнул игрока &3" + targetPlayer.getName() + " &fпо причине: &6Слишком умный для этого сервера");
@@ -52,6 +55,7 @@ public class KickCommand implements CommandExecutor {
                                 .replace("{targetName}", targetPlayer.getName())
                                 .replace("{reason}", reason));
 
+                    // Immunity to kick
                     if (flPlayer.has(Rank.ADMIN)) {
                         FlexingNetwork.kick(args[0], reason, sender.getName(), false);
                     } else if (flPlayer.has(Rank.SADMIN)) {
@@ -73,9 +77,10 @@ public class KickCommand implements CommandExecutor {
                     for (Player players : Bukkit.getOnlinePlayers())
                         Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
                                 .replace("{kicked}", sender.getName())
-                                .replace("{targetName}", targetPlayer.getName())
+                                .replace("{targetName}", args[0])
                                 .replace("{reason}", reason));
 
+                    // Immunity to kick
                     if (flPlayer.has(Rank.ADMIN)) {
                         FlexingNetwork.kick(args[0], reason, sender.getName(), false);
                     } else if (flPlayer.has(Rank.SADMIN)) {

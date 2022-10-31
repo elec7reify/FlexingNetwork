@@ -1,11 +1,10 @@
 package com.flexingstudios.FlexingNetwork.api.player;
 
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLangChangeEvent;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -58,7 +57,7 @@ public class Language extends Configuration {
      * Get language display name.
      */
     public String getLangName() {
-        return getString("name");
+        return getString(Messages.LANGUAGE_NAME);
     }
 
     /**

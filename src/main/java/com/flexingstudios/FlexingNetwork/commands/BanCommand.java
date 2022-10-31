@@ -29,7 +29,7 @@ public class BanCommand implements CommandExecutor {
 
         if (command.getName().equals("ban")) {
             if (args.length == 0) {
-                Utilities.msg(sender, "Usage");
+                Utilities.msg(sender, "Usage: ban <username> [time] [reason]");
             } else {
                 int time;
                 String reason = "";
@@ -63,8 +63,8 @@ public class BanCommand implements CommandExecutor {
                             .replace("{reason}", reason));
 
                     FlexingNetwork.mysql().query("INSERT INTO bans (username, banto, reason, banfrom, status, admin) VALUES('" +
-                            StringEscapeUtils.escapeSql(args[0]) + "', " + (time == 0 ? 0 :
-                            (System.currentTimeMillis() + (time))) + ", '" +
+                            StringEscapeUtils.escapeSql(args[0]) + "', " +
+                            (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", '" +
                             StringEscapeUtils.escapeSql(reason) + "', " +
                             System.currentTimeMillis() + ", 1, '" +
                             StringEscapeUtils.escapeSql(sender.getName()) + "')");
@@ -76,12 +76,12 @@ public class BanCommand implements CommandExecutor {
 
         if (command.getName().equals("unban")) {
             if (args.length == 0) {
-                Utilities.msg(sender, "");
+                Utilities.msg(sender, "&cИспользование: /unban <username>");
             } else {
-
+                FlexingNetwork.unban(args[0], sender.getName(), false);
             }
         }
 
-        return false;
+        return true;
     }
 }

@@ -21,6 +21,7 @@ commands:
   fly:
   alert:
   report:
+  reports:
   friend:
     aliases: [friends, f]
   profile:
@@ -42,4 +43,5 @@ commands:
   shadekick:
     aliases: [shkick]
   ban:
+  unban:
   actions:

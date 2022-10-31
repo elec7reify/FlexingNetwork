@@ -6,7 +6,7 @@
 
     <groupId>net.flexingworld</groupId>
     <artifactId>FlexingNetwork</artifactId>
-    <version>0.6.1</version>
+    <version>0.7</version>
     <packaging>jar</packaging>
 
     <name>FlexingNetwork</name>
@@ -45,6 +45,10 @@
             <url>https://libraries.minecraft.net/</url>
         </repository>
         <repository>
+            <id>destroystokyo-repo</id>
+            <url>https://repo.destroystokyo.com/repository/maven-public/</url>
+        </repository>
+        <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -61,12 +65,12 @@
             <version>5.4</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.gitlab.ruany</groupId>
-            <artifactId>LiteBansAPI</artifactId>
-            <version>0.3.4</version>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.destroystokyo.paper</groupId>-->
+<!--            <artifactId>paper-api</artifactId>-->
+<!--            <version>1.12.2-R0.1-SNAPSHOT</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-core</artifactId>

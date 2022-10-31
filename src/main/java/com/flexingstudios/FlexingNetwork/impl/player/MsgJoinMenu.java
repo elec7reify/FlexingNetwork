@@ -11,9 +11,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MsgJoinMenu implements InvMenu {
     private final Inventory inv;
     private final FLPlayer player;
@@ -41,7 +38,7 @@ public class MsgJoinMenu implements InvMenu {
                 lore = "&cНужно купить";
                 withPrice = "Стоимость: " + msg.getPrice();
             }
-            Items.name(is, color + msg.getText(), lore, withPrice);
+            Items.name(is, color + msg.getItem().getItemMeta().getDisplayName(), msg.getItem().getItemMeta().getLore());
             inv.setItem(getSlot(index++), is);
         }
     }

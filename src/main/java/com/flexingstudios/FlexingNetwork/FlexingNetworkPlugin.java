@@ -10,10 +10,7 @@ import com.flexingstudios.FlexingNetwork.commands.*;
 import com.flexingstudios.FlexingNetwork.commands.FriendCommand;
 import com.flexingstudios.FlexingNetwork.friends.listeners.GUIListener;
 import com.flexingstudios.FlexingNetwork.impl.FMetrics;
-import com.flexingstudios.FlexingNetwork.impl.languages.Deutsch;
-import com.flexingstudios.FlexingNetwork.impl.languages.English;
-import com.flexingstudios.FlexingNetwork.impl.languages.LangListener;
-import com.flexingstudios.FlexingNetwork.impl.languages.Russian;
+import com.flexingstudios.FlexingNetwork.impl.languages.*;
 import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
 import com.flexingstudios.FlexingNetwork.impl.player.*;
 import com.flexingstudios.FlexingNetwork.listeners.*;
@@ -47,7 +44,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public FMetrics metrics;
     public VanishCommand vanishCommand;
     public PlayerMetaSaver metaSaver;
-    public static Connection connection;
 
     @Override
     public void onLoad() {
@@ -56,6 +52,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         new English();
         new Russian();
         new Deutsch();
+        new Ukrainian();
     }
 
     @Override
@@ -79,7 +76,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PerWorldTablist(), this);
         getServer().getPluginManager().registerEvents(new ServiceItems(), this);
         getServer().getPluginManager().registerEvents(new ArrowTrailListener(), this);
-        getServer().getPluginManager().registerEvents(new MessageOnJoinListener(), this);
+        //getServer().getPluginManager().registerEvents(new MessageOnJoinListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new LangListener(), this);
@@ -109,6 +106,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("kick").setExecutor(new KickCommand());
         getCommand("shadekick").setExecutor(new ShadeKickCommand());
         getCommand("ban").setExecutor(new BanCommand());
+        getCommand("unban").setExecutor(new BanCommand());
         getCommand("hub").setExecutor(new HubCommand());
         getCommand("stp").setExecutor(new StpCommand());
         getCommand("donate").setExecutor(new DonateCommand());
@@ -116,6 +114,8 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("friend").setExecutor(new FriendCommand());
         getCommand("language").setExecutor(new LanguageCommand());
         getCommand("actions").setExecutor(new ActionsCommand());
+        getCommand("report").setExecutor(new ReportCommand());
+        getCommand("reports").setExecutor(new ReportsCommand());
         getCommand("help").setExecutor(help);
 
         //getServer().getScheduler().scheduleSyncRepeatingTask(this, new MemoryFix(), 100L, 100L);
@@ -146,17 +146,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
             help.addCommand("flex", "Админские команды", Rank.ADMIN);
         });
 
-
-        /*getLogger().info("Starting Up...");
-        try {
-            openConnection();
-            checkTables();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
-
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayerMetaSaver(this), 20L, 20L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
@@ -176,30 +165,9 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         metrics.flush();
         mysql.finish();
         scheduledExecutorService.shutdownNow();
-        /*try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public static FlexingNetworkPlugin getInstance() {
         return instance;
     }
-
-    /*public static void openConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("org.sqlite.JDBC");
-        String url = "jdbc:sqlite:test.db";
-        Connection conn = DriverManager.getConnection(url);
-        connection = conn;
-        getPlugin().getLogger().info("MySQL connected.");
-    }
-
-    public static void checkTables() throws SQLException {
-        Statement st = connection.createStatement();
-        st.execute("CREATE TABLE IF NOT EXISTS friends (playera TEXT NOT NULL, playerb TEXT NOT NULL)");
-        getPlugin().getLogger().info("Checked table \"friends\"!");
-        st.execute("CREATE TABLE IF NOT EXISTS requests (thatrequested TEXT NOT NULL, other TEXT NOT NULL, whenrequested TEXT NOT NULL)");
-        getPlugin().getLogger().info("Checked table \"requests\"!");
-        }*/
 }

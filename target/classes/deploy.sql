@@ -22,11 +22,19 @@ CREATE TABLE `servers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
   `target` varchar(20) NOT NULL,
-  `type` varchar(20) NOT NULL,
   `message` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`username`, `target`, `type`)
+  PRIMARY KEY (`id`, `username`, `target`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `reports_amount` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `target` varchar(20) NOT NULL,
+  `message` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`, `username`, `target`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_meta` (

@@ -30,7 +30,6 @@ public class MysqlWorker extends MysqlThread {
         this.plugin = plugin;
         SelectCallback.class.getName();
         UpdateCallback.class.getName();
-
     }
 
     @Override
@@ -71,14 +70,18 @@ public class MysqlWorker extends MysqlThread {
                 long currtime = System.currentTimeMillis();
                 long banto = rs.getLong("banto");
                 String username = rs.getString("username");
+                String reason = rs.getString("reason");
+                String admin = rs.getString("admin");
 
                 if (banto > 0L && banto < currtime) {
                     query("UPDATE bans SET status = 0 WHERE username = '" + player.getName() + "'");
                 } else {
-                    String bantime = banto == 0L ? "навсегда" : (1 + (F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(banto - currtime / 1000)))) + "";
+                    String bantime = banto == 0L ? "навсегда" : F.formatSecondsShort((int) TimeUnit.MILLISECONDS.convert(banto - currtime / 1000L + 1, TimeUnit.SECONDS)) + "";
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
                             player.player.kickPlayer(Utilities.colored(T.BanMessage(player.player)
                             .replace("{username}", username)
+                            .replace("{reason}", reason)
+                            .replace("{admin}", admin)
                             .replace("{time}", bantime))));
 
                     return;
@@ -127,7 +130,7 @@ public class MysqlWorker extends MysqlThread {
     }
 
     public class LoadFinishRunnable implements Runnable {
-        private MysqlPlayer player;
+        private final MysqlPlayer player;
 
         public LoadFinishRunnable(FLPlayer player) {
             this.player = (MysqlPlayer) player;
