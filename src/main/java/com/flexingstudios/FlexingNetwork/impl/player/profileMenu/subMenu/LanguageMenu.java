@@ -27,7 +27,7 @@ public class LanguageMenu implements InvMenu {
         int index = 0;
         String title = null;
 
-        inv.setItem(22, Items.name(Material.FEATHER, "&aВернуться назад &7(Мой профиль)"));
+        inv.setItem(22, Items.name(Material.FEATHER, "&aCome back &7(My Profile)"));
 
         for (Languages lang : Languages.values()) {
             ItemStack is = lang.getItem();
@@ -53,7 +53,7 @@ public class LanguageMenu implements InvMenu {
                     title,
                     // Lore
                     lang.getItem().getType().equals(Material.BOOK_AND_QUILL) ?
-                            Language.getLang(lang.getId()).getStringList(Messages.MENU_LANGUAGE_COS_LORE) :
+                            Language.getLang(lang.getId()).getStringList(Messages.MENU_LANGUAGE_LORE_COMMING_SOON) :
                             Language.getLang(lang.getId()).getStringList(Messages.MENU_LANGUAGE_LORE));
             inv.setItem(getSlot(index++), is);
         }

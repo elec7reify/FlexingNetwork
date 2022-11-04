@@ -1,9 +1,11 @@
 package com.flexingstudios.FlexingNetwork.api.player;
 
+import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLangChangeEvent;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -63,9 +65,18 @@ public class Language extends Configuration {
     /**
      * Get message in player's language.
      */
-    public static String getMsg(Player p, String path) {
-        if (p == null) return getDefaultLanguage().m(path);
-        return langByPlayer.getOrDefault(p.getUniqueId(), getDefaultLanguage()).m(path);
+    public static String getMsg(Player player, String path) {
+        if (player == null) return getDefaultLanguage().m(path);
+        return langByPlayer.getOrDefault(player.getUniqueId(), getDefaultLanguage()).m(path);
+    }
+
+    /**
+     * Get message in player's language.
+     */
+    public static String getMsg(NetworkPlayer player, String path) {
+        if (player == null) return getDefaultLanguage().m(path);
+        Player flPlayer = player.getBukkitPlayer();
+        return langByPlayer.getOrDefault(flPlayer.getUniqueId(), getDefaultLanguage()).m(path);
     }
 
     /**

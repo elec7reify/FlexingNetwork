@@ -18,7 +18,7 @@ public enum ArrowTrail {
 
     private static final TIntObjectHashMap<ArrowTrail> byId;
     private final int id;
-    private String name;
+    private final String name;
     private final ItemStack itemStack;
     private final int price;
 
