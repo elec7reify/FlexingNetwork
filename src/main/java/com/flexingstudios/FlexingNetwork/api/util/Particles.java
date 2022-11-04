@@ -55,12 +55,12 @@ public enum Particles {
     public static void play(World world, String particle, float x, float y, float z, float xOffset, float yOffset, float zOffset, float effectSpeed, int amountOfParticles, Player... players) {
         PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.valueOf(particle), true, x, y, z, xOffset, yOffset, zOffset, effectSpeed, amountOfParticles);
         if (players.length == 0) {
-            int radius = 400;
+//            int radius = 8800;
             List<EntityPlayer> list = MinecraftServer.getServer().getPlayerList().players;
             for (EntityPlayer player : list) {
-                double distanceSquared = NumberConversions.square(player.locX - x) + NumberConversions.square(player.locY - y) + NumberConversions.square(player.locZ - z);
-                if (distanceSquared < radius)
-                    player.playerConnection.sendPacket(packet);
+//                double distanceSquared = NumberConversions.square(player.locX - x) + NumberConversions.square(player.locY - y) + NumberConversions.square(player.locZ - z);
+//                if (distanceSquared < radius)
+                player.playerConnection.sendPacket(packet);
             }
         } else {
             for (Player player : players)

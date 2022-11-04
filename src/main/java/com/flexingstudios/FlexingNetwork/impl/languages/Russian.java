@@ -2,9 +2,11 @@ package com.flexingstudios.FlexingNetwork.impl.languages;
 
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
+import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Arrow;
 
 import java.util.Arrays;
 
@@ -19,12 +21,12 @@ public class Russian extends Language {
         yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "&aЯзык изменён");
         yml.addDefault(Messages.MENU_LANGUAGE_TITLE, "Сменить язык");
         yml.addDefault(Messages.MENU_LANGUAGE_LORE , Arrays.asList(
-                "&7После применения: язык" +
-                "\n&7интерфейса сервера будет" +
-                "\n&7изменён на Русский." +
-                "\n" +
-                "\n&aНажмите, чтобы изменить язык" +
-                "\n&aна Русский."));
+                "&7После применения: язык",
+                "&7интерфейса сервера будет",
+                "&7изменён на Русский.",
+                "",
+                "&aНажмите, чтобы изменить язык",
+                "&aна Русский."));
         yml.addDefault(Messages.PLAYER_NOT_FOUND, "&cИгрок {targetPlayer} не найден");
 
         yml.addDefault(Messages.NEW, "НОВОЕ");
@@ -137,6 +139,10 @@ public class Russian extends Language {
                 "",
                 "&8{date}"));
         yml.addDefault(Messages.OFFICIAL_DATE_FORMAT, "yyyy-MM-dd HH:mm");
+        yml.addDefault(Messages.PROFILE_MENU_TITLE, "Профиль: {name}");
+        for (ArrowTrail trail : ArrowTrail.values()) {
+            yml.addDefault(Messages.ARROWTRAIL_NAME + ArrowTrail.byId(trail.getId()).name().toLowerCase(), trail.getName());
+        }
 
         save();
     }

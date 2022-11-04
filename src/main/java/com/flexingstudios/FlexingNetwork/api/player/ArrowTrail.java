@@ -18,7 +18,7 @@ public enum ArrowTrail {
 
     private static final TIntObjectHashMap<ArrowTrail> byId;
     private final int id;
-    private final String name;
+    private String name;
     private final ItemStack itemStack;
     private final int price;
 
@@ -47,7 +47,7 @@ public enum ArrowTrail {
     }
 
     public ItemStack getItem() {
-        return itemStack.clone();
+        return itemStack;
     }
 
     public int getPrice() {

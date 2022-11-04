@@ -4,16 +4,17 @@ public class Messages {
 
     /**  */
     public static final String LANGUAGE_NAME = "name";
+    public static final String NEW = "new";
+    public static final String COMMING_SOON = "comming-soon";
     public static final String COMMAND_LANG_AVAILABLE = "available-lang";
     public static final String COMMAND_LANG_LIST_FORMAT = "lang-list-format";
     public static final String COMMAND_LANG_SELECTED_SUCCESSFULLY = "lang-selected";
     public static final String MENU_LANGUAGE_LORE = "language-menu-lore";
-    public static final String MENU_LANGUAGE_COS_LORE = "language-menu-commingsoon-lore";
+    public static final String MENU_LANGUAGE_LORE_COMMING_SOON = "language-menu-lore." + COMMING_SOON;
     public static final String MENU_LANGUAGE_TITLE = "language-menu-title";
+    public static final String PROFILE_MENU_TITLE = "profile-menu-title";
     public static final String PLAYER_NOT_FOUND = "player-not-found";
-
-    public static final String NEW = "new";
-    public static final String COMMING_SOON = "comming-soon";
+    public static final String ARROWTRAIL_NAME = "arrowtrail-";
 
     /** BAN/KICK/MUTE Messages + SHADE */
     public static final String REASON_NOT_SPECIFIED = "reason-not-specified";
