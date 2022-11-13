@@ -12,7 +12,7 @@ public class Collectable {
     public Collectable(NetworkPlayer player, String key, boolean[] defaults) {
         this.player = player;
         this.key = key;
-        this.data = defaults;
+        data = defaults;
     }
 
     public boolean get(int index) {
@@ -36,8 +36,7 @@ public class Collectable {
     public int getTrueCount() {
         int count = 0;
         for (boolean b : data) {
-            if (b)
-                count++;
+            if (b) count++;
         }
 
         return count;
@@ -46,8 +45,7 @@ public class Collectable {
     public int getFalseCount() {
         int count = 0;
         for (boolean b : data) {
-            if (!b)
-                count++;
+            if (!b) count++;
         }
 
         return count;

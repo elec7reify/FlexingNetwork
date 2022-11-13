@@ -4,7 +4,7 @@ import net.md_5.bungee.api.chat.*;
 import org.jetbrains.annotations.NotNull;
 
 public class ChatUtil {
-    
+
     private ChatUtil() {
         throw new UnsupportedOperationException("This class cannot be instantiated");
     }

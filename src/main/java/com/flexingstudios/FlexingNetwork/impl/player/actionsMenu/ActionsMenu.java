@@ -9,6 +9,7 @@ import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.BanMenu;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.KickMenu;
+import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.MuteMenu;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
@@ -57,13 +58,14 @@ public class ActionsMenu implements InvMenu {
         inv.setItem(25, Items.name(Material.SULPHUR, "ignore", ""));
         inv.setItem(37, Items.name(Material.REDSTONE, "кикнуть игрока — " + target, ""));
         inv.setItem(40, Items.name(Material.REDSTONE_BLOCK, "Забанить игрока — " + target, ""));
+        inv.setItem(43, Items.name(new ItemStack(Material.INK_SACK, 1, (short) 1), "Замутить игрока — " + target, ""));
     }
 
-    private static int getSlot(int index) {
+    private int getSlot(int index) {
         return 10 + 9 * (index / 7) + index % 7;
     }
 
-    private static int getIndex(int slot) {
+    private int getIndex(int slot) {
         if (slot % 9 == 0 || (slot + 1) % 9 == 0)
             return -1;
 
@@ -103,6 +105,10 @@ public class ActionsMenu implements InvMenu {
             case 40:
                 if (FlexingNetwork.hasRank(flPlayer.getBukkitPlayer(), Rank.SPONSOR, true))
                     player.openInventory(new BanMenu(target).getInventory());
+                break;
+            case 43:
+                if (FlexingNetwork.hasRank(flPlayer.getBukkitPlayer(), Rank.GOD, true))
+                    player.openInventory(new MuteMenu(target, this).getInventory());
                 break;
         }
     }

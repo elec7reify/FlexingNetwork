@@ -1,11 +1,9 @@
 package com.flexingstudios.FlexingNetwork.api.player;
 
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLangChangeEvent;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

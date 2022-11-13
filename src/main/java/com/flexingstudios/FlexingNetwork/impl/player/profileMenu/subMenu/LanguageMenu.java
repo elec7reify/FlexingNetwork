@@ -17,6 +17,9 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class LanguageMenu implements InvMenu {
     private final Inventory inv;
     private final FPlayerMenu parent;
@@ -25,7 +28,7 @@ public class LanguageMenu implements InvMenu {
         inv = Bukkit.createInventory(this, 27, Language.getMsg(player, Messages.MENU_LANGUAGE_TITLE));
         this.parent = parent;
         int index = 0;
-        String title = null;
+        String title;
 
         inv.setItem(22, Items.name(Material.FEATHER, "&aCome back &7(My Profile)"));
 
@@ -33,24 +36,24 @@ public class LanguageMenu implements InvMenu {
             ItemStack is = lang.getItem();
 
             if (lang.isNew()) {
-                if (lang.getItem().getType().equals(Material.BOOK_AND_QUILL))
-                    title = "&a" + Language.getLang(lang.getId()).getString(Messages.LANGUAGE_NAME) +
-                            " &a&l" + Language.getLang(lang.getId()).getString(Messages.NEW) +
-                            " &c" + Language.getLang(lang.getId()).getString(Messages.COMMING_SOON);
-                else
-                    title = "&a" + Language.getLang(lang.getId()).getString(Messages.LANGUAGE_NAME) +
-                            " &a&l" + Language.getLang(lang.getId()).getString(Messages.NEW);
+                if (lang.getItem().getType().equals(Material.BOOK_AND_QUILL)) {
+                    title = "&a" + Language.getLang(lang.getId()).getString(Messages.LANGUAGE_NAME) + // (English)
+                            " &a&l" + Language.getLang(lang.getId()).getString(Messages.NEW) + // (NEW)
+                            " &c" + Language.getLang(lang.getId()).getString(Messages.COMMING_SOON); // (COMMING SOON)
+                } else {
+                    title = "&a" + Language.getLang(lang.getId()).getString(Messages.LANGUAGE_NAME) + // (English)
+                            " &a&l" + Language.getLang(lang.getId()).getString(Messages.NEW); // (NEW)
+                }
             } else {
-                if (lang.getItem().getType().equals(Material.BOOK_AND_QUILL))
-                    title = "&a" + Language.getLang(lang.getId()).getString(Messages.LANGUAGE_NAME) +
-                            " &c" + Language.getLang(lang.getId()).getString(Messages.COMMING_SOON);
-                else
-                    title = "&a" + Language.getLang(lang.getId()).getString(Messages.LANGUAGE_NAME);
+                if (lang.getItem().getType().equals(Material.BOOK_AND_QUILL)) {
+                    title = "&a" + Language.getLang(lang.getId()).getString(Messages.LANGUAGE_NAME) + // (English)
+                            " &c" + Language.getLang(lang.getId()).getString(Messages.COMMING_SOON); // (COMMING SOON)
+                } else {
+                    title = "&a" + Language.getLang(lang.getId()).getString(Messages.LANGUAGE_NAME); // (English)
+                }
             }
 
-            Items.name(is,
-                    //T itle
-                    title,
+            Items.name(is, title,
                     // Lore
                     lang.getItem().getType().equals(Material.BOOK_AND_QUILL) ?
                             Language.getLang(lang.getId()).getStringList(Messages.MENU_LANGUAGE_LORE_COMMING_SOON) :

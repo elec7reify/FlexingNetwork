@@ -140,9 +140,17 @@ public class Russian extends Language {
                 "&8{date}"));
         yml.addDefault(Messages.OFFICIAL_DATE_FORMAT, "yyyy-MM-dd HH:mm");
         yml.addDefault(Messages.PROFILE_MENU_TITLE, "Профиль: {name}");
-        for (ArrowTrail trail : ArrowTrail.values()) {
-            yml.addDefault(Messages.ARROWTRAIL_NAME + ArrowTrail.byId(trail.getId()).name().toLowerCase(), trail.getName());
-        }
+        yml.addDefault(Messages.ARROWTRAIL_HEARTS, "Сердца");
+        yml.addDefault(Messages.ARROWTRAIL_DRIP_WATER, "Капли воды");
+        yml.addDefault(Messages.ARROWTRAIL_DRIP_LAVA, "Капли лавы");
+        yml.addDefault(Messages.ARROWTRAIL_FIREWORK, "Фейерверк");
+        yml.addDefault(Messages.ARROWTRAIL_NOTE, "Ноты");
+        yml.addDefault(Messages.ARROWTRAIL_SLIME, "Слизь");
+        yml.addDefault(Messages.ARROWTRAIL_VILLAGER_HAPPY, "Зелёные звёзды");
+        yml.addDefault(Messages.ARROWTRAIL_ANGRY_VILLAGER, "Разбитые сердца");
+        yml.addDefault(Messages.ARROWTRAIL_ENCHANTMENT_TABLE, "Зашифрованные символы");
+        yml.addDefault(Messages.ARROWTRAIL_SELECTED, "&fВы выбрали &6след от стрелы&f: &a{trail_name}");
+        yml.addDefault(Messages.CLICK_TO_BUY, "&6Нажмите, чтобы купить.");
 
         save();
     }

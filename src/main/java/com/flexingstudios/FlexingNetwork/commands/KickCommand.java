@@ -36,17 +36,17 @@ public class KickCommand implements CommandExecutor {
 
                 Player targetPlayer = Bukkit.getPlayerExact(args[0]);
                 FLPlayer flPlayer = FLPlayer.get(sender);
-                int cooldown = 0;
+//                int cooldown = 0;
+//
+//                if (cooldown++ > 6000L) {
+//                    Utilities.msg(sender, "&cВы не можете кикать много игроков в короткое время.");
+//                    return true;
+//                }
 
-                if (cooldown++ > 6000L) {
-                    Utilities.msg(sender, "&cВы не можете кикать много игроков в короткое время.");
-                    return true;
-                }
-
-                if (targetPlayer == sender) {
-                    Utilities.msg(sender, "&3" + sender.getName() + " &fкикнул игрока &3" + targetPlayer.getName() + " &fпо причине: &6Слишком умный для этого сервера");
-                    return true;
-                }
+//                if (targetPlayer == sender) {
+//                    Utilities.msg(sender, "&3" + sender.getName() + " &fкикнул игрока &3" + targetPlayer.getName() + " &fпо причине: &6Слишком умный для этого сервера");
+//                    return true;
+//                }
 
                 if (targetPlayer != null) {
                     for (Player players : Bukkit.getOnlinePlayers())

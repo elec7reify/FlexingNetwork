@@ -1,7 +1,6 @@
 package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
 
-import com.flexingstudios.Commons.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
@@ -11,6 +10,7 @@ import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;
 import com.google.common.collect.ImmutableSet;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -92,23 +92,23 @@ public class KickMenu implements InvMenu {
                             .replace("{reason}", objects));
 
                 // Immunity to kick
-                if (flPlayer.has(Rank.ADMIN)) {
-                    FlexingNetwork.kick(target, objects, player.getName(), false);
-                } else if (flPlayer.has(Rank.SADMIN)) {
-                    if (!FlexingNetwork.getPlayer(target).has(Rank.ADMIN)) {
-                        FlexingNetwork.kick(target, objects, player.getName(), false);
-                    }
-                } else if (flPlayer.has(Rank.VADMIN)) {
-                    if (!FlexingNetwork.getPlayer(target).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.SADMIN)) {
-                        FlexingNetwork.kick(target, objects, player.getName(), false);
-                    }
-                } else if (flPlayer.has(Rank.TEAM)) {
-                    if (!FlexingNetwork.getPlayer(target).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.VADMIN)) {
-                        FlexingNetwork.kick(target, objects, player.getName(), false);
-                    }
-                } else if (flPlayer.has(Rank.GOD) && !FlexingNetwork.getPlayer(target).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.VADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.TEAM)) {
-                    FlexingNetwork.kick(target, objects, player.getName(), false);
-                }
+//                if (flPlayer.has(Rank.ADMIN)) {
+//                    FlexingNetwork.kick(target, objects, player.getName(), false);
+//                } else if (flPlayer.has(Rank.SADMIN)) {
+//                    if (!FlexingNetwork.getPlayer(target).has(Rank.ADMIN)) {
+//                        FlexingNetwork.kick(target, objects, player.getName(), false);
+//                    }
+//                } else if (flPlayer.has(Rank.VADMIN)) {
+//                    if (!FlexingNetwork.getPlayer(target).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.SADMIN)) {
+//                        FlexingNetwork.kick(target, objects, player.getName(), false);
+//                    }
+//                } else if (flPlayer.has(Rank.TEAM)) {
+//                    if (!FlexingNetwork.getPlayer(target).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.VADMIN)) {
+//                        FlexingNetwork.kick(target, objects, player.getName(), false);
+//                    }
+//                } else if (flPlayer.has(Rank.GOD) && !FlexingNetwork.getPlayer(target).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.VADMIN) && !FlexingNetwork.getPlayer(target).has(Rank.TEAM)) {
+//                    FlexingNetwork.kick(target, objects, player.getName(), false);
+//                }
             }, "Подтвердите действия");
             menu.setBackOnConfirm(false);
             menu.setConfirmText("OK");

@@ -14,7 +14,6 @@ public class FMetrics implements Metrics {
 
     public FMetrics(FlexingNetworkPlugin plugin) {
         map = new HashMap<>();
-        Value.class.getName();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::flush, 24000L, 24000L);
     }
 

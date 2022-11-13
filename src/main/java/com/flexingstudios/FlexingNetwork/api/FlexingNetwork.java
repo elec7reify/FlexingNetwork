@@ -4,6 +4,7 @@ import com.flexingstudios.Commons.F;
 import com.flexingstudios.Commons.player.Permission;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
@@ -126,6 +127,11 @@ public class FlexingNetwork {
     }
 
     public static void kick(String target, String reason, String kicked, boolean shadeKick) {
+
+        if (target.equals(kicked)) {
+            Utilities.msg(Bukkit.getPlayer(kicked), Language.getMsg(Bukkit.getPlayer(target), Messages.KICKED_BY_ADMIN));
+        }
+
         Player player = Bukkit.getPlayer(target);
         if (shadeKick) {
             BungeeBridge.kickPlayer(target, Utilities.colored(T.formattedKickMessage(player)

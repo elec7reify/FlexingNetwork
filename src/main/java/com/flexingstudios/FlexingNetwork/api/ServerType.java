@@ -13,8 +13,8 @@ public enum ServerType {
     UNKNOWN("UNKNOWN", "UNKNOWN");
 
     private static final Map<String, ServerType> byId;
-    private String name;
-    private String id;
+    private final String name;
+    private final String id;
 
     static {
         byId = new HashMap<>();
@@ -43,7 +43,6 @@ public enum ServerType {
     public String getId() {
         return id;
     }
-
 
     public static ServerType byId(String id) {
         return byId.getOrDefault(id.toUpperCase(), UNKNOWN);

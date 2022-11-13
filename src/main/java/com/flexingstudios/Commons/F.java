@@ -59,7 +59,7 @@ public class F {
     }
 
     public static String formatSecondsShort(int seconds) {
-        if (seconds < 1000)
+        if (seconds <= 1000)
             return "0 мин";
         if (seconds <= 3540)
             return plurals((int)Math.ceil((seconds / 60.0F)), "минута", "минуты", "минут");

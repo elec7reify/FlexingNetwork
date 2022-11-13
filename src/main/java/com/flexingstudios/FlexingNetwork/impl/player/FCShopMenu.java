@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.impl.player.shopMenu.subMenu;
+package com.flexingstudios.FlexingNetwork.impl.player;
 
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
@@ -7,10 +7,6 @@ import com.flexingstudios.FlexingNetwork.api.util.ItemBuilder;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.api.util.SkullBuilder;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.ArrowTrailMenu;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
-import com.flexingstudios.FlexingNetwork.impl.player.MsgJoinMenu;
-import com.flexingstudios.FlexingNetwork.impl.player.shopMenu.FCoinsMenu;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

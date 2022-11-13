@@ -1,10 +1,9 @@
 package com.flexingstudios.FlexingNetwork.impl.player;
 
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.*;
 import com.flexingstudios.FlexingNetwork.impl.GroupsMenu;
+import com.flexingstudios.FlexingNetwork.impl.player.FCShopMenu;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,8 +16,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Set;
 
 public class FCoinsMenu implements InvMenu {
-    private static final Set<Integer> GLASS_PANE_SLOTS = ImmutableSet.of(0, 1, 2, 3, 4, 5, Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(10), Integer.valueOf(11), Integer.valueOf(15), Integer.valueOf(16), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(22), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(29), Integer.valueOf(31), Integer.valueOf(33), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(38), Integer.valueOf(40), Integer.valueOf(42), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
-    private static final Set<Integer> INFO_BOOK_SLOTS = ImmutableSet.of(12, 13, 14);
     private final Inventory inv;
 
     public FCoinsMenu(Player player) {
@@ -29,6 +26,8 @@ public class FCoinsMenu implements InvMenu {
                 "&a◆ &fПокупки &e&lТитулов", "&a◆ &fПокупки &b&lПерсонализированных сообщений", "&a◆ &fПокупки &d&lГаджетов и плюшек на выживании",
                 "&a◆ &fПокупки &6&lСледов от стрел", "", "&f&lДанная валюта никак не влияет на экономику сервера",
                 "&f&lЕё нельзя обменять на внутриигровую валюту и наоборот");
+
+        Set<Integer> INFO_BOOK_SLOTS = ImmutableSet.of(12, 13, 14);
         INFO_BOOK_SLOTS.forEach(slot -> inv.setItem(slot, INFO_BOOK));
 
         this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3Вернуться назад"));
@@ -46,6 +45,10 @@ public class FCoinsMenu implements InvMenu {
         ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
         GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
         GLASS_PANE.setItemMeta(GLASS_PANE_META);
+
+        Set<Integer> GLASS_PANE_SLOTS = ImmutableSet.of(
+                0, 1, 2, 3, 4, 5, 6, 7,
+                9, 10, 11, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 31, 33, 35, 36, 38, 40, 42,44, 45, 46, 47, 48, 50, 51, 52, 53);
         GLASS_PANE_SLOTS.forEach(slot -> inv.setItem(slot, GLASS_PANE));
     }
 
@@ -56,7 +59,7 @@ public class FCoinsMenu implements InvMenu {
                 player.openInventory(new GroupsMenu(player).getInventory());
                 break;
             case 49:
-                player.openInventory(new FlexCoinShop(player).getInventory());
+                player.openInventory(new FCShopMenu(player).getInventory());
                 break;
             case 28:
             case 30:
@@ -74,74 +77,5 @@ public class FCoinsMenu implements InvMenu {
     @Override
     public Inventory getInventory() {
         return this.inv;
-    }
-
-    private static class FlexCoinShop implements InvMenu {
-        private static final Set<Integer> GLASS_PANE_BLACK_SLOTS = ImmutableSet.of(0, 7, 9, 16, 17, 18, 25, 26, 27, 28, 35, 36, 37, 44, 45, 46, 53);
-        private static final Set<Integer> GLASS_PANE_BLUE_SLOTS = ImmutableSet.of(1, 2, 3, 10, 12, 19, 20, 21, 29, 30, 31, 38, 40, 47, 48, 49);
-        private static final Set<Integer> GLASS_PANE_WHITE_SLOTS = ImmutableSet.of(4, 5, 6, 13, 15, 22, 23, 24, 32, 33, 34, 41, 43, 50, 51, 52);
-        private final Inventory inv;
-
-        public FlexCoinShop(Player player) {
-            this.inv = Bukkit.createInventory(this, 54, "Магазин FlexCoin");
-
-            NetworkPlayer nplayer = FlexingNetwork.getPlayer(player);
-
-            ItemStack GLASS_PANE_BLACK = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
-            ItemMeta GLASS_PANE_BLACK_META = GLASS_PANE_BLACK.getItemMeta();
-            GLASS_PANE_BLACK_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
-            GLASS_PANE_BLACK.setItemMeta(GLASS_PANE_BLACK_META);
-            GLASS_PANE_BLACK_SLOTS.forEach(slot -> this.inv.setItem(slot, GLASS_PANE_BLACK));
-
-            ItemStack GLASS_PANE_BLUE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
-            ItemMeta GLASS_PANE_BLUE_META = GLASS_PANE_BLUE.getItemMeta();
-            GLASS_PANE_BLUE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
-            GLASS_PANE_BLUE.setItemMeta(GLASS_PANE_BLUE_META);
-            GLASS_PANE_BLUE_SLOTS.forEach(slot -> this.inv.setItem(slot, GLASS_PANE_BLUE));
-
-            ItemStack GLASS_PANE_WHITE = new ItemStack(Material.STAINED_GLASS_PANE, 1);
-            ItemMeta GLASS_PANE_WHITE_META = GLASS_PANE_WHITE.getItemMeta();
-            GLASS_PANE_WHITE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
-            GLASS_PANE_WHITE.setItemMeta(GLASS_PANE_WHITE_META);
-            GLASS_PANE_WHITE_SLOTS.forEach(slot -> this.inv.setItem(slot, GLASS_PANE_WHITE));
-
-            this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
-
-            this.inv.setItem(11, Items.name(Material.CHEST, "&e&lТитулы", "&fТитулы &f- интересные приписки", "&fКоторые отображаются в чате и табе сразу после ника", "  &fНапример:",
-                     nplayer.getRank().getDisplayName() + " &7" + player.getDisplayName() + " &5&lГачист", "", "&fВ магазине вы найдёте много разных титулов", "&fКоторые обязательно вам понравятся!", "", "&a&lКликните, чтобы перейти!"));
-
-            this.inv.setItem(14, Items.name(Material.CHEST, "&b&lСообщения при входе", "&fСпециальные сообщения, которые приходят всем", "&fКогда вы зайдёте на сервер", "  &fНапример:",
-                    "&8&l[&c&l+&8&l] " + nplayer.getRank().getDisplayName() + " &7" + player.getDisplayName() + " &aзалетел на тусу", "", "&a&lКликните, чтобы перейти!"));
-
-            this.inv.setItem(39, Items.name(Material.CHEST, "&d&lГаджеты и плюшки &c&l(Survival only)", "&fМножество разнообразных плюшек", "&fОт крутых шапок до красивых баннеров",
-                    "&fИдеально подойдут, чтобы повеселиться с друзьями", "", "&a&lКликните, чтобы перейти!"));
-
-            this.inv.setItem(42, Items.name(Material.CHEST, "&6&lСледы от стрел и меча &c&l(Minigames only)", "&fРазличные следы при выстрелах из лука", "&fИли ударов мечом", "&fКрасиво, просто и со вкусом", "", "&a&lКликните, чтобы перейти!"));
-        }
-
-        @Override
-        public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
-            FLPlayer flplayer = (FLPlayer) FlexingNetwork.getPlayer(player);
-            switch (slot) {
-                case 8:
-                    player.openInventory(new FCoinsMenu(player).getInventory());
-                    break;
-                case 11:
-                    break;
-                case 14:
-                    player.openInventory(new MsgJoinMenu(flplayer).getInventory());
-                    break;
-                case 39:
-                    break;
-                case 42:
-                    player.openInventory(new ArrowTrailMenu(flplayer).getInventory());
-                    break;
-            }
-        }
-
-        @Override
-        public Inventory getInventory() {
-            return this.inv;
-        }
     }
 }

@@ -47,21 +47,22 @@ public class Restart {
         Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers())
                 Utilities.msg(player, Language.getList(player, Messages.RESTART_BROADCAST));
+            Logger.getGlobal().info("The Server will restart in 5 minutes!");
         });
 
         ScheduledExecutorService executor = FlexingNetworkPlugin.getInstance().scheduledExecutorService;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "4min")), 60L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "3min")), 120L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "2min")), 180L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "1min")), 240L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "30sec")), 270L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "10sec")), 290L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "5sec")), 295L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "4sec")), 296L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "3sec")), 297L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "2sec")), 298L, TimeUnit.SECONDS);
-            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "1sec")), 299L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "4min"), Language.getLang("en").getString(Messages.RESTART_TIME + "4min")), 60L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "3min"), Language.getLang("en").getString(Messages.RESTART_TIME + "3min")), 120L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "2min"), Language.getLang("en").getString(Messages.RESTART_TIME + "2min")), 180L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "1min"), Language.getLang("en").getString(Messages.RESTART_TIME + "1min")), 240L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "30sec"), Language.getLang("en").getString(Messages.RESTART_TIME + "30sec")), 270L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "10sec"), Language.getLang("en").getString(Messages.RESTART_TIME + "10sec")), 290L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "5sec"), Language.getLang("en").getString(Messages.RESTART_TIME + "5sec")), 295L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "4sec"), Language.getLang("en").getString(Messages.RESTART_TIME + "4sec")), 296L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "3sec"), Language.getLang("en").getString(Messages.RESTART_TIME + "3sec")), 297L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "2sec"), Language.getLang("en").getString(Messages.RESTART_TIME + "2sec")), 298L, TimeUnit.SECONDS);
+            executor.schedule(() -> bcast(Language.getMsg(player, Messages.RESTART_TIME + "1sec"), Language.getLang("en").getString(Messages.RESTART_TIME + "1sec")), 299L, TimeUnit.SECONDS);
         }
 
         executor.schedule(() -> Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetworkPlugin.getInstance(), Restart::doRestart), 300L, TimeUnit.SECONDS);
@@ -72,10 +73,10 @@ public class Restart {
         doRestart();
     }
 
-    private static void bcast(String time) {
+    private static void bcast(String time, String consoleTime) {
         for (Player player : Bukkit.getOnlinePlayers())
             Utilities.msg(player, Language.getMsg(player, Messages.RESTART_BROADCAST_SCHEDULED).replace("{time}", time));
-        Logger.getGlobal().info("The Server will restart in " + time +"!");
+//        Logger.getGlobal().info("The Server will restart in " + consoleTime +"!");
     }
 
     private static void doRestart() {

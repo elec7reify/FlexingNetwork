@@ -49,7 +49,6 @@ public class Configuration {
             plugin.getLogger().log(Level.INFO, "Creating " + cfg.getPath());
             try {
                 plugin.getDataFolder().mkdir();
-
                 if (!cfg.createNewFile()) {
                     plugin.getLogger().log(Level.SEVERE, "Could not create " + cfg.getPath());
                     return;

@@ -15,8 +15,10 @@ import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
 import com.flexingstudios.FlexingNetwork.impl.player.*;
 import com.flexingstudios.FlexingNetwork.listeners.*;
 import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
+import com.flexingstudios.FlexingNetwork.tasks.MemoryFix;
 import com.flexingstudios.FlexingNetwork.tasks.PlayerMetaSaver;
 import com.flexingstudios.FlexingNetwork.tasks.Restart;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +34,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public final class FlexingNetworkPlugin extends JavaPlugin {
+    @Getter
     static FlexingNetworkPlugin instance;
     public ScheduledExecutorService scheduledExecutorService;
     public HelpCommand help;
@@ -118,8 +121,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("reports").setExecutor(new ReportsCommand());
         getCommand("help").setExecutor(help);
 
-        //getServer().getScheduler().scheduleSyncRepeatingTask(this, new MemoryFix(), 100L, 100L);
-
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             help.addCommand("banlist", "Банлист", Permission.BAN);
             help.addCommand("history <игрок>", "История мутов и банов у игрока", Rank.VADMIN);
@@ -147,6 +148,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         });
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayerMetaSaver(this), 20L, 20L);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new MemoryFix(), 100L, 100L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             if (!FlexingNetwork.isDevelopment() && FlexingNetwork.features().AUTO_RESTART.isEnabled())
@@ -165,9 +167,5 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         metrics.flush();
         mysql.finish();
         scheduledExecutorService.shutdownNow();
-    }
-
-    public static FlexingNetworkPlugin getInstance() {
-        return instance;
     }
 }

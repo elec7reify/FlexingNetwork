@@ -94,13 +94,14 @@ public class UpdateWatcher implements Listener {
     private WatchedDir genTree() throws Exception {
         WatchedDir root = new WatchedDir("", SERVER_UPDATE_DIR);
         File build = new File(SERVER_UPDATE_DIR, "build.conf");
-        if (build.exists())
+        if (build.exists()) {
             Files.readAllLines(build.toPath(), StandardCharsets.UTF_8).forEach(line -> {
                 WatchedDir existing;
                 WatchedDir rewrited;
                 line = line.trim();
                 if (line.isEmpty() || line.charAt(0) == '#')
                     return;
+
                 int index = line.indexOf(":");
                 String type = line.substring(0, index);
                 line = line.substring(index + 1);
@@ -114,7 +115,7 @@ public class UpdateWatcher implements Listener {
                     if (entry0 == null) {
                         t.entries.put(parts[i], t = new WatchedDir(t.path + "/" + parts[i], new File(t.dir, parts[i])));
                     } else if (entry0 instanceof WatchedDir) {
-                        t = (WatchedDir)entry0;
+                        t = (WatchedDir) entry0;
                     } else {
                         throw new IllegalArgumentException(path + " has file in path");
                     }
@@ -126,7 +127,7 @@ public class UpdateWatcher implements Listener {
                             t.entries.put(name, new WatchedFile(path, new File(UPDATE_DIR, update)));
                         return;
                     case "dir":
-                        existing = (WatchedDir)t.entries.get(name);
+                        existing = (WatchedDir) t.entries.get(name);
                         rewrited = new WatchedDir(path, new File(UPDATE_DIR, update));
                         if (existing != null)
                             rewrite(existing, rewrited);
@@ -135,6 +136,7 @@ public class UpdateWatcher implements Listener {
                 }
                 this.plugin.getLogger().info("[UpdateWatcher] Skipped unknown build type");
             });
+        }
         return root;
     }
 
@@ -166,7 +168,7 @@ public class UpdateWatcher implements Listener {
     }
 
     public boolean isRestartNeeded() {
-        return this.restartNeeded;
+        return restartNeeded;
     }
 
     public void tryToRestart() {

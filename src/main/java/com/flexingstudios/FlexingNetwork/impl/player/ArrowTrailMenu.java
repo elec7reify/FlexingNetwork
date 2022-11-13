@@ -8,7 +8,6 @@ import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.shopMenu.subMenu.FCShopMenu;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,15 +17,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.stream.Stream;
+import java.util.*;
 
 public class ArrowTrailMenu implements InvMenu {
     private final Inventory inv;
     private final FLPlayer player;
     private final FCShopMenu parent;
+    private int page = 0;
+    private boolean hasNextPage;
 
     public ArrowTrailMenu(NetworkPlayer nplayer, FCShopMenu parent) {
         inv = Bukkit.createInventory(this, 54, "Следы за стрелой");
@@ -53,24 +51,47 @@ public class ArrowTrailMenu implements InvMenu {
 
         int index = 0;
         for (ArrowTrail trail : ArrowTrail.values()) {
-            String color, lore, withPrice;
+            String color, title;
+            List<String> lore = new ArrayList<>();
             ItemStack is = trail.getItem();
+
+            if (trail.isNew()) {
+                title = replaceToAnyLang(trail) + " &c" + Language.getMsg(player, Messages.NEW);
+            } else  {
+                title = replaceToAnyLang(trail);
+            }
+
             if (player.availableArrowTrails.contains(trail.getId())) {
                 if (player.getArrowTrail() == trail) {
-                    color = "&a";
-                    lore = "&aВыбрано";
-                    withPrice = null;
+                    color = "&f";
+                    lore.add("&fРедкость: &3" + trail.getRarity());
+                    lore.add("");
+                    lore.add("&aВыбрано!");
                 } else {
                     color = "&b";
-                    lore = "&2Нажмите для выбора";
-                    withPrice = null;
+                    lore.add("&fРедкость: &3" + trail.getRarity());
+                    lore.add("");
+                    lore.add("&2Нажмите для выбора.");
                 }
-            } else {
+            } else if (player.getCoins() <= trail.getPrice()) {
                 color = "&c";
-                lore = "&cНужно купить";
-                withPrice = "&fСтоимость: &6" + trail.getPrice();
+                lore.add("&fЦена: &3" + trail.getPrice());
+                lore.add("");
+                lore.add("&fРедкость: &3" + trail.getRarity());
+                lore.add("");
+                lore.add("&cУ Вас недостаточно средств");
+                lore.add("&cЧтобы приобрести: " + replaceToAnyLang(trail));
+            } else {
+                color = "&f";
+                lore.add("&fЦена: &3" + trail.getPrice());
+                lore.add("");
+                lore.add("&fРедкость: &3" + trail.getRarity());
+                lore.add("");
+                //for (String str : Language.getList(player.getBukkitPlayer(), Messages.CLICK_TO_BUY))
+                lore.add(Language.getMsg(player.getBukkitPlayer(), Messages.CLICK_TO_BUY));
             }
-            Items.name(is, color + replaceToAnyLang(trail), lore, withPrice);
+
+            Items.name(is, color + title, lore);
             inv.setItem(getSlot(index++), is);
         }
     }
@@ -102,16 +123,19 @@ public class ArrowTrailMenu implements InvMenu {
         ArrowTrail selected = ArrowTrail.values()[index];
         if (!player.availableArrowTrails.contains(selected.getId())) {
             if (player.getCoins() >= selected.getPrice()) {
-                ConfirmMenu confirmMenu = new ConfirmMenu(getInventory(), () -> {
+                ConfirmMenu menu = new ConfirmMenu(getInventory(), () -> {
                     player.takeCoins(selected.getPrice());
                     player.unlockArrowTrail(selected);
-                }, selected.getName());
-                bukkitPlayer.openInventory(confirmMenu.getInventory());
+                }, Language.getMsg(bukkitPlayer, Messages.ARROWTRAIL_NAME + ArrowTrail.byId(selected.getId()).name().toLowerCase()));
+                menu.setConfirmText("&a&lПОДТВЕРДИТЬ", "&7С Вас будет списано 70 FlexCoin");
+                menu.setCancelText("&c&lОТМЕНИТЬ ДЕЙСТВИЕ");
+                bukkitPlayer.openInventory(menu.getInventory());
             } else {
                 bukkitPlayer.closeInventory();
                 Utilities.msg(bukkitPlayer, "&cУ Вас недостаточно коинов для покупки этого следа от стрелы.");
             }
         } else if (player.availableArrowTrails.contains(selected.getId()) && player.getArrowTrail() != selected) {
+            Utilities.msg(bukkitPlayer, Language.getMsg(player, Messages.ARROWTRAIL_SELECTED).replace("{trail_name}", replaceToAnyLang(selected)));
             player.setArrowTrail(selected);
             bukkitPlayer.closeInventory();
         }
@@ -123,6 +147,8 @@ public class ArrowTrailMenu implements InvMenu {
     }
 
     private String replaceToAnyLang(ArrowTrail trail) {
-        return Language.getMsg(player.getBukkitPlayer(), Messages.ARROWTRAIL_NAME + ArrowTrail.byId(trail.getId()).name().toLowerCase());
+        return !Language.getPlayerLanguage(player.getBukkitPlayer()).exists(Messages.ARROWTRAIL_NAME + ArrowTrail.byId(trail.getId()).name().toLowerCase()) ?
+                trail.getName() :
+                Language.getMsg(player, Messages.ARROWTRAIL_NAME + ArrowTrail.byId(trail.getId()).name().toLowerCase());
     }
 }

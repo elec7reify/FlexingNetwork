@@ -46,7 +46,7 @@ public enum Languages {
     }
 
     public ItemStack getItem() {
-        return is.clone();
+        return is;
     }
 
     public boolean isNew() {

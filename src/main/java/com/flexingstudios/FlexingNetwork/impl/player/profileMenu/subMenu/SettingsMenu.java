@@ -1,18 +1,30 @@
 package com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu;
 
+import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
+import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FPlayerMenu;
+import net.minecraft.server.v1_12_R1.EntityEnderPearl;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.Item;
+import net.minecraft.server.v1_12_R1.MinecraftServer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SettingsMenu implements InvMenu {
     private final Inventory inv;
@@ -39,7 +51,9 @@ public class SettingsMenu implements InvMenu {
 
     @Override
     public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
+        EntityPlayer entityPlayer = MinecraftServer.getServer().getPlayerList().getPlayer(player.getName());
         Togglable togglable = null;
+
         for (Togglable t : TOGGLABLES) {
             if (t.slot == slot || t.slot == slot - 9) {
                 togglable = t;
@@ -48,8 +62,13 @@ public class SettingsMenu implements InvMenu {
         }
 
         if (togglable != null) {
-            togglable.toggle(this.player);
-            updateTogglables();
+            for (int i = 0; i < 150L; i++) {
+                if (i == 150L) {
+                    entityPlayer.getCooldownTracker().a(Item.getById(ENABLED_ITEM.getTypeId()), 150);
+                    togglable.toggle(this.player);
+                    updateTogglables();
+                }
+            }
         }
     }
 

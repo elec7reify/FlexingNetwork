@@ -15,6 +15,17 @@ public class Messages {
     public static final String PROFILE_MENU_TITLE = "profile-menu-title";
     public static final String PLAYER_NOT_FOUND = "player-not-found";
     public static final String ARROWTRAIL_NAME = "arrowtrail-";
+    public static final String ARROWTRAIL_HEARTS = "arrowtrail-hearts";
+    public static final String ARROWTRAIL_DRIP_WATER = "arrowtrail-drip_water";
+    public static final String ARROWTRAIL_DRIP_LAVA = "arrowtrail-drip_lava";
+    public static final String ARROWTRAIL_FIREWORK = "arrowtrail-firework";
+    public static final String ARROWTRAIL_NOTE = "arrowtrail-note";
+    public static final String ARROWTRAIL_SLIME = "arrowtrail-slime";
+    public static final String ARROWTRAIL_VILLAGER_HAPPY = "arrowtrail-villager_happy";
+    public static final String ARROWTRAIL_ANGRY_VILLAGER = "arrowtrail-angry_villager";
+    public static final String ARROWTRAIL_ENCHANTMENT_TABLE = "arrowtrail-enchantment_table";
+    public static final String ARROWTRAIL_SELECTED = "arrowtrail-selected";
+    public static final String CLICK_TO_BUY = "click-to-buy";
 
     /** BAN/KICK/MUTE Messages + SHADE */
     public static final String REASON_NOT_SPECIFIED = "reason-not-specified";

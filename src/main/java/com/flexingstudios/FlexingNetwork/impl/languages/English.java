@@ -62,6 +62,18 @@ public class English extends Language {
         addDefault(Messages.REASON_NOT_SPECIFIED, "Not specified");
 //        addDefault(Messages.KICKED_BY_SHADEADMIN, "&c&lТеневой админ &fкикнул игрока &3{target} &fпо причине: &6{reason}");
 //        addDefault(Messages.KICKED_BY_ADMIN, "&3{kicker} &fкикнул игрока &3{target} &fпо причине: &6{reason}");
+        yml.addDefault(Messages.PROFILE_MENU_TITLE, "Profile: {name}");
+        yml.addDefault(Messages.ARROWTRAIL_HEARTS, "Hearts");
+        yml.addDefault(Messages.ARROWTRAIL_DRIP_WATER, "Water droplets");
+        yml.addDefault(Messages.ARROWTRAIL_DRIP_LAVA, "Lava droplets");
+        yml.addDefault(Messages.ARROWTRAIL_FIREWORK, "Firework");
+        yml.addDefault(Messages.ARROWTRAIL_NOTE, "Notes");
+        yml.addDefault(Messages.ARROWTRAIL_SLIME, "Slime");
+        yml.addDefault(Messages.ARROWTRAIL_VILLAGER_HAPPY, "Green stars");
+        yml.addDefault(Messages.ARROWTRAIL_ANGRY_VILLAGER, "Broken hearts");
+        yml.addDefault(Messages.ARROWTRAIL_ENCHANTMENT_TABLE, "Encrypted symbols");
+        yml.addDefault(Messages.ARROWTRAIL_SELECTED, "&fYou selected &6arrow trail&f: &a{trail_name}");
+        yml.addDefault(Messages.CLICK_TO_BUY, "&6Click to buy.");
 
         save();
     }

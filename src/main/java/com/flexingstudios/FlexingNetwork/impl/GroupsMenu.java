@@ -16,6 +16,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class GroupsMenu implements InvMenu {
@@ -23,34 +25,31 @@ public class GroupsMenu implements InvMenu {
     public final Inventory inv;
 
     public GroupsMenu(Player player) {
-        this.inv = Bukkit.createInventory(this, 54, "Донат привилегии | Выживание");
+        inv = Bukkit.createInventory(this, 54, "Донат привилегии | Выживание");
+        List<String> lore = new ArrayList<>();
 
         ItemStack GLASS_PANE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
         ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
         GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
         GLASS_PANE.setItemMeta(GLASS_PANE_META);
-        GLASS_PANE_SLOTS.forEach(slot -> this.inv.setItem(slot, GLASS_PANE));
+        GLASS_PANE_SLOTS.forEach(slot -> inv.setItem(slot, GLASS_PANE));
 
-        this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), Language.getMsg(player, Messages.CLOSE_DONATE_INVENTORY)));
-        this.inv.setItem(10, Items.name(Items.glow(Material.GRASS), "&f&lВы просматриваете возможности на &a&lВыживании"));
-        this.inv.setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
-        this.inv.setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
-        this.inv.setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
-        this.inv.setItem(15, Items.name(Material.REDSTONE, "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
-        this.inv.setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об админах", "&7И их возможностях"));
-        this.inv.setItem(40, Items.name(Items.glow(Material.ENDER_PEARL), "&9&lFlex&f&lCoins"));
+        inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), Language.getMsg(player, Messages.CLOSE_DONATE_INVENTORY)));
+        inv.setItem(10, Items.name(Items.glow(Material.GRASS), "&f&lВы просматриваете возможности на &a&lВыживании"));
+        inv.setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
+        inv.setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
+        inv.setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
+        inv.setItem(15, Items.name(Material.REDSTONE, "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
+        inv.setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об админах", "&7И их возможностях"));
+        inv.setItem(40, Items.name(Items.glow(Material.ENDER_PEARL), "&9&lFlex&f&lCoins"));
 
         // Статус VIP (Чикибамбвипка)
         ItemStack vip = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/2b6a97ba2793fe1fc83fd261e6de8ac3299f9f646f322bb8d40554baaecff", 1)).build();
-
-        inv.setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.", "",
-                "&a• §fПрефикс в чат и таб: &7«&a&lЧикибамбвипка&7» &7" + player.getDisplayName(), "&a• &fПример сообщения в чате:",
-                "&7«&a&lЧикибамбвипка&7» &7" + player.getDisplayName() + " &8→ &7Hello World!", "",
-                "&a◆ &fВозможность получить набор &a&lVIP: &a/kit vip", "&a◆ &fВозможность включить режим полёта: &a/fly",
-                "&a◆ &fВозможность установить &a&l3 &fточки дома: &a/sethome", "&a◆ &fВозможность открыть эндер сундук: &a/echest",
-                "&a◆ &fВозможность открыть верстак: &a/workbench", "&a◆ &fВозможность телепортация к месту смерти: &a/back",
-                "&a◆ &fВозможность узнать рецепт крафта: &a/recipe", "", "&c▪ Донат выдается на &c&lвсе &cсервера.",
-                "&a▪ Донат &a&lостается &aпосле вайпа.", "", "&fПокупать донат на сайте: &ewww.FlexingWorld.ru"));
+        for (String s : Language.getList(player, Messages.RANK_VIP_LORE_SURVIVAL)) {
+            lore.add(s.replace("{player_name}", player.getName()));
+        }
+        inv.setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.", lore));
+        lore.clear();
 
         // Статус premium (Премиумбамбони)
         ItemStack premium = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/279a2375363be891381d42c45b377553c2b6e0fbdc16def5fbc6b32ed5cad7a7", 1)).build();
@@ -111,7 +110,10 @@ public class GroupsMenu implements InvMenu {
 
         // Статус sponsor (Спонсорбамбони)
         ItemStack sponsor = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/c1df70dc9885e418b58d8e7486a81ed4ec2e7963c42569c468084d4f567c6", 1)).build();
-        inv.setItem(33, Items.name(sponsor, Language.getMsg(player, Messages.RANK_SPONSOR_TITLE), Language.getList(player, Messages.RANK_SPONSOR_LORE_SURVIVAL.replace("{player_name}", player.getName()))));
+        for (String s : Language.getList(player, Messages.RANK_SPONSOR_LORE_SURVIVAL)) {
+            lore.add(s.replace("{player_name}", player.getName()));
+        }
+        inv.setItem(33, Items.name(sponsor, Language.getMsg(player, Messages.RANK_SPONSOR_TITLE), lore));
 
         // Статус owner (Чикивладелец)
         ItemStack owner = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/6c92e3f45b49e405670224892f93ebc84fa7f8c96c36aab24a8854f2cbf0b8", 1)).build();

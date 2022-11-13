@@ -16,6 +16,7 @@ import com.flexingstudios.Commons.F;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
 
@@ -28,8 +29,6 @@ public class MysqlWorker extends MysqlThread {
         super(plugin, new MysqlThread.MysqlConfigSupplier(() -> plugin.config.mysqlUrl, () -> plugin.config.mysqlUsername, () -> plugin.config.mysqlPassword));
         useUnicode();
         this.plugin = plugin;
-        SelectCallback.class.getName();
-        UpdateCallback.class.getName();
     }
 
     @Override
@@ -76,14 +75,13 @@ public class MysqlWorker extends MysqlThread {
                 if (banto > 0L && banto < currtime) {
                     query("UPDATE bans SET status = 0 WHERE username = '" + player.getName() + "'");
                 } else {
-                    String bantime = banto == 0L ? "навсегда" : F.formatSecondsShort((int) TimeUnit.MILLISECONDS.convert(banto - currtime / 1000L + 1, TimeUnit.SECONDS)) + "";
+                    String bantime = banto == 0L ? "навсегда" : F.formatSecondsShort(((int) TimeUnit.MILLISECONDS.toSeconds(banto - currtime) + 1)) + "";
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
                             player.player.kickPlayer(Utilities.colored(T.BanMessage(player.player)
                             .replace("{username}", username)
                             .replace("{reason}", reason)
                             .replace("{admin}", admin)
                             .replace("{time}", bantime))));
-
                     return;
                 }
             }
@@ -113,7 +111,7 @@ public class MysqlWorker extends MysqlThread {
 
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new LoadFinishRunnable(player));
                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                        if (!player.isOnline()) {
+                        if (player.isOnline()) {
                             Bukkit.getPluginManager().callEvent(new PlayerLoadedEvent(player));
                         }
                     }, 1L);

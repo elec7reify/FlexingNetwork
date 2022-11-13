@@ -12,19 +12,18 @@ import org.bukkit.entity.Player;
 import java.util.Set;
 
 public class StpCommand implements CommandExecutor {
-    static final Set<String> ALLOWED_SERVER_TYPES = Sets.newHashSet(new String[]{"LOBBY", "BW", "SURVIVAL", "ANARCHY", "BEDWARS"});
+    static final Set<String> ALLOWED_SERVER_TYPES = Sets.newHashSet("LOBBY", "BW", "SURVIVAL", "ANARCHY", "BEDWARS");
 
-    static final Set<String> ALLOWED_STP = Sets.union(ALLOWED_SERVER_TYPES, Sets.newHashSet(new String[]{"BW"}));
+    static final Set<String> ALLOWED_STP = Sets.union(ALLOWED_SERVER_TYPES, Sets.newHashSet("BW"));
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
                 Player player = (Player) sender;
 
-                if (!FlexingNetwork.hasRank(sender, Rank.VADMIN, true))
-                    return true;
+                if (!FlexingNetwork.hasRank(sender, Rank.VADMIN, true)) return true;
 
-                if(args.length == 0) {
+                if (args.length == 0) {
                     player.sendMessage("§cИспользование /stp @<сервер>");
                     return true;
                 }

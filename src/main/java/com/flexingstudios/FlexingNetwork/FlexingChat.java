@@ -1,6 +1,7 @@
 package com.flexingstudios.FlexingNetwork;
 
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.util.ChatUtil;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import net.md_5.bungee.api.ChatMessageType;
@@ -20,15 +21,14 @@ public class FlexingChat implements Listener {
                 event.setCancelled(true);
                 Player player = event.getPlayer();
                 FLPlayer flPlayer = FLPlayer.get(player);
-                TextComponent rank = new TextComponent(Utilities.colored("&7«" + flPlayer.getRank().getDisplayName() + "&7» "));
+                BaseComponent rank = ChatUtil.createMessage(Utilities.colored("&7«" + flPlayer.getRank().getDisplayName() + "&7» "));
 
-                TextComponent playerName = new TextComponent(new ComponentBuilder(player.getName())
-                        .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/actions " + player.getName()))
-                        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§7Нажмите, чтобы открыть меню быстрых действий")))
-                        .append(": ", ComponentBuilder.FormatRetention.NONE)
-                        .create());
+                BaseComponent playerName = ChatUtil.createMessage(player.getName(),
+                        new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/actions " + player.getName()),
+                        new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("§7Нажмите, чтобы открыть меню быстрых действий")),
+                        ": ", ComponentBuilder.FormatRetention.NONE);
 
-                TextComponent message = new TextComponent(Utilities.colored(event.getMessage()));
+                BaseComponent message = ChatUtil.createMessage(Utilities.colored(event.getMessage()));
 
                 BaseComponent[] components = new BaseComponent[]{rank, playerName, message};
 

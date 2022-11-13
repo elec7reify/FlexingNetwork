@@ -5,9 +5,12 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
+import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
+import com.flexingstudios.FlexingNetwork.api.player.MessageOnJoin;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.JaroWinkler;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.friends.utils.Colour;
 import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
@@ -25,6 +28,8 @@ import org.bukkit.event.server.PluginDisableEvent;
 
 import java.io.File;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 class WorldProtect implements Listener {
@@ -65,7 +70,6 @@ class WorldProtect implements Listener {
         FLPlayer nplayer = FLPlayer.get(player);
         plugin.mysql.addLoadPlayer(nplayer);
 
-        //nplayer.onMetaLoaded();
         ((CraftPlayer) player).addChannel("BungeeCord");
         ((CraftPlayer) player).addChannel("FlexingBungee");
     }
@@ -73,6 +77,10 @@ class WorldProtect implements Listener {
     @EventHandler
     public void onPlayerLoaded(PlayerLoadedEvent event) {
         FLPlayer flPlayer = FLPlayer.get(event.getNetworkPlayer().getName());
+
+        if (flPlayer.getMessageOnJoin() != null) {
+            Utilities.bcast(Language.getList(flPlayer.getBukkitPlayer(), "msg" + flPlayer.getMessageOnJoin().getId()));
+        }
     }
 
     @EventHandler

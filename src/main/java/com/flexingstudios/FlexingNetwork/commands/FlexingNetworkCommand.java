@@ -115,6 +115,23 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
+    @CmdSub(value = "takecoins", rank = Rank.ADMIN)
+    private void takeCoins(dataCommand data) {
+        if (data.getArgs().length != 2) {
+            Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
+            return;
+        }
+        int coins = Integer.parseInt(data.getArgs()[1]);
+        if (data.getArgs()[0].equals("@all")) {
+            for (Player player : Bukkit.getOnlinePlayers())
+                FlexingNetwork.getPlayer(player).takeCoins(coins);
+        } else {
+            Player player = plugin.getServer().getPlayerExact(data.getArgs()[0]);
+            if (player != null)
+                FlexingNetwork.getPlayer(player).takeCoins(coins);
+        }
+    }
+
     @CmdSub(value = "giveexp", rank = Rank.SADMIN)
     private void giveExp(dataCommand data) {
         if (data.getArgs().length != 2) {
@@ -155,7 +172,7 @@ public class FlexingNetworkCommand extends UpCommand {
         List<String> lines = new ArrayList<>();
         lines.add("&3------------ &fСтатистика &3------------");
         lines.add("&bВремя работы: &f" + new ParsedTime(System.currentTimeMillis() - ManagementFactory.getRuntimeMXBean().getStartTime()).format());
-        lines.add("&bПамять: &f" + (runtime.totalMemory() - runtime.freeMemory() / 1024L / 1024L) + " MB / " + (runtime.totalMemory() / 1024L / 1024L) + " MB up to " + (runtime.maxMemory() / 1024L / 1024L) + " MB");
+        lines.add("&bПамять: &f" + ((runtime.totalMemory() - runtime.freeMemory()) / 1024L / 1024L) + " MB / " + (runtime.totalMemory() / 1024L / 1024L) + " MB up to " + (runtime.maxMemory() / 1024L / 1024L) + " MB");
         lines.add("&bПодключение к бд: " + (plugin.mysql.isConnected() ? "&aактивно" : "&cразорвано"));
         lines.add("&bЗапросов к бд: &f" + plugin.mysql.getExecutedQueries());
         Utilities.msg(data.getSender(), lines);

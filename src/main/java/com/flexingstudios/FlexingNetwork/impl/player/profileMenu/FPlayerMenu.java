@@ -39,7 +39,7 @@ public class FPlayerMenu implements InvMenu {
 
     public FPlayerMenu(NetworkPlayer player) {
         this.player = (FLPlayer) player;
-        inv = Bukkit.createInventory(this, 45, player.getName());
+        inv = Bukkit.createInventory(this, 45, Language.getMsg(player, Messages.PROFILE_MENU_TITLE).replace("{name}", player.getName()));
 
         Player bukkitPlayer = player.getBukkitPlayer();
         int expToNextLevel = Leveling.getExpToNextLevel(player.getLevel());
