@@ -105,8 +105,8 @@ public class Russian extends Language {
         addDefault(Messages.COMMAND_KICK_USAGE, "&cИспользование: /kick <ник> [причина]");
         addDefault(Messages.COMMAND_SHADEKICK_USAGE, "&cИспользование: /shadekick <ник> [причина]");
         addDefault(Messages.REASON_NOT_SPECIFIED, "Не указана");
-        addDefault(Messages.KICKED_BY_SHADEADMIN, "&c&lТеневой админ &fкикнул игрока &3{target} &fпо причине: &6{reason}");
-        addDefault(Messages.KICKED_BY_ADMIN, "&3{kicker} &fкикнул игрока &3{target} &fпо причине: &6{reason}");
+        addDefault(Messages.KICKED_BY_SHADEADMIN, "&c&lТеневой админ &fкикнул игрока &3{targetName} &fпо причине: &6{reason}");
+        addDefault(Messages.KICKED_BY_ADMIN, "&3{admin} &fкикнул игрока &3{targetName} &fпо причине: &6{reason}");
         addDefault(Messages.KICK_MESSAGE, Arrays.asList(
                 "&fСлужба безопастности &9&lFlexing&f&lWorld",
                 "&fВы были кикнуты",

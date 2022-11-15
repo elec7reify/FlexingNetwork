@@ -1,16 +1,13 @@
 package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;
 import com.google.common.collect.ImmutableSet;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -32,8 +29,7 @@ public class KickMenu implements InvMenu {
             "Багоюз",
             "Игрок невыносим в чате",
             "Аморальное поведение",
-            "Анти-AFK машина",
-            "");
+            "Анти-AFK машина");
 
     public KickMenu(String target) {
         this.target = target;
@@ -51,10 +47,10 @@ public class KickMenu implements InvMenu {
                 18, 19, 20, 21, 23, 24, 25, 26);
         GLASS_PANE_WHITE_SLOTS.forEach(slot -> inv.setItem(slot, GLASS_PANE_WHITE));
 
-        inv.setItem(22, Items.name(new ItemStack(Material.STAINED_GLASS, 1, (short) 14), "&c&lОтменить действие", "&e► &7Вернуться в меню быстрых действий"));
+        inv.setItem(22, Items.name(new ItemStack(Material.STAINED_GLASS, 1, (short) 14), "&3&lОтменить действие", "&3► &7Вернуться в меню быстрых действий"));
 
-        for (String reasons : REASON) {
-            inv.setItem(getSlot(index++), Items.name(Material.EMPTY_MAP, "&a" + reasons));
+        for (String reason : REASON) {
+            inv.setItem(getSlot(index++), Items.name(Material.EMPTY_MAP, "&a" + reason));
         }
     }
 
@@ -79,17 +75,15 @@ public class KickMenu implements InvMenu {
     public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
         if (slot == 22) player.openInventory(new ActionsMenu(target).getInventory());
 
-        FLPlayer flPlayer = FLPlayer.get(player);
         int index = getIndex(slot);
-        if (index >= 0 && index < KickMenu.REASON.size()) {
-            String objects = KickMenu.REASON.get(index);
-            player.closeInventory();
-            ConfirmMenu menu = new ConfirmMenu(() -> {
+        if (index >= 0 && index < REASON.size()) {
+            String object = REASON.get(index);
+            ConfirmMenu menu = new ConfirmMenu(getInventory(), () -> {
                 for (Player players : Bukkit.getOnlinePlayers())
                     Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
-                            .replace("{kicked}", player.getName())
+                            .replace("{admin}", player.getName())
                             .replace("{targetName}", target)
-                            .replace("{reason}", objects));
+                            .replace("{reason}", object));
 
                 // Immunity to kick
 //                if (flPlayer.has(Rank.ADMIN)) {
@@ -111,8 +105,8 @@ public class KickMenu implements InvMenu {
 //                }
             }, "Подтвердите действия");
             menu.setBackOnConfirm(false);
-            menu.setConfirmText("OK");
-            menu.setCancelText("NO");
+            menu.setConfirmText("&aКикнуть игрока с сервера");
+            menu.setCancelText("&cОтменить действие");
             player.openInventory(menu.getInventory());
         }
     }
