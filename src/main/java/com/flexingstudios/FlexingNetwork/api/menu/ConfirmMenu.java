@@ -35,6 +35,7 @@ public class ConfirmMenu implements InvMenu {
 
     public ConfirmMenu(Runnable callback, String title) {
         this.callback = callback;
+        prev = null;
         inv = Bukkit.createInventory(this, 36, title);
     }
 
@@ -68,6 +69,8 @@ public class ConfirmMenu implements InvMenu {
                 } else {
                     player.closeInventory();
                 }
+            } else {
+                player.closeInventory();
             }
         } else if (ConfirmMenu.CANCEL_SLOTS.contains(slot)) {
             if (cancelledCallback != null) {

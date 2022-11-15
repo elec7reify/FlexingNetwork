@@ -88,7 +88,7 @@ public class ActionsMenu implements InvMenu {
                 Utilities.msg(player, "&2Друзья » §aИгроку " + target + " &aотправлена заявка в друзья.");
                 break;
             case 25:
-                if (flPlayer.ignored.contains(target)) {
+                if (!flPlayer.ignored.contains(target)) {
                     flPlayer.ignored.add(target);
                     player.closeInventory();
                     Utilities.msg(player, T.success("GOT IT!", "Теперь вы игнорируете игрока " + target));
