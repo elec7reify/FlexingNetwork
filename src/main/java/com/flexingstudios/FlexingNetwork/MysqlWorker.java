@@ -7,6 +7,7 @@ import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
 import com.flexingstudios.FlexingNetwork.api.mysql.SelectCallback;
 import com.flexingstudios.FlexingNetwork.api.mysql.UpdateCallback;
+import com.flexingstudios.FlexingNetwork.api.util.ParsedTime;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.commands.BanCommand;
@@ -64,10 +65,11 @@ public class MysqlWorker extends MysqlThread {
     }
 
     void addLoadPlayer(FLPlayer player) {
-        select("SELECT `username`, banto, reason, `admin` FROM bans WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
+        select("SELECT `username`, banto, banfrom, reason, `admin` FROM bans WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
             if (rs.next()) {
                 long currtime = System.currentTimeMillis();
                 long banto = rs.getLong("banto");
+                long banfrom = rs.getLong("banfrom");
                 String username = rs.getString("username");
                 String reason = rs.getString("reason");
                 String admin = rs.getString("admin");
@@ -75,7 +77,7 @@ public class MysqlWorker extends MysqlThread {
                 if (banto > 0L && banto < currtime) {
                     query("UPDATE bans SET status = 0 WHERE username = '" + player.getName() + "'");
                 } else {
-                    String bantime = banto == 0L ? "навсегда" : F.formatSecondsShort(((int) TimeUnit.MILLISECONDS.toSeconds(banto - currtime) + 1)) + "";
+                    String bantime = banto == 0L ? "навсегда" : F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(banto - banfrom + 1)) + "";
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
                             player.player.kickPlayer(Utilities.colored(T.BanMessage(player.player)
                             .replace("{username}", username)

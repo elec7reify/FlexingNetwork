@@ -1,5 +1,7 @@
 package com.flexingstudios.Commons;
 
+import org.slf4j.Logger;
+
 public class F {
     private static final char[] magnitudes = new char[] { 'k', 'M', 'G', 'T', 'P', 'E' };
 
@@ -87,10 +89,10 @@ public class F {
         return orig + " " + form3;
     }
 
-    public static int toMilliSec(String s) {
+    public static long toMilliSec(String s) {
         String[] sl = s.toLowerCase().split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
-        int i = Integer.parseInt(sl[0]);
+        long i = Long.parseLong(sl[0]);
         switch (sl[1]) {
             case "s":
                 return i * 1000;
@@ -104,6 +106,8 @@ public class F {
                 return i * 1000 * 60 * 60 * 24 * 7;
             case "mo":
                 return i * 1000 * 60 * 60 * 24 * 30;
+            case "y":
+                return i * 1000 * 60 * 60 * 24 * 30 * 12;
             case "999y":
             default:
                 return 0;

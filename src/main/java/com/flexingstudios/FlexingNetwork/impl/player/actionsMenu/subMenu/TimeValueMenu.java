@@ -25,6 +25,7 @@ public class TimeValueMenu implements InvMenu {
     private final Inventory inv;
     private final Inventory prev;
     private final String target;
+    private final List<Pair<Long, String>> objects = BanMenu.REASON;
 
     public TimeValueMenu(String target, Inventory prev) {
         this.target = target;
@@ -57,8 +58,7 @@ public class TimeValueMenu implements InvMenu {
                 if (!FlexingNetwork.hasRank(player, Rank.CHIKIBOMBASTER, true)) {
                     return;
                 } else {
-                    List<Pair<Integer, String>> objects = BanMenu.REASON;
-                    for (Pair<Integer, String> object : objects) {
+                    for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
                             FlexingNetwork.ban(target, F.toMilliSec("1w"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
@@ -73,8 +73,7 @@ public class TimeValueMenu implements InvMenu {
                 if (!FlexingNetwork.hasRank(player, Rank.CHIKIBOMBASTER, true)) {
                     return;
                 } else {
-                    List<Pair<Integer, String>> objects = BanMenu.REASON;
-                    for (Pair<Integer, String> object : objects) {
+                    for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
                             FlexingNetwork.ban(target, F.toMilliSec("1d"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
@@ -89,8 +88,7 @@ public class TimeValueMenu implements InvMenu {
                 if (!FlexingNetwork.hasRank(player, Rank.OWNER, true)) {
                     return;
                 } else {
-                    List<Pair<Integer, String>> objects = BanMenu.REASON;
-                    for (Pair<Integer, String> object : objects) {
+                    for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
                             FlexingNetwork.ban(target, F.toMilliSec("6h"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
@@ -105,8 +103,7 @@ public class TimeValueMenu implements InvMenu {
                 if (!FlexingNetwork.hasRank(player, Rank.OWNER, true)) {
                     return;
                 } else {
-                    List<Pair<Integer, String>> objects = BanMenu.REASON;
-                    for (Pair<Integer, String> object : objects) {
+                    for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
                             FlexingNetwork.ban(target, F.toMilliSec("2h"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
@@ -121,8 +118,7 @@ public class TimeValueMenu implements InvMenu {
                 if (!FlexingNetwork.hasRank(player, Rank.OWNER, true)) {
                     return;
                 } else {
-                    List<Pair<Integer, String>> objects = BanMenu.REASON;
-                    for (Pair<Integer, String> object : objects) {
+                    for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
                             FlexingNetwork.ban(target, F.toMilliSec("1h"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
@@ -137,8 +133,7 @@ public class TimeValueMenu implements InvMenu {
                 if (!FlexingNetwork.hasRank(player, Rank.SPONSOR, true)) {
                     return;
                 } else {
-                    List<Pair<Integer, String>> objects = BanMenu.REASON;
-                    for (Pair<Integer, String> object : objects) {
+                    for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
                             FlexingNetwork.ban(target, F.toMilliSec("30min"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");

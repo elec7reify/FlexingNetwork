@@ -21,7 +21,7 @@ import java.util.Set;
 public class BanMenu implements InvMenu {
     private final Inventory inv;
     private final String target;
-    public static final List<Pair<Integer, String>> REASON = Arrays.asList(
+    public static final List<Pair<Long, String>> REASON = Arrays.asList(
             Pair.of(F.toMilliSec("1w"),"Использование читов"),
             Pair.of(F.toMilliSec("2h"), "Тим на соло мини-играх"),
             Pair.of(F.toMilliSec("1w"), "Некорректный никнейм"),
@@ -49,9 +49,9 @@ public class BanMenu implements InvMenu {
                 45, 46, 47, 48, 50, 51, 52, 53);
         GLASS_PANE_WHITE_SLOTS.forEach(slot -> inv.setItem(slot, GLASS_PANE_WHITE));
 
-        inv.setItem(49, Items.name(new ItemStack(Material.STAINED_GLASS, 1, (short) 14), "&c&lОтменить действие", "&e► &7Вернуться в меню быстрых действий"));
+        inv.setItem(49, Items.name(new ItemStack(Material.STAINED_GLASS, 1, (short) 14), "&3&lОтменить действие", "&3► &7Вернуться в меню быстрых действий"));
         int index = 0;
-        for (Pair<Integer, String> objects : REASON) {
+        for (Pair<Long, String> objects : REASON) {
             inv.setItem(getSlot(index++), Items.name(Material.EMPTY_MAP, "&a" + objects.getRight()));
         }
     }
