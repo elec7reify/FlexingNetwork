@@ -63,7 +63,7 @@ public class ArrowTrailMenu implements InvMenu {
 
             if (player.availableArrowTrails.contains(trail.getId())) {
                 if (player.getArrowTrail() == trail) {
-                    color = "&f";
+                    color = "&a";
                     lore.add("&fРедкость: &3" + trail.getRarity());
                     lore.add("");
                     lore.add("&aВыбрано!");
@@ -82,7 +82,7 @@ public class ArrowTrailMenu implements InvMenu {
                 lore.add("&cУ Вас недостаточно средств");
                 lore.add("&cЧтобы приобрести: " + replaceToAnyLang(trail));
             } else {
-                color = "&f";
+                color = "&6";
                 lore.add("&fЦена: &3" + trail.getPrice());
                 lore.add("");
                 lore.add("&fРедкость: &3" + trail.getRarity());

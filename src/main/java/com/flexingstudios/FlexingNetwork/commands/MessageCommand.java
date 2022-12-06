@@ -30,10 +30,10 @@ public class MessageCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (args[0].equalsIgnoreCase(sender.getName())) {
-                    Utilities.msg(sender, "&dОчень умный ход, пожалуй слишком умный для того, чтобы сервер смог это понять");
-                    return true;
-                }
+//                if (args[0].equalsIgnoreCase(sender.getName())) {
+//                    Utilities.msg(sender, "&dОчень умный ход, пожалуй слишком умный для того, чтобы сервер смог это понять");
+//                    return true;
+//                }
 
                 player = Bukkit.getPlayerExact(args[0]);
 

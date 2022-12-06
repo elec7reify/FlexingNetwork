@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CmdSub {
-    String [] value();
-    String [] aliases() default {};
+    String[] value();
+    String[] aliases() default {};
     Rank rank() default Rank.PLAYER;
     Rank[] ranks() default {};
     boolean hidden() default false;

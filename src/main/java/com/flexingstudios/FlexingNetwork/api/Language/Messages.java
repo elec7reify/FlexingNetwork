@@ -75,4 +75,7 @@ public class Messages {
     public static final String RANK_VIP_LORE_SURVIVAL = RANK_VIP_MENU + ".lore";
     public static final String RANK_SPONSOR_TITLE = RANK_SPONSOR_MENU + ".title";
     public static final String RANK_SPONSOR_LORE_SURVIVAL = RANK_SPONSOR_MENU + ".lore";
+
+    /** ONLY Console AND ONLY in ENGLISH */
+    public static final String CONSOLE_COMMAND_GAMEMODE_USAGE = "console-cmd-gamemode-usage";
 }

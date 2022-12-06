@@ -9,6 +9,8 @@ import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import gnu.trove.set.hash.TIntHashSet;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -53,6 +55,7 @@ public abstract class FLPlayer implements NetworkPlayer {
     public int level = 0;
     public int exp = 0;
     public int expBuffer = 0;
+    public @Setter boolean restrict = false;
 
     FLPlayer(Player player) {
         this.player = player;
@@ -307,6 +310,11 @@ public abstract class FLPlayer implements NetworkPlayer {
             if (launchFirework)
                 Fireworks.playRandom(player.getLocation());
         }
+    }
+
+    @Override
+    public boolean getRestrict() {
+        return restrict;
     }
 
     public boolean equals(Object obj) {

@@ -9,6 +9,7 @@ import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FPlayerMenu;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -87,14 +88,15 @@ public class LanguageMenu implements InvMenu {
         if (index < 0 || index >= Languages.values().length) return;
 
         Languages selected = Languages.values()[index];
-        TextComponent url = new TextComponent(new ComponentBuilder(Utilities.colored("&6&nhttps://crowdin.com/project/flexingworld"))
+        TextComponent url = new TextComponent(new ComponentBuilder(Utilities.colored("&3&nhttps://crowdin.com/project/flexingworld"))
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("&7Нажмите, чтобы открыть ссылку")))
                 .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://crowdin.com/project/flexingworld"))
                 .create());
         if (selected.getItem().getType() == Material.BOOK_AND_QUILL) {
             player.closeInventory();
-            Utilities.msg(player, "&eДанный язык пока невозможно выбрать!",
-                    "&eЧтобы помочь перевести FlexingWorld",
-                    "&eПерейдите по этой ссылке:");
+            Utilities.msg(player, "&fДанный язык пока невозможно выбрать!",
+                    "&fЧтобы помочь перевести FlexingWorld",
+                    "&fПерейдите по этой ссылке:");
             player.spigot().sendMessage(url);
             return;
         }

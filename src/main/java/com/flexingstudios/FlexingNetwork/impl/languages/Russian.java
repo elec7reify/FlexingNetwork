@@ -30,7 +30,7 @@ public class Russian extends Language {
         yml.addDefault(Messages.PLAYER_NOT_FOUND, "&cИгрок {targetPlayer} не найден");
 
         yml.addDefault(Messages.NEW, "НОВОЕ");
-        yml.addDefault(Messages.COMMING_SOON, "В РАЗРАБОТКЕ");
+        yml.addDefault(Messages.COMMING_SOON, "СКОРО ПОЯВИТСЯ");
 
         yml.addDefault(Messages.COMMAND_GAMEMODE_USAGE, "&cИспользование: /{label} <режим>");
         yml.addDefault(Messages.COMMAND_GAMEMODE_CHANGED, "Ваш режим игры изменён на &a{mode}");

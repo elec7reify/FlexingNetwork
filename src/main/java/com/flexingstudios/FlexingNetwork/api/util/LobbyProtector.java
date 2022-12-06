@@ -1,7 +1,11 @@
 package com.flexingstudios.FlexingNetwork.api.util;
+
+import com.flexingstudios.FlexingNetwork.Config;
+import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -73,8 +77,10 @@ public class LobbyProtector implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onPickup(PlayerPickupItemEvent event) {
-        if (isNearLobby0(event.getPlayer()))
-            event.setCancelled(true);
+        if (FlexingNetworkPlugin.getInstance().config.allowPickUpItems) {
+            if (isNearLobby0(event.getPlayer()))
+                event.setCancelled(true);
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
@@ -145,15 +151,21 @@ public class LobbyProtector implements Listener {
     }
 
     private boolean isNearLobby0(Player player) {
-        if (this.lobby.getWorld() != player.getWorld())
+        if (lobby.getWorld() != player.getWorld())
             return false;
-        return (player.getLocation().distanceSquared(this.lobby) < this.size);
+        else
+            return player.getLocation().distanceSquared(lobby) < size;
+    }
+
+    private boolean isExactNearLobby0(Player player) {
+        return player.getLocation().distanceSquared(lobby) > size;
     }
 
     private boolean isLobby0(Location loc) {
-        if (this.lobby.getWorld() != loc.getWorld())
+        if (lobby.getWorld() != loc.getWorld())
             return false;
-        return (loc.distanceSquared(this.lobby) < this.size);
+        else
+            return loc.distanceSquared(lobby) < size;
     }
 
     public static void init(Plugin plugin, Location lobby) {
@@ -175,7 +187,15 @@ public class LobbyProtector implements Listener {
         return instance.isNearLobby0(entity);
     }
 
+    public static boolean isExactNearLobby(Player entity) {
+        return instance.isExactNearLobby0(entity);
+    }
+
     public static boolean isLobby(Location loc) {
         return instance.isLobby0(loc);
+    }
+
+    public static World getWorld() {
+        return instance.lobby.getWorld();
     }
 }

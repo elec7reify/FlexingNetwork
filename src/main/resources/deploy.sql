@@ -67,7 +67,18 @@ CREATE TABLE `bans` (
   `admin` varchar(20) NOT NULL,
   `status` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `users` (`username`) USING HASH
+  KEY `authme` (`username`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
+
+CREATE TABLE `modrestrict` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `restrictto` bigint(20) NOT NULL,
+  `restrictfrom` bigint(20) NOT NULL,
+  `admin` varchar(20) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `authme` (`username`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 CREATE TABLE `friends` (

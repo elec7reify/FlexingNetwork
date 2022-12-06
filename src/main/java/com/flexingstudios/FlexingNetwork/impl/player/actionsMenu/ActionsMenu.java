@@ -9,6 +9,7 @@ import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.BanMenu;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.KickMenu;
+import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.MessageMenu;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.MuteMenu;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
@@ -53,7 +54,7 @@ public class ActionsMenu implements InvMenu {
 
         GameProfile profile = new GameProfile(Bukkit.getPlayer(target).getUniqueId(), target);
         inv.setItem(4, Items.name(new ItemBuilder(SkullBuilder.getSkull(profile, 1)).build(), "", ""));
-        inv.setItem(19, Items.name(Material.EMERALD, "", ""));
+        inv.setItem(19, Items.name(Material.EMERALD, "Быстрые сообщения", ""));
         inv.setItem(22, Items.name(new ItemStack(new Dye(DyeColor.LIME).toItemStack(1)), "Добавить в друзья", ""));
         inv.setItem(25, Items.name(Material.SULPHUR, "ignore", ""));
         inv.setItem(37, Items.name(Material.REDSTONE, "кикнуть игрока — " + target, ""));
@@ -61,28 +62,14 @@ public class ActionsMenu implements InvMenu {
         inv.setItem(43, Items.name(new ItemStack(Material.INK_SACK, 1, (short) 1), "Замутить игрока — " + target, ""));
     }
 
-    private int getSlot(int index) {
-        return 10 + 9 * (index / 7) + index % 7;
-    }
-
-    private int getIndex(int slot) {
-        if (slot % 9 == 0 || (slot + 1) % 9 == 0)
-            return -1;
-
-        slot -= 10;
-        if (slot < 0)
-            return -1;
-
-        int row = slot / 9;
-
-        return row * 7 + (slot - row * 9) % 7;
-    }
-
     @Override
     public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
         MysqlPlayer flPlayer = (MysqlPlayer) FLPlayer.get(player);
 
         switch (slot) {
+            case 19:
+                player.openInventory(new MessageMenu(target).getInventory());
+                break;
             case 22:
                 FriendsManager.addFriendRequest(player.getName(), target);
                 Utilities.msg(player, "&2Друзья » §aИгроку " + target + " &aотправлена заявка в друзья.");

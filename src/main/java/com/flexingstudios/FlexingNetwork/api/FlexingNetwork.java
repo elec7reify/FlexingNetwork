@@ -78,16 +78,70 @@ public class FlexingNetwork {
         return getPlayer(who.getName()).has(permission);
     }
 
+    public static void restrict(String target, long time, String admin, boolean shadeRestrict) {
+        Player player = Bukkit.getPlayer(target);
+        FLPlayer flPlayer = FLPlayer.get(target);
+
+        if (player != null) {
+            if (shadeRestrict) {
+                FlexingNetwork.mysql().query("INSERT INTO modrestrict (username, restrictto, restrictfrom, status, admin) VALUES('" +
+                        StringEscapeUtils.escapeSql(target) + "', " +
+                        (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", " +
+                        System.currentTimeMillis() + ", 1, '" +
+                        StringEscapeUtils.escapeSql(admin) + "')");
+                flPlayer.setRestrict(true);
+
+                logAction(admin, "restrict", target, "Некорректный кик/бан/мут");
+            }
+            FlexingNetwork.mysql().query("INSERT INTO modrestrict (username, restrictto, restrictfrom, status, admin) VALUES('" +
+                    StringEscapeUtils.escapeSql(target) + "', " +
+                    (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", " +
+                    System.currentTimeMillis() + ", 1, '" +
+                    StringEscapeUtils.escapeSql(admin) + "')");
+            flPlayer.setRestrict(true);
+
+            logAction(admin, "restrict", target, "Некорректный кик/бан/мут");
+        } else {
+            if (shadeRestrict) {
+                FlexingNetwork.mysql().query("INSERT INTO modrestrict (username, restrictto, restrictfrom, status, admin) VALUES('" +
+                        StringEscapeUtils.escapeSql(target) + "', " +
+                        (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", " +
+                        System.currentTimeMillis() + ", 1, '" +
+                        StringEscapeUtils.escapeSql(admin) + "')");
+
+                logAction(admin, "restrict", target, "Некорректный кик/бан/мут");
+            }
+            FlexingNetwork.mysql().query("INSERT INTO modrestrict (username, restrictto, restrictfrom, status, admin) VALUES('" +
+                    StringEscapeUtils.escapeSql(target) + "', " +
+                    (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", " +
+                    System.currentTimeMillis() + ", 1, '" +
+                    StringEscapeUtils.escapeSql(admin) + "')");
+
+            logAction(admin, "restrict", target, "Некорректный кик/бан/мут");
+        }
+    }
+
     public static void ban(String target, long time, String reason, String admin, boolean shadeBan) {
         Player player = Bukkit.getPlayer(target);
-        if (shadeBan) {
-            BungeeBridge.kickPlayer(target, Utilities.colored(T.BanMessage(player)
-                    .replace("{username}", target)
-                    .replace("{admin}", "&cnТеневой админ")
-                    .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
-                    .replace("{reason}", reason)
-                    .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
-                            .format(new Date(System.currentTimeMillis())))));
+
+        if (player != null) {
+            if (shadeBan) {
+                FlexingNetwork.mysql().query("INSERT INTO bans (username, banto, reason, banfrom, status, admin) VALUES('" +
+                        StringEscapeUtils.escapeSql(target) + "', " +
+                        (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", '" +
+                        StringEscapeUtils.escapeSql(reason) + "', " +
+                        System.currentTimeMillis() + ", 1, '" +
+                        StringEscapeUtils.escapeSql(admin) + "')");
+
+                player.kickPlayer(Utilities.colored(T.BanMessage(player)
+                        .replace("{username}", target)
+                        .replace("{admin}", "&cТеневой админ")
+                        .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
+                        .replace("{reason}", reason)
+                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                                .format(new Date(System.currentTimeMillis())))));
+                logAction(admin, "shade.ban", target, reason);
+            }
 
             FlexingNetwork.mysql().query("INSERT INTO bans (username, banto, reason, banfrom, status, admin) VALUES('" +
                     StringEscapeUtils.escapeSql(target) + "', " +
@@ -95,24 +149,50 @@ public class FlexingNetwork {
                     StringEscapeUtils.escapeSql(reason) + "', " +
                     System.currentTimeMillis() + ", 1, '" +
                     StringEscapeUtils.escapeSql(admin) + "')");
-            logAction(admin, "shade.ban", target, reason);
+
+            player.kickPlayer(Utilities.colored(T.BanMessage(player)
+                    .replace("{username}", target)
+                    .replace("{admin}", "&3" + admin)
+                    .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
+                    .replace("{reason}", reason)
+                    .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                            .format(new Date(System.currentTimeMillis())))));
+            logAction(admin, "ban", target, reason);
+        } else {
+            if (shadeBan) {
+                FlexingNetwork.mysql().query("INSERT INTO bans (username, banto, reason, banfrom, status, admin) VALUES('" +
+                        StringEscapeUtils.escapeSql(target) + "', " +
+                        (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", '" +
+                        StringEscapeUtils.escapeSql(reason) + "', " +
+                        System.currentTimeMillis() + ", 1, '" +
+                        StringEscapeUtils.escapeSql(admin) + "')");
+
+                BungeeBridge.kickPlayer(target, Utilities.colored(T.BanMessage(player)
+                        .replace("{username}", target)
+                        .replace("{admin}", "&cnТеневой админ")
+                        .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
+                        .replace("{reason}", reason)
+                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                                .format(new Date(System.currentTimeMillis())))));
+                logAction(admin, "shade.ban", target, reason);
+            }
+
+            FlexingNetwork.mysql().query("INSERT INTO bans (username, banto, reason, banfrom, status, admin) VALUES('" +
+                    StringEscapeUtils.escapeSql(target) + "', " +
+                    (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", '" +
+                    StringEscapeUtils.escapeSql(reason) + "', " +
+                    System.currentTimeMillis() + ", 1, '" +
+                    StringEscapeUtils.escapeSql(admin) + "')");
+
+            BungeeBridge.kickPlayer(target, Utilities.colored(T.BanMessage(player)
+                    .replace("{username}", target)
+                    .replace("{admin}", "&3" + admin)
+                    .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
+                    .replace("{reason}", reason)
+                    .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                            .format(new Date(System.currentTimeMillis())))));
+            logAction(admin, "ban", target, reason);
         }
-
-        FlexingNetwork.mysql().query("INSERT INTO bans (username, banto, reason, banfrom, status, admin) VALUES('" +
-                StringEscapeUtils.escapeSql(target) + "', " +
-                (time == 0 ? 0 : (System.currentTimeMillis() + time)) + ", '" +
-                StringEscapeUtils.escapeSql(reason) + "', " +
-                System.currentTimeMillis() + ", 1, '" +
-                StringEscapeUtils.escapeSql(admin) + "')");
-
-        BungeeBridge.kickPlayer(target, Utilities.colored(T.BanMessage(player)
-                .replace("{username}", target)
-                .replace("{admin}", "&3" + admin)
-                .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
-                .replace("{reason}", reason)
-                .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
-                        .format(new Date(System.currentTimeMillis())))));
-        logAction(admin, "ban", target, reason);
     }
 
     public static void unban(String player, String admin, boolean shadeUnban) {
@@ -140,28 +220,28 @@ public class FlexingNetwork {
     }
 
     public static void kick(String target, String reason, String kicked, boolean shadeKick) {
-        if (target.equals(kicked)) {
-            Utilities.msg(Bukkit.getPlayer(kicked), Language.getMsg(Bukkit.getPlayer(target), Messages.KICKED_BY_ADMIN));
-        }
-
         Player player = Bukkit.getPlayer(target);
         if (player != null) {
             if (shadeKick) {
-                player.kickPlayer(Utilities.colored(T.formattedKickMessage(player)
+                for (String s : T.formattedKickMessageTest(player)) {
+                    player.kickPlayer(Utilities.colored(s
+                            .replace("{targetName}", target)
+                            .replace("{kicked}", "&cТеневой админ")
+                            .replace("{reason}", reason)
+                            .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                                    .format(new Date(System.currentTimeMillis())))));
+                }
+                logAction(kicked, "shade.kick", target, reason);
+            }
+
+            for (String s : T.formattedKickMessageTest(player)) {
+                player.kickPlayer(Utilities.colored(s
                         .replace("{targetName}", target)
                         .replace("{kicked}", "&cТеневой админ")
                         .replace("{reason}", reason)
                         .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
                                 .format(new Date(System.currentTimeMillis())))));
-                logAction(kicked, "shade.kick", target, reason);
             }
-
-            player.kickPlayer(Utilities.colored(T.formattedKickMessage(player)
-                    .replace("{targetName}", target)
-                    .replace("{kicked}", "&3" + kicked)
-                    .replace("{reason}", reason)
-                    .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
-                            .format(new Date(System.currentTimeMillis())))));
             logAction(kicked, "kick", target, reason);
         } else {
             if (shadeKick) {

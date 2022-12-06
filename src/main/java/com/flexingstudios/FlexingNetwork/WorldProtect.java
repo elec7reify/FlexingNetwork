@@ -1,5 +1,6 @@
 package com.flexingstudios.FlexingNetwork;
 
+import com.flexingstudios.Commons.F;
 import com.flexingstudios.Commons.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
@@ -10,6 +11,7 @@ import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.MessageOnJoin;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.JaroWinkler;
+import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.friends.utils.Colour;
 import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
@@ -28,6 +30,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -70,6 +73,20 @@ class WorldProtect implements Listener {
         FLPlayer nplayer = FLPlayer.get(player);
         plugin.mysql.addLoadPlayer(nplayer);
 
+        FlexingNetwork.mysql().select("SELECT restrictto FROM modrestrict WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
+            if (rs.next()) {
+                long currtime = System.currentTimeMillis();
+                long restrictto = rs.getLong("restrictto");
+
+                if (restrictto > 0L && restrictto < currtime) {
+                    FlexingNetwork.mysql().query("UPDATE modrestrict SET status = 0 WHERE username = '" + player.getName() + "'");
+                    nplayer.setRestrict(false);
+                } else {
+                    nplayer.setRestrict(true);
+                }
+            }
+        });
+
         ((CraftPlayer) player).addChannel("BungeeCord");
         ((CraftPlayer) player).addChannel("FlexingBungee");
     }
@@ -110,6 +127,7 @@ class WorldProtect implements Listener {
 
         if (!label.contains(":")) return;
         event.setCancelled(true);
+
         /*
         if (event.getMessage().split(" ")[0].contains(":")) {
             event.setCancelled(true);

@@ -109,7 +109,9 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("kick").setExecutor(new KickCommand());
         getCommand("shadekick").setExecutor(new ShadeKickCommand());
         getCommand("ban").setExecutor(new BanCommand());
+        getCommand("shadeban").setExecutor(new ShadeBanCommand());
         getCommand("unban").setExecutor(new BanCommand());
+        getCommand("shadeunban").setExecutor(new ShadeBanCommand());
         getCommand("hub").setExecutor(new HubCommand());
         getCommand("stp").setExecutor(new StpCommand());
         getCommand("donate").setExecutor(new DonateCommand());
@@ -119,6 +121,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("actions").setExecutor(new ActionsCommand());
         getCommand("report").setExecutor(new ReportCommand());
         getCommand("reports").setExecutor(new ReportsCommand());
+        getCommand("restrict").setExecutor(new RestrictCommand());
         getCommand("help").setExecutor(help);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {

@@ -43,5 +43,10 @@ commands:
   shadekick:
     aliases: [shkick]
   ban:
+  shadeban:
+    aliases: [shban]
   unban:
+  shadeunban:
+    aliases: [shunban]
   actions:
+  restrict:

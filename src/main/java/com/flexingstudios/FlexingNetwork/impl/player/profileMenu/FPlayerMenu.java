@@ -14,6 +14,7 @@ import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu.LanguageMenu;
 import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu.Languages;
+import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu.PunishmentsMenu;
 import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu.SettingsMenu;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
@@ -64,14 +65,13 @@ public class FPlayerMenu implements InvMenu {
 
         GameProfile gameProfile = new GameProfile(player.getBukkitPlayer().getUniqueId(), player.getName());
         inv.setItem(13, Items.name(new ItemBuilder(SkullBuilder.getSkull(gameProfile, 1)).build(), "Ваш профиль",
-                "&fВаш ник - &e" + player.getName(),
-                "&fВаш ранг - &r" + player.getRank().getDisplayName(),
-                "&fФлекс-коинов - &e" + Utilities.pluralsCoins(player.getCoins()),
-                "&b&lУровень " + player.getLevel() + " (" + (int)(progress * 100.0F) + "%) " + Utilities.genBar(48, progress, '|', "&7", "&a")));
+                "&fВаш ник: &e" + player.getName(),
+                "&fВаш ранг: &r" + player.getRank().getDisplayName(),
+                "&fFlexCoin: &e" + Utilities.pluralsCoins(player.getCoins()))); // "&b&lУровень " + player.getLevel() + " (" + (int)(progress * 100.0F) + "%) " + Utilities.genBar(48, progress, '|', "&7", "&a"))
         inv.setItem(14, Items.name(new ItemBuilder(SkullBuilder.getSkull(Languages.byId(Language.getPlayerLanguage(bukkitPlayer).getIso()).getSkinURL())).build(), "&aИзменить язык &cNEW", "", "&2Нажмите, чтобы открыть меню смены языка."));
-        inv.setItem(29, Items.name(new ItemStack(Material.INK_SACK, 1, (short) 12), "flexcoin", ""));
+        inv.setItem(29, Items.name(new ItemStack(Material.INK_SACK, 1, (short) 12), "FlexCoin", "&aНажмите, чтобы открыть меню магазин FlexCoin."));
         inv.setItem(31, Items.name(Material.ENDER_PEARL, "История наказаний", "&aНажмите, чтобы открыть меню история наказаний."));
-        inv.setItem(33, Items.name(Material.FIREWORK_CHARGE, "&7Настройки", "&aНажмите, чтобы открыть меню настроек."));
+        //inv.setItem(33, Items.name(Material.FIREWORK_CHARGE, "&7Настройки", "&aНажмите, чтобы открыть меню настроек."));
     }
 
     @Override
@@ -80,8 +80,11 @@ public class FPlayerMenu implements InvMenu {
             case 14:
                 player.openInventory(new LanguageMenu(player, this).getInventory());
                 break;
+            case 31:
+                player.openInventory(new PunishmentsMenu(player, this).getInventory());
+                break;
             case 33:
-                player.openInventory(new SettingsMenu(this.player, this).getInventory());
+                //player.openInventory(new SettingsMenu(this.player, this).getInventory());
                 break;
         }
     }

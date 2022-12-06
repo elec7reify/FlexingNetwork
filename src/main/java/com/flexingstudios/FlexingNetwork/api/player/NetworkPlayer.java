@@ -66,7 +66,6 @@ public interface NetworkPlayer {
     ArrowTrail getArrowTrail();
     MessageOnJoin getMessageOnJoin();
     void setArrowTrail(ArrowTrail arrowTrail);
-
     void setMessageOnJoin(MessageOnJoin msg);
     void unlockArrowTrail(ArrowTrail trail);
     void unlockJoinMessage(MessageOnJoin msg);
@@ -76,4 +75,5 @@ public interface NetworkPlayer {
     int getPartialExp();
     void giveExp(int exp);
     void giveExpExact(int exp);
+    boolean getRestrict();
 }

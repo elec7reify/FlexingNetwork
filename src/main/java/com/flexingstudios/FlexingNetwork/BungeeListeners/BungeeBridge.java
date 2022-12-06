@@ -119,26 +119,51 @@ public class BungeeBridge implements PluginMessageListener {
         };
     }
 
+//    private static Player getFirstPlayer() {
+//        /**
+//         * if Bukkit Version < 1.7.10 then Bukkit.getOnlinePlayers() will return
+//         * a Player[] otherwise it'll return a Collection<? extends Player>.
+//         */
+//        Player firstPlayer = getFirstPlayer0(Bukkit.getOnlinePlayers());
+//
+//        if (firstPlayer == null) {
+//            throw new IllegalArgumentException("Bungee Messaging Api requires at least one player to be online.");
+//        }
+//
+//        return firstPlayer;
+//    }
+//
+//    @SuppressWarnings("unused")
+//    private static Player getFirstPlayer0(Player[] playerArray) {
+//        return playerArray.length > 0 ? playerArray[0] : null;
+//    }
+//
+//    private static Player getFirstPlayer0(Collection<? extends Player> playerCollection) {
+//        return Iterables.getFirst(playerCollection, null);
+//    }
+
     private static Player getFirstPlayer() {
-        /**
-         * if Bukkit Version < 1.7.10 then Bukkit.getOnlinePlayers() will return
-         * a Player[] otherwise it'll return a Collection<? extends Player>.
-         */
-        Player firstPlayer = getFirstPlayer0(Bukkit.getOnlinePlayers());
-
-        if (firstPlayer == null) {
-            throw new IllegalArgumentException("Bungee Messaging Api requires at least one player to be online.");
-        }
-
-        return firstPlayer;
+        return Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
     }
 
-    @SuppressWarnings("unused")
-    private static Player getFirstPlayer0(Player[] playerArray) {
-        return playerArray.length > 0 ? playerArray[0] : null;
+    public static void sendBroadcastMessage(String paramString1, String paramString2) {
+        ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
+        byteArrayDataOutput.writeUTF(paramString1);
+        byteArrayDataOutput.writeUTF(paramString2);
+        byteArrayDataOutput.writeLong(System.currentTimeMillis());
+        forward("FlexingBungee", "FlexingBungee", byteArrayDataOutput.toByteArray());
     }
 
-    private static Player getFirstPlayer0(Collection<? extends Player> playerCollection) {
-        return Iterables.getFirst(playerCollection, null);
+    public static void forward(String paramString1, String paramString2, byte[] paramArrayOfbyte) {
+        Player player = getFirstPlayer();
+        if (player == null)
+            return;
+        ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
+        byteArrayDataOutput.writeUTF("Forward");
+        byteArrayDataOutput.writeUTF(paramString1);
+        byteArrayDataOutput.writeUTF(paramString2);
+        byteArrayDataOutput.writeShort(paramArrayOfbyte.length);
+        byteArrayDataOutput.write(paramArrayOfbyte);
+        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", byteArrayDataOutput.toByteArray());
     }
 }
