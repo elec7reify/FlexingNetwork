@@ -102,8 +102,8 @@ public class Russian extends Language {
                 "",
                 "&fПокупать донат на сайте: &ewww.FlexingWorld.ru"));
 
-        addDefault(Messages.COMMAND_KICK_USAGE, "&cИспользование: /kick <ник> [причина]");
-        addDefault(Messages.COMMAND_SHADEKICK_USAGE, "&cИспользование: /shadekick <ник> [причина]");
+        addDefault(Messages.COMMAND_KICK_USAGE, "&cИспользование: {command} <игрок> [причина]");
+        addDefault(Messages.COMMAND_BAN_USAGE, "&cИспользование: {command} <игрок> [время] [причина]");
         addDefault(Messages.REASON_NOT_SPECIFIED, "Не указана");
         addDefault(Messages.KICKED_BY_SHADEADMIN, "&c&lТеневой админ &fкикнул игрока &3{targetName} &fпо причине: &6{reason}");
         addDefault(Messages.KICKED_BY_ADMIN, "&3{admin} &fкикнул игрока &3{targetName} &fпо причине: &6{reason}");

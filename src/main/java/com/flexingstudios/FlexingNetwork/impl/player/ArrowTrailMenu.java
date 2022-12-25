@@ -64,12 +64,12 @@ public class ArrowTrailMenu implements InvMenu {
             if (player.availableArrowTrails.contains(trail.getId())) {
                 if (player.getArrowTrail() == trail) {
                     color = "&a";
-                    lore.add("&fРедкость: &3" + trail.getRarity());
+                    lore.add("&fРедкость: &3" + trail.getRarity().getTag());
                     lore.add("");
                     lore.add("&aВыбрано!");
                 } else {
-                    color = "&b";
-                    lore.add("&fРедкость: &3" + trail.getRarity());
+                    color = "&6";
+                    lore.add("&fРедкость: &3" + trail.getRarity().getTag());
                     lore.add("");
                     lore.add("&2Нажмите для выбора.");
                 }
@@ -77,7 +77,7 @@ public class ArrowTrailMenu implements InvMenu {
                 color = "&c";
                 lore.add("&fЦена: &3" + trail.getPrice());
                 lore.add("");
-                lore.add("&fРедкость: &3" + trail.getRarity());
+                lore.add("&fРедкость: &3" + trail.getRarity().getTag());
                 lore.add("");
                 lore.add("&cУ Вас недостаточно средств");
                 lore.add("&cЧтобы приобрести: " + replaceToAnyLang(trail));
@@ -85,7 +85,7 @@ public class ArrowTrailMenu implements InvMenu {
                 color = "&6";
                 lore.add("&fЦена: &3" + trail.getPrice());
                 lore.add("");
-                lore.add("&fРедкость: &3" + trail.getRarity());
+                lore.add("&fРедкость: &3" + trail.getRarity().getTag());
                 lore.add("");
                 //for (String str : Language.getList(player.getBukkitPlayer(), Messages.CLICK_TO_BUY))
                 lore.add(Language.getMsg(player.getBukkitPlayer(), Messages.CLICK_TO_BUY));

@@ -18,7 +18,6 @@ import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
 import com.flexingstudios.FlexingNetwork.tasks.MemoryFix;
 import com.flexingstudios.FlexingNetwork.tasks.PlayerMetaSaver;
 import com.flexingstudios.FlexingNetwork.tasks.Restart;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,7 +33,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public final class FlexingNetworkPlugin extends JavaPlugin {
-    @Getter
     static FlexingNetworkPlugin instance;
     public ScheduledExecutorService scheduledExecutorService;
     public HelpCommand help;
@@ -54,8 +52,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
 
         new English();
         new Russian();
-        new Deutsch();
-        new Ukrainian();
     }
 
     @Override

@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="FlexingNetwork">
-    <output-path>$PROJECT_DIR$/out</output-path>
-    <root id="archive" name="FlexingNetwork.jar">
-      <element id="module-output" name="FlexingNetwork" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/mina/mina-core/2.0.16/mina-core-2.0.16.jar" path-in-jar="/" />
-    </root>
-  </artifact>
-</component>

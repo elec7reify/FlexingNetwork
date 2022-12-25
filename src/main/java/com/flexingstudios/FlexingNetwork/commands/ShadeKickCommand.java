@@ -14,16 +14,16 @@ import org.bukkit.entity.Player;
 
 public class ShadeKickCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender commandSender, Command cmd, String s, String[] args) {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (!commandSender.hasPermission("flexingnetwork.shade.*")) {
             return true;
         }
 
         Player sender = (Player) commandSender;
 
-        if (cmd.getName().equals("shadekick")) {
+        if (command.getName().equals("shadekick")) {
             if (args.length == 0) {
-                Utilities.msg(commandSender, Language.getMsg(sender, Messages.COMMAND_SHADEKICK_USAGE));
+                Utilities.msg(commandSender, Language.getMsg(sender, Messages.COMMAND_KICK_USAGE).replace("{command}", "/" + command.getName()));
             } else {
                 String reason = "";
                 if (args.length > 1) {

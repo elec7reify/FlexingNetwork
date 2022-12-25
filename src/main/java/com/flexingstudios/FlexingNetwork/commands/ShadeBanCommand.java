@@ -24,7 +24,7 @@ public class ShadeBanCommand implements CommandExecutor {
 
         if (command.getName().equals("shadeban")) {
             if (args.length == 0) {
-                Utilities.msg(sender, "Usage: ban <username> [time] [reason]");
+                Utilities.msg(sender, Language.getMsg(sender, Messages.COMMAND_BAN_USAGE).replace("{command}", "/" + command.getName()));
             } else {
                 long time;
                 String reason = "";

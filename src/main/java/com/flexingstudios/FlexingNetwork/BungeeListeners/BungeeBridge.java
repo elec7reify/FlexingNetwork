@@ -19,6 +19,8 @@ import java.util.function.BiFunction;
 
 public class BungeeBridge implements PluginMessageListener {
     private static final Map<String, Queue<CompletableFuture<?>>> callbackMap = new HashMap<>();
+    private Map<String, ForwardConsumer> forwardListeners;
+    private ForwardConsumer globalForwardListener;
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
@@ -44,11 +46,64 @@ public class BungeeBridge implements PluginMessageListener {
 
             CompletableFuture<?> callback = callbacks.poll();
 
-            switch (in.readUTF()) {
-                case "PlayerCount":
-                    ((CompletableFuture<Integer>) callback).complete(Integer.valueOf(in.readUTF()));
+            try {
+                switch (subchannel) {
+                    case "PlayerCount":
+                        ((CompletableFuture<Integer>) callback).complete(Integer.valueOf(in.readInt()));
+                        break;
+
+                    case "PlayerList":
+                        ((CompletableFuture<List<String>>) callback).complete(Arrays.asList(in.readUTF().split(", ")));
+                        break;
+
+//                    case "UUIDOther":
+//                        ((CompletableFuture<String>) callback).complete(input.readUTF());
+//                        break;
+
+//                    case "ServerIP": {
+//                        String ip = input.readUTF();
+//                        int port = input.readUnsignedShort();
+//                        ((CompletableFuture<InetSocketAddress>) callback).complete(new InetSocketAddress(ip, port));
+//                        break;
+//                    }
+                }
+            } catch(Exception ex) {
+                callback.completeExceptionally(ex);
+            }
+
+            return;
+        }
+
+        callbacks = callbackMap.get(subchannel);
+
+        if (callbacks.isEmpty()) {
+            return;
+        }
+
+        final CompletableFuture<?> callback = callbacks.poll();
+
+        try {
+            switch (subchannel) {
+                case "GetServers":
+                    ((CompletableFuture<List<String>>) callback).complete(Arrays.asList(in.readUTF().split(", ")));
+                    break;
+
+                case "GetServer":
+                case "UUID":
+                    ((CompletableFuture<String>) callback).complete(in.readUTF());
+                    break;
+                case "IP": {
+                    String ip = in.readUTF();
+                    int port = in.readInt();
+                    ((CompletableFuture<InetSocketAddress>) callback).complete(new InetSocketAddress(ip, port));
+                    break;
+                }
+
+                default:
                     break;
             }
+        } catch(Exception ex) {
+            callback.completeExceptionally(ex);
         }
     }
 
@@ -76,6 +131,23 @@ public class BungeeBridge implements PluginMessageListener {
         output.writeUTF("ConnectOther");
         output.writeUTF(playerName);
         output.writeUTF(server);
+        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
+    }
+
+    /**
+     * Send a message (as in, a chat message) to the specified player.
+     *
+     * @param playerName the name of the player to send the chat message.
+     * @param message the message to send to the player.
+     * @throws IllegalArgumentException if there is no players online.
+     */
+    public static void sendMessage(String playerName, String message) {
+        Player player = getFirstPlayer();
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+
+        output.writeUTF("Message");
+        output.writeUTF(playerName);
+        output.writeUTF(message);
         player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
     }
 
@@ -146,24 +218,52 @@ public class BungeeBridge implements PluginMessageListener {
         return Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
     }
 
-    public static void sendBroadcastMessage(String paramString1, String paramString2) {
-        ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
-        byteArrayDataOutput.writeUTF(paramString1);
-        byteArrayDataOutput.writeUTF(paramString2);
-        byteArrayDataOutput.writeLong(System.currentTimeMillis());
-        forward("FlexingBungee", "FlexingBungee", byteArrayDataOutput.toByteArray());
+    /**
+     * Send a custom plugin message to said server. This is one of the most useful channels ever.
+     * <b>Remember, the sending and receiving server(s) need to have a player online.</b>
+     *
+     * @param server the name of the server to send to,
+     *        ALL to send to every server (except the one sending the plugin message),
+     *        or ONLINE to send to every server that's online (except the one sending the plugin message).
+     *
+     * @param channelName Subchannel for plugin usage.
+     * @param data data to send.
+     * @throws IllegalArgumentException if there is no players online.
+     */
+    public static void forward(String server, String channelName, byte[] data) {
+        Player player = getFirstPlayer();
+
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        output.writeUTF("Forward");
+        output.writeUTF(server);
+        output.writeUTF(channelName);
+        output.writeShort(data.length);
+        output.write(data);
+        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
     }
 
-    public static void forward(String paramString1, String paramString2, byte[] paramArrayOfbyte) {
+    /**
+     * Send a custom plugin message to specific player.
+     *
+     * @param playerName the name of the player to send to.
+     * @param channelName Subchannel for plugin usage.
+     * @param data data to send.
+     * @throws IllegalArgumentException if there is no players online.
+     */
+    public static void forwardToPlayer(String playerName, String channelName, byte[] data) {
         Player player = getFirstPlayer();
-        if (player == null)
-            return;
-        ByteArrayDataOutput byteArrayDataOutput = ByteStreams.newDataOutput();
-        byteArrayDataOutput.writeUTF("Forward");
-        byteArrayDataOutput.writeUTF(paramString1);
-        byteArrayDataOutput.writeUTF(paramString2);
-        byteArrayDataOutput.writeShort(paramArrayOfbyte.length);
-        byteArrayDataOutput.write(paramArrayOfbyte);
-        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", byteArrayDataOutput.toByteArray());
+
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        output.writeUTF("ForwardToPlayer");
+        output.writeUTF(playerName);
+        output.writeUTF(channelName);
+        output.writeShort(data.length);
+        output.write(data);
+        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", output.toByteArray());
+    }
+
+    @FunctionalInterface
+    public interface ForwardConsumer {
+        void accept(String channel, Player player, byte[] data);
     }
 }

@@ -57,11 +57,12 @@ public class English extends Language {
         yml.addDefault(Messages.RESTART_TIME + "2sec", "2 seconds");
         yml.addDefault(Messages.RESTART_TIME + "1sec", "1 second");
 
-        addDefault(Messages.COMMAND_KICK_USAGE, "&cUsage: /kick <username> [reason]");
-        addDefault(Messages.COMMAND_SHADEKICK_USAGE, "&cUsage: /shadekick <username> [reason]");
+        addDefault(Messages.COMMAND_KICK_USAGE, "&cUsage: {command} <player> [reason]");
+        addDefault(Messages.COMMAND_BAN_USAGE, "&cUsage: {command} <player> [time] [reason]");
         addDefault(Messages.REASON_NOT_SPECIFIED, "Not specified");
 //        addDefault(Messages.KICKED_BY_SHADEADMIN, "&c&lТеневой админ &fкикнул игрока &3{target} &fпо причине: &6{reason}");
 //        addDefault(Messages.KICKED_BY_ADMIN, "&3{kicker} &fкикнул игрока &3{target} &fпо причине: &6{reason}");
+
         yml.addDefault(Messages.PROFILE_MENU_TITLE, "Profile: {name}");
         yml.addDefault(Messages.ARROWTRAIL_HEARTS, "Hearts");
         yml.addDefault(Messages.ARROWTRAIL_DRIP_WATER, "Water droplets");

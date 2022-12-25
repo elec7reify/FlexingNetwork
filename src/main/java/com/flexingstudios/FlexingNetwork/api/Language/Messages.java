@@ -30,7 +30,7 @@ public class Messages {
     /** BAN/KICK/MUTE Messages + SHADE */
     public static final String REASON_NOT_SPECIFIED = "reason-not-specified";
     public static final String COMMAND_KICK_USAGE = "cmd-kick-usage";
-    public static final String COMMAND_SHADEKICK_USAGE = "cmd-shadekick-usage";
+    public static final String COMMAND_BAN_USAGE = "cmd-ban-usage";
     public static final String KICKED_BY_SHADEADMIN = "kicked-by-shadeadmin";
     public static final String KICKED_BY_ADMIN = "kicked-by-admin";
     public static final String KICK_MESSAGE = "kick-message";

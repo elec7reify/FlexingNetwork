@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 public class KickCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender commandSender, Command cmd, String s, String[] args) {
+    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (!FlexingNetwork.hasRank(commandSender, Rank.CHIKIBAMBONYLA, true)) return true;
 
         Player sender = (Player) commandSender;
@@ -24,12 +24,11 @@ public class KickCommand implements CommandExecutor {
             return true;
         }
 
-        if (cmd.getName().equals("kick")) {
+        if (command.getName().equals("kick")) {
             if (args.length == 0) {
-                Utilities.msg(commandSender, Language.getMsg(sender, Messages.COMMAND_KICK_USAGE));
+                Utilities.msg(commandSender, Language.getMsg(sender, Messages.COMMAND_KICK_USAGE).replace("{command}", "/" + command.getName()));
             } else {
                 String reason = "";
-
                 if (args.length > 1) {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 1; i < args.length; i++)

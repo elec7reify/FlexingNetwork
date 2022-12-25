@@ -29,7 +29,7 @@ public class BanCommand implements CommandExecutor {
 
         if (command.getName().equals("ban")) {
             if (args.length == 0) {
-                Utilities.msg(sender, "Usage: ban <player> [time] [reason]");
+                Utilities.msg(sender, Language.getMsg(sender, Messages.COMMAND_BAN_USAGE).replace("{command}", "/" + command.getName()));
             } else {
                 long time;
                 String reason = "";
@@ -54,7 +54,7 @@ public class BanCommand implements CommandExecutor {
                     Player banned = Bukkit.getPlayerExact(args[0]);
                     FLPlayer flPlayer = FLPlayer.get(sender);
 
-                    // Immunity to kick
+                    // Immunity to ban
                     if (flPlayer.has(Rank.ADMIN)) {
                         FlexingNetwork.ban(args[0], time, reason, sender.getName(), false);
                     } else if (flPlayer.has(Rank.SADMIN)) {
