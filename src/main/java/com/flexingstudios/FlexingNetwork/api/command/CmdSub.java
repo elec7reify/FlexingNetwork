@@ -1,6 +1,6 @@
 package com.flexingstudios.FlexingNetwork.api.command;
 
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Rank;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,6 +1,4 @@
-package com.flexingstudios.Commons;
-
-import org.slf4j.Logger;
+package com.flexingstudios.Common;
 
 public class F {
     private static final char[] magnitudes = new char[] { 'k', 'M', 'G', 'T', 'P', 'E' };
@@ -61,8 +59,6 @@ public class F {
     }
 
     public static String formatSecondsShort(int seconds) {
-        if (seconds <= 1000)
-            return "0 мин";
         if (seconds <= 3540)
             return plurals((int)Math.ceil((seconds / 60.0F)), "минута", "минуты", "минут");
         if (seconds <= 82800)

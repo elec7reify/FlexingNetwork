@@ -1,25 +1,22 @@
 package com.flexingstudios.FlexingNetwork;
 
-import com.flexingstudios.Commons.player.Leveling;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Leveling;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
-import com.flexingstudios.FlexingNetwork.api.mysql.SelectCallback;
-import com.flexingstudios.FlexingNetwork.api.mysql.UpdateCallback;
-import com.flexingstudios.FlexingNetwork.api.util.ParsedTime;
+import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.commands.BanCommand;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
-import com.flexingstudios.Commons.F;
+import com.flexingstudios.Common.F;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.LogManager;
 
 public class MysqlWorker extends MysqlThread {
     private final FlexingNetworkPlugin plugin;
@@ -35,12 +32,12 @@ public class MysqlWorker extends MysqlThread {
     @Override
     protected void onConnect() {
         for (Player player : Bukkit.getOnlinePlayers())
-            addLoadPlayer(FLPlayer.get(player));
+            addLoadPlayer(FlexPlayer.get(player));
     }
 
     @Override
     protected void onDisconnect() {
-        for (FLPlayer player : FLPlayer.PLAYERS.values()) {
+        for (FlexPlayer player : FlexPlayer.PLAYERS.values()) {
             player.coins = 0;
         }
     }
@@ -64,7 +61,7 @@ public class MysqlWorker extends MysqlThread {
         return queryCounter;
     }
 
-    void addLoadPlayer(FLPlayer player) {
+    void addLoadPlayer(FlexPlayer player) {
         select("SELECT `username`, banto, banfrom, reason, `admin` FROM bans WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
             if (rs.next()) {
                 long currtime = System.currentTimeMillis();
@@ -80,10 +77,12 @@ public class MysqlWorker extends MysqlThread {
                     String bantime = banto == 0L ? "навсегда" : F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(banto - banfrom + 1)) + "";
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
                             player.player.kickPlayer(Utilities.colored(T.BanMessage(player.player)
-                            .replace("{username}", username)
+                            .replace("{player}", username)
                             .replace("{reason}", reason)
                             .replace("{admin}", admin)
-                            .replace("{time}", bantime))));
+                            .replace("{time}", bantime)
+                            .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                                    .format(new Date(System.currentTimeMillis()))))));
                     return;
                 }
             }
@@ -92,7 +91,7 @@ public class MysqlWorker extends MysqlThread {
         });
     }
 
-    private void loadPlayer(FLPlayer player) {
+    private void loadPlayer(FlexPlayer player) {
         if (!player.isOnline())
             return;
         select("SELECT id, coins, exp, status FROM authme WHERE username = '" + player.getName() + "'", rs -> {
@@ -132,7 +131,7 @@ public class MysqlWorker extends MysqlThread {
     public class LoadFinishRunnable implements Runnable {
         private final MysqlPlayer player;
 
-        public LoadFinishRunnable(FLPlayer player) {
+        public LoadFinishRunnable(FlexPlayer player) {
             this.player = (MysqlPlayer) player;
         }
 

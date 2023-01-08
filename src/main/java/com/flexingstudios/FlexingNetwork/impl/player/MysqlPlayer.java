@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class MysqlPlayer extends FLPlayer {
+public class MysqlPlayer extends FlexPlayer {
     public Set<String> ignored = new HashSet<>();
     public boolean ignoreAll = false;
     public String lastWriter = null;

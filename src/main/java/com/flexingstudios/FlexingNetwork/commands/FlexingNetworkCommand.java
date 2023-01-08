@@ -1,7 +1,7 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.Commons.F;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.F;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
 import com.flexingstudios.FlexingNetwork.Config;
 import com.flexingstudios.FlexingNetwork.Debug;

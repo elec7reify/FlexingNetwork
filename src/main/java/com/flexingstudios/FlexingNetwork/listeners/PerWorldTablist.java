@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin;
 public class PerWorldTablist implements Listener {
 
     @EventHandler
-    private void onPlayreChangeWorld(PlayerChangedWorldEvent event) {
+    private void onPlayerChangeWorld(PlayerChangedWorldEvent event) {
         updatePlayer(event.getPlayer());
     }
 

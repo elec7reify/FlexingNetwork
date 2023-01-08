@@ -1,38 +1,30 @@
 package com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
-import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FPlayerMenu;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FlexPlayerMenu;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.EnderPearl;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EnderDragonChangePhaseEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SettingsMenu implements InvMenu {
     private final Inventory inv;
-    private final FPlayerMenu parent;
-    private final FLPlayer player;
+    private final FlexPlayerMenu parent;
+    private final FlexPlayer player;
     private static final List<Togglable> TOGGLABLES = Arrays.asList(
             new FlagTogglable(9, Items.name(Material.SULPHUR, "ignore all"), 1));
     private static final ItemStack ENABLED_ITEM = Items.name(new ItemStack(Material.INK_SACK, 1, (short) 10), "enabled");
     private static final ItemStack DISABLED_ITEM = Items.name(new ItemStack(Material.INK_SACK, 1, (short) 8), "disabled");
 
-    public SettingsMenu(FLPlayer player, FPlayerMenu parent) {
+    public SettingsMenu(FlexPlayer player, FlexPlayerMenu parent) {
         inv = Bukkit.createInventory(this, 27, "Настройки");
         this.parent = parent;
         this.player = player;
@@ -83,8 +75,8 @@ public class SettingsMenu implements InvMenu {
             this.is = is;
         }
 
-        abstract boolean toggle(FLPlayer player);
-        abstract boolean isEnabled(FLPlayer player);
+        abstract boolean toggle(FlexPlayer player);
+        abstract boolean isEnabled(FlexPlayer player);
     }
 
     static class FlagTogglable extends Togglable {
@@ -96,12 +88,12 @@ public class SettingsMenu implements InvMenu {
         }
 
         @Override
-        boolean toggle(FLPlayer player) {
+        boolean toggle(FlexPlayer player) {
             return player.settings.get(flag);
         }
 
         @Override
-        boolean isEnabled(FLPlayer player) {
+        boolean isEnabled(FlexPlayer player) {
             boolean f = !player.settings.get(flag);
             player.settings.set(flag, f);
             return f;

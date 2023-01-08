@@ -3,7 +3,7 @@ package com.flexingstudios.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.util.ChatUtil;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
@@ -20,7 +20,7 @@ public class FlexingChat implements Listener {
             if (FlexingNetwork.features().CHANGE_CHAT.isEnabled()) {
                 event.setCancelled(true);
                 Player player = event.getPlayer();
-                FLPlayer flPlayer = FLPlayer.get(player);
+                FlexPlayer flPlayer = FlexPlayer.get(player);
                 BaseComponent rank = ChatUtil.createMessage(Utilities.colored("&7«" + flPlayer.getRank().getDisplayName() + "&7» "));
 
                 BaseComponent playerName = ChatUtil.createMessage(player.getName(),

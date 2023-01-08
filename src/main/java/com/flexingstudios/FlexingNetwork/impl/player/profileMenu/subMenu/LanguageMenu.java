@@ -6,7 +6,7 @@ import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FPlayerMenu;
+import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FlexPlayerMenu;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -18,14 +18,11 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 public class LanguageMenu implements InvMenu {
     private final Inventory inv;
-    private final FPlayerMenu parent;
+    private final FlexPlayerMenu parent;
 
-    public LanguageMenu(Player player, FPlayerMenu parent) {
+    public LanguageMenu(Player player, FlexPlayerMenu parent) {
         inv = Bukkit.createInventory(this, 27, Language.getMsg(player, Messages.MENU_LANGUAGE_TITLE));
         this.parent = parent;
         int index = 0;

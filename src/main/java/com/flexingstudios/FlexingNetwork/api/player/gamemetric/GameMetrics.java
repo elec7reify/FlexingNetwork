@@ -1,6 +1,6 @@
 package com.flexingstudios.FlexingNetwork.api.player.gamemetric;
 
-import com.flexingstudios.Commons.season.GameSeason;
+import com.flexingstudios.Common.season.GameSeason;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;

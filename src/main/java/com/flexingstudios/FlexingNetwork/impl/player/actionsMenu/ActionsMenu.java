@@ -1,11 +1,11 @@
 package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu;
 
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.util.*;
 import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.BanMenu;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.KickMenu;
@@ -64,7 +64,7 @@ public class ActionsMenu implements InvMenu {
 
     @Override
     public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
-        MysqlPlayer flPlayer = (MysqlPlayer) FLPlayer.get(player);
+        MysqlPlayer flPlayer = (MysqlPlayer) FlexPlayer.get(player);
 
         switch (slot) {
             case 19:

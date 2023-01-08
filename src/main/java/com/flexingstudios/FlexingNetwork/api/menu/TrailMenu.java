@@ -1,6 +1,6 @@
 package com.flexingstudios.FlexingNetwork.api.menu;
 
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Items;

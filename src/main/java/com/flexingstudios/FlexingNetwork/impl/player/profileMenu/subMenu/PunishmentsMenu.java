@@ -5,14 +5,13 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FPlayerMenu;
+import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FlexPlayerMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.sqlite.core.DB;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -20,15 +19,15 @@ import java.util.*;
 public class PunishmentsMenu implements InvMenu {
     private final Inventory inv;
     private final Player player;
-    private final FPlayerMenu parent;
+    private final FlexPlayerMenu parent;
     private ArrayList<Punishment> punishments = new ArrayList<>();
 
-    public PunishmentsMenu(Player player, FPlayerMenu parent) {
+    public PunishmentsMenu(Player player, FlexPlayerMenu parent) {
         inv = Bukkit.createInventory(this, 54, "История наказаний");
         this.player = player;
         this.parent = parent;
 
-        inv.setItem(40, Items.name(Material.FEATHER, "&aCome back &7(My Profile)"));
+        inv.setItem(40, Items.name(Material.FEATHER, "&aВернуться назад &7(Мой профиль)"));
     }
 
     private void requestPunishments() {
@@ -68,12 +67,12 @@ public class PunishmentsMenu implements InvMenu {
                 }
                 inv.setItem(getSlot(i), Items.name(PunishmentType.byId(punishment.action).is, "&e#" + i,
                         "&fИдентификатор лога &7" + punishment.id,
-                        "&fАдмин: &c" + admin,
+                        "&fАдмининистратор: &c" + admin,
                         "&fДата и время: &6" + new SimpleDateFormat(Language.getMsg(player, "date-format"))
                                 .format(new Date(punishment.time * 1000L)),
                         "&fДействие: &3" + PunishmentType.byId(punishment.action).action,
                         "&fНарушитель: &3" + punishment.data,
-                        "&fСообщение: &6" + punishment.comment));
+                        "&fПричина: &6" + punishment.comment));
             }
         }
     }

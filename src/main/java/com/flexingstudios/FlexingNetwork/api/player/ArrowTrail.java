@@ -39,8 +39,8 @@ public enum ArrowTrail {
         this.name = name;
         this.itemStack = itemStack;
         this.price = price;
-        this.isNew = isNew;
         this.rarity = rarity;
+        this.isNew = isNew;
     }
 
     public String getName() {

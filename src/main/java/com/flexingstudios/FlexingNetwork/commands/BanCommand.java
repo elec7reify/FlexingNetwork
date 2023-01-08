@@ -1,20 +1,25 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.Commons.F;
-import com.flexingstudios.Commons.player.Permission;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.F;
+import com.flexingstudios.Common.player.Permission;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
+import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.TimeUnit;
+
 public class BanCommand implements CommandExecutor {
+    public static long maxBanTime;
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (!FlexingNetwork.hasPermission(commandSender, Permission.BAN, true))
@@ -37,9 +42,23 @@ public class BanCommand implements CommandExecutor {
                 if (args.length > 1) {
                     try {
                         time = F.toMilliSec(args[1]);
-                        for (int i = 2; i < args.length; i++)
-                            reason = reason + args[i] + " ";
+                        if (FlexingNetwork.hasRank(sender, Rank.TEAM, false)) {
+                            for (int i = 2; i < args.length; i++)
+                                reason = reason + args[i] + " ";
+                        } else {
+                            if (maxBanTime <= time) {
+                                for (int i = 2; i < args.length; i++)
+                                    reason = reason + args[i] + " ";
+                            } else {
+                                Utilities.msg(sender, "&cВремя бана превышает максимальное допустимое время для Вашего ранга!");
+                                return false;
+                            }
+                        }
                     } catch (NumberFormatException e) {
+                        if (!FlexingNetwork.hasRank(sender, Rank.TEAM, false)) {
+                            Utilities.msg(sender, "&cВремя бана указано некорректно!");
+                            return false;
+                        }
                         time = 0;
                         for (int i = 1; i < args.length; i++)
                             reason = reason + args[i] + " ";
@@ -52,7 +71,12 @@ public class BanCommand implements CommandExecutor {
                     }
 
                     Player banned = Bukkit.getPlayerExact(args[0]);
-                    FLPlayer flPlayer = FLPlayer.get(sender);
+                    FlexPlayer flPlayer = FlexPlayer.get(sender);
+
+                    if (banned == sender) {
+                        Utilities.msg(sender, Messages.BAN_ME);
+                        return true;
+                    }
 
                     // Immunity to ban
                     if (flPlayer.has(Rank.ADMIN)) {
@@ -74,17 +98,31 @@ public class BanCommand implements CommandExecutor {
                     }
 
                     if (banned != null) {
-                        for (Player players : Bukkit.getOnlinePlayers())
-                            Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
-                                    .replace("{kicked}", sender.getName())
-                                    .replace("{targetName}", banned.getName())
+                        if (time == 0) {
+                            Utilities.bcast("&3{admin} &fзабанил игрока &3{player} &6навсегда &fпо причине: &6{reason}"
+                                    .replace("{admin}", sender.getName())
+                                    .replace("{player}", banned.getName())
                                     .replace("{reason}", reason));
+                        } else {
+                            Utilities.bcast("&3{admin} &fзабанил игрока &3{player} &3на {time} &fпо причине: &6{reason}"
+                                    .replace("{admin}", sender.getName())
+                                    .replace("{player}", banned.getName())
+                                    .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
+                                    .replace("{reason}", reason));
+                        }
                     } else {
-                        for (Player players : Bukkit.getOnlinePlayers())
-                            Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
-                                    .replace("{kicked}", sender.getName())
-                                    .replace("{targetName}", args[0])
+                        if (time == 0) {
+                            Utilities.bcast("&3{admin} &fзабанил игрока &3{player} &6навсегда &fпо причине: &6{reason}"
+                                    .replace("{admin}", sender.getName())
+                                    .replace("{player}", args[0])
                                     .replace("{reason}", reason));
+                        } else {
+                            Utilities.bcast("&3{admin} &fзабанил игрока &3{player} &3на {time} &fпо причине: &6{reason}"
+                                    .replace("{admin}", sender.getName())
+                                    .replace("{player}", args[0])
+                                    .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
+                                    .replace("{reason}", reason));
+                        }
                     }
                 }
 
@@ -94,12 +132,12 @@ public class BanCommand implements CommandExecutor {
 
         if (command.getName().equals("unban")) {
             if (args.length == 0) {
-                Utilities.msg(sender, "&cИспользование: /unban <username>");
+                Utilities.msg(sender, "&cИспользование: /unban <игрок>");
             } else {
                 FlexingNetwork.unban(args[0], sender.getName(), false);
             }
         }
 
-        return true;
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-package com.flexingstudios.Commons.player;
+package com.flexingstudios.Common.player;
 
 public class Leveling {
     private static final int BASE = 8000;

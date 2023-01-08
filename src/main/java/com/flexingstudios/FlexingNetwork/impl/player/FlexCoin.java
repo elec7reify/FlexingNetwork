@@ -11,11 +11,11 @@ import org.bukkit.ChatColor;
 
 import java.util.logging.Level;
 
-public class FCoins {
+public class FlexCoin {
     private final FlexingNetworkPlugin plugin;
-    private volatile boolean waiting = false;
+    private volatile boolean waiting;
 
-    public FCoins(FlexingNetworkPlugin plugin) {
+    public FlexCoin(FlexingNetworkPlugin plugin) {
         this.plugin = plugin;
         waiting = true;
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::flush, 200L, 200L);
@@ -25,10 +25,10 @@ public class FCoins {
         waiting = false;
         int total = 0;
         TIntObjectMap<TIntLinkedList> map = new TIntObjectHashMap<>();
-        for (FLPlayer player : FLPlayer.PLAYERS.values()) {
+        for (FlexPlayer player : FlexPlayer.PLAYERS.values()) {
             if (player.coinsAddBuffer != 0) {
                 total += player.coinsAddBuffer;
-                TIntLinkedList list = (TIntLinkedList) map.get(player.coinsAddBuffer);
+                TIntLinkedList list = map.get(player.coinsAddBuffer);
                 if (list == null)
                     map.put(player.coinsAddBuffer, list = new TIntLinkedList());
                 list.add(player.id);
@@ -46,7 +46,7 @@ public class FCoins {
         map.clear();
     }
 
-    public void saveNow(FLPlayer player) {
+    public void saveNow(FlexPlayer player) {
         if (!waiting)
             return;
         if (player.coinsAddBuffer > 0) {
@@ -56,7 +56,7 @@ public class FCoins {
         }
     }
 
-    public int addCoins(FLPlayer player, int amount, boolean simulate) {
+    public int addCoins(FlexPlayer player, int amount, boolean simulate) {
         if (player == null || amount < 1)
             return -1;
 
@@ -76,7 +76,7 @@ public class FCoins {
         }
     }
 
-    public void takeCoins(FLPlayer player, int amount, boolean simulate) {
+    public void takeCoins(FlexPlayer player, int amount, boolean simulate) {
         if (amount < 1)
             return;
         if (!simulate) {

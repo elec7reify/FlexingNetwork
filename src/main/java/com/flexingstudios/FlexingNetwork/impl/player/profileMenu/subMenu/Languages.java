@@ -10,9 +10,9 @@ import java.util.Map;
 
 public enum Languages {
     RUSSIAN("ru", "https://textures.minecraft.net/texture/16eafef980d6117dabe8982ac4b4509887e2c4621f6a8fe5c9b735a83d775ad", new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/16eafef980d6117dabe8982ac4b4509887e2c4621f6a8fe5c9b735a83d775ad")).build(), false),
-    ENGLISH("en", "https://textures.minecraft.net/texture/4cac9774da1217248532ce147f7831f67a12fdcca1cf0cb4b3848de6bc94b4", new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/4cac9774da1217248532ce147f7831f67a12fdcca1cf0cb4b3848de6bc94b4")).build(), true),
-    UKRAINIAN("uk", "https://textures.minecraft.net/texture/28b9f52e36aa5c7caaa1e7f26ea97e28f635e8eac9aef74cec97f465f5a6b51", new ItemStack(Material.BOOK_AND_QUILL, 1), false),
-    GERMAN("de", "https://textures.minecraft.net/texture/5e7899b4806858697e283f084d9173fe487886453774626b24bd8cfecc77b3f", new ItemStack(Material.BOOK_AND_QUILL, 1), true),
+//    ENGLISH("en", "https://textures.minecraft.net/texture/4cac9774da1217248532ce147f7831f67a12fdcca1cf0cb4b3848de6bc94b4", new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/4cac9774da1217248532ce147f7831f67a12fdcca1cf0cb4b3848de6bc94b4")).build(), true),
+//    UKRAINIAN("uk", "https://textures.minecraft.net/texture/28b9f52e36aa5c7caaa1e7f26ea97e28f635e8eac9aef74cec97f465f5a6b51", new ItemStack(Material.BOOK_AND_QUILL, 1), false),
+//    GERMAN("de", "https://textures.minecraft.net/texture/5e7899b4806858697e283f084d9173fe487886453774626b24bd8cfecc77b3f", new ItemStack(Material.BOOK_AND_QUILL, 1), true),
     ;
 
     private final String id;

@@ -1,7 +1,7 @@
 package com.flexingstudios.FlexingNetwork.impl.player;
 
-import com.flexingstudios.Commons.player.Leveling;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Leveling;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.player.*;
@@ -9,26 +9,18 @@ import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import gnu.trove.set.hash.TIntHashSet;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public abstract class FLPlayer implements NetworkPlayer {
-    public static final ConcurrentHashMap<String, FLPlayer> PLAYERS = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<Integer, FLPlayer> IDS = new ConcurrentHashMap<>();
+public abstract class FlexPlayer implements NetworkPlayer {
+    public static final ConcurrentHashMap<String, FlexPlayer> PLAYERS = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Integer, FlexPlayer> IDS = new ConcurrentHashMap<>();
     public Map<String, MysqlPlayer.MetaValue> meta = new ConcurrentHashMap<>();
     private static final String ARROW_SELECTED = "arr.sel";
     private static final String ARROW_AVAILABLE = "arr.open";
@@ -55,9 +47,9 @@ public abstract class FLPlayer implements NetworkPlayer {
     public int level = 0;
     public int exp = 0;
     public int expBuffer = 0;
-    public @Setter boolean restrict = false;
+    public boolean restrict = false;
 
-    FLPlayer(Player player) {
+    FlexPlayer(Player player) {
         this.player = player;
         id = -1;
         username = player.getName();
@@ -266,6 +258,11 @@ public abstract class FLPlayer implements NetworkPlayer {
         setMeta("msg.open", sb.toString());
     }
 
+    public boolean setRestrict(boolean flag) {
+        restrict = flag;
+        return flag;
+    }
+
     /**
      * @return player login time
      */
@@ -331,10 +328,10 @@ public abstract class FLPlayer implements NetworkPlayer {
                 "'}";
     }
 
-    public static Function<Player, FLPlayer> CONSTRUCTOR = null;
+    public static Function<Player, FlexPlayer> CONSTRUCTOR = null;
 
-    public static FLPlayer get(String player) {
-        FLPlayer val = PLAYERS.get(player);
+    public static FlexPlayer get(String player) {
+        FlexPlayer val = PLAYERS.get(player);
 
         if (val == null) {
             Player bukkitPlayer = Bukkit.getPlayerExact(player);
@@ -347,8 +344,8 @@ public abstract class FLPlayer implements NetworkPlayer {
         return val;
     }
 
-    public static FLPlayer get(Player player) {
-        FLPlayer val = PLAYERS.get(player.getName());
+    public static FlexPlayer get(Player player) {
+        FlexPlayer val = PLAYERS.get(player.getName());
 
         if (val == null)
             val = PLAYERS.computeIfAbsent(player.getName(), name -> CONSTRUCTOR.apply(player));

@@ -16,21 +16,15 @@ public class Russian extends Language {
         YamlConfiguration yml = getYml();
 
         yml.addDefault(Messages.LANGUAGE_NAME, "Русский");
-        yml.addDefault(Messages.COMMAND_LANG_AVAILABLE, "&fДоступные языки:");
-        yml.addDefault(Messages.COMMAND_LANG_LIST_FORMAT, "&e{iso} - {name}");
-        yml.addDefault(Messages.COMMAND_LANG_SELECTED_SUCCESSFULLY, "&aЯзык изменён");
-        yml.addDefault(Messages.MENU_LANGUAGE_TITLE, "Сменить язык");
-        yml.addDefault(Messages.MENU_LANGUAGE_LORE , Arrays.asList(
-                "&7После применения: язык",
-                "&7интерфейса сервера будет",
-                "&7изменён на Русский.",
-                "",
-                "&aНажмите, чтобы изменить язык",
-                "&aна Русский."));
+//        yml.addDefault(Messages.MENU_LANGUAGE_TITLE, "Сменить язык");
+//        yml.addDefault(Messages.MENU_LANGUAGE_LORE , Arrays.asList(
+//                "&7После применения: язык",
+//                "&7интерфейса сервера будет",
+//                "&7изменён на Русский.",
+//                "",
+//                "&aНажмите, чтобы изменить язык",
+//                "&aна Русский."));
         yml.addDefault(Messages.PLAYER_NOT_FOUND, "&cИгрок {targetPlayer} не найден");
-
-        yml.addDefault(Messages.NEW, "НОВОЕ");
-        yml.addDefault(Messages.COMMING_SOON, "СКОРО ПОЯВИТСЯ");
 
         yml.addDefault(Messages.COMMAND_GAMEMODE_USAGE, "&cИспользование: /{label} <режим>");
         yml.addDefault(Messages.COMMAND_GAMEMODE_CHANGED, "Ваш режим игры изменён на &a{mode}");
@@ -105,14 +99,16 @@ public class Russian extends Language {
         addDefault(Messages.COMMAND_KICK_USAGE, "&cИспользование: {command} <игрок> [причина]");
         addDefault(Messages.COMMAND_BAN_USAGE, "&cИспользование: {command} <игрок> [время] [причина]");
         addDefault(Messages.REASON_NOT_SPECIFIED, "Не указана");
-        addDefault(Messages.KICKED_BY_SHADEADMIN, "&c&lТеневой админ &fкикнул игрока &3{targetName} &fпо причине: &6{reason}");
-        addDefault(Messages.KICKED_BY_ADMIN, "&3{admin} &fкикнул игрока &3{targetName} &fпо причине: &6{reason}");
+        addDefault(Messages.KICKED_BY_SHADEADMIN, "&c&lТеневой админ &fкикнул игрока &3{player} &fпо причине: &6{reason}");
+        addDefault(Messages.KICKED_BY_ADMIN, "&3{admin} &fкикнул игрока &3{player} &fпо причине: &6{reason}");
+        addDefault(Messages.BANNED_BY_ADMIN, "&3{admin} &fзабанил игрока &3{player} &6навсегда &fпо причине: &6{reason}");
+        addDefault(Messages.TEMPBANNED_BY_ADMIN, "&3{admin} &fзабанил игрока &3{player} &3на {time} &fпо причине: &6{reason}");
         addDefault(Messages.KICK_MESSAGE, Arrays.asList(
                 "&fСлужба безопастности &9&lFlexing&f&lWorld",
                 "&fВы были кикнуты",
                 "",
-                "&fВаш ник: &3{username}",
-                "&fВас кикнул: {kicker}",
+                "&fВаш ник: &3{player}",
+                "&fВас кикнул: {admin}",
                 "&fПо причине: &6{reason}",
                 "",
                 "&fПожалуйста, &3&lпрочитайте правила сервера&r&f, чтобы избежать дальнейших наказаний",
@@ -126,9 +122,9 @@ public class Russian extends Language {
                 "&fСлужба безопастности &9&lFlexing&f&lWorld",
                 "&fВы были забанены",
                 "",
-                "&fВаш ник: &3{username}",
+                "&fВаш ник: &3{player}",
                 "&fВас забанил: {admin}",
-                "Время бана: &6{time}",
+                "&fВремя бана: &6{time}",
                 "&fПо причине: &6{reason}",
                 "",
                 "&fПожалуйста, &3&lпрочитайте правила сервера&r&f, чтобы избежать дальнейших наказаний",
@@ -150,7 +146,6 @@ public class Russian extends Language {
         yml.addDefault(Messages.ARROWTRAIL_ANGRY_VILLAGER, "Разбитые сердца");
         yml.addDefault(Messages.ARROWTRAIL_ENCHANTMENT_TABLE, "Зашифрованные символы");
         yml.addDefault(Messages.ARROWTRAIL_SELECTED, "&fВы выбрали &6след от стрелы&f: &a{trail_name}");
-        yml.addDefault(Messages.CLICK_TO_BUY, "&6Нажмите, чтобы купить.");
 
         save();
     }

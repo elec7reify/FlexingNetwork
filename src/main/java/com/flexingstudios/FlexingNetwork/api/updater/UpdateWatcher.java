@@ -3,7 +3,7 @@ package com.flexingstudios.FlexingNetwork.api.updater;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.event.FileUpdateEvent;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.tasks.Restart;
 import org.apache.commons.lang3.SystemUtils;
 import org.bukkit.Bukkit;
@@ -173,7 +173,7 @@ public class UpdateWatcher implements Listener {
 
     public void tryToRestart() {
         this.restartNeeded = true;
-        if (!this.restartScheduled && FLPlayer.PLAYERS.isEmpty()) {
+        if (!this.restartScheduled && FlexPlayer.PLAYERS.isEmpty()) {
             Restart.restart();
             this.restartScheduled = true;
         }

@@ -21,14 +21,14 @@ import java.util.*;
 
 public class ArrowTrailMenu implements InvMenu {
     private final Inventory inv;
-    private final FLPlayer player;
+    private final FlexPlayer player;
     private final FCShopMenu parent;
     private int page = 0;
     private boolean hasNextPage;
 
     public ArrowTrailMenu(NetworkPlayer nplayer, FCShopMenu parent) {
         inv = Bukkit.createInventory(this, 54, "Следы за стрелой");
-        player = (FLPlayer) nplayer;
+        player = (FlexPlayer) nplayer;
         this.parent = parent;
 
         ItemStack GLASS_PANE_BLUE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
@@ -56,7 +56,7 @@ public class ArrowTrailMenu implements InvMenu {
             ItemStack is = trail.getItem();
 
             if (trail.isNew()) {
-                title = replaceToAnyLang(trail) + " &c" + Language.getMsg(player, Messages.NEW);
+                title = replaceToAnyLang(trail) + " &c" + Messages.NEW;
             } else  {
                 title = replaceToAnyLang(trail);
             }
@@ -74,21 +74,20 @@ public class ArrowTrailMenu implements InvMenu {
                     lore.add("&2Нажмите для выбора.");
                 }
             } else if (player.getCoins() <= trail.getPrice()) {
-                color = "&c";
+                color = "&7";
                 lore.add("&fЦена: &3" + trail.getPrice());
                 lore.add("");
                 lore.add("&fРедкость: &3" + trail.getRarity().getTag());
                 lore.add("");
                 lore.add("&cУ Вас недостаточно средств");
-                lore.add("&cЧтобы приобрести: " + replaceToAnyLang(trail));
+                lore.add("&cЧтобы приобрести &6след от стрелы&c:&r " + replaceToAnyLang(trail));
             } else {
                 color = "&6";
                 lore.add("&fЦена: &3" + trail.getPrice());
                 lore.add("");
                 lore.add("&fРедкость: &3" + trail.getRarity().getTag());
                 lore.add("");
-                //for (String str : Language.getList(player.getBukkitPlayer(), Messages.CLICK_TO_BUY))
-                lore.add(Language.getMsg(player.getBukkitPlayer(), Messages.CLICK_TO_BUY));
+                lore.add("&6Нажмите, чтобы купить.");
             }
 
             Items.name(is, color + title, lore);
@@ -127,7 +126,7 @@ public class ArrowTrailMenu implements InvMenu {
                     player.takeCoins(selected.getPrice());
                     player.unlockArrowTrail(selected);
                 }, Language.getMsg(bukkitPlayer, Messages.ARROWTRAIL_NAME + ArrowTrail.byId(selected.getId()).name().toLowerCase()));
-                menu.setConfirmText("&a&lПОДТВЕРДИТЬ", "&7С Вас будет списано 70 FlexCoin");
+                menu.setConfirmText("&a&lПОДТВЕРДИТЬ", "&7С Вас будет списано " + selected.getPrice() + " FlexCoin");
                 menu.setCancelText("&c&lОТМЕНИТЬ ДЕЙСТВИЕ");
                 bukkitPlayer.openInventory(menu.getInventory());
             } else {

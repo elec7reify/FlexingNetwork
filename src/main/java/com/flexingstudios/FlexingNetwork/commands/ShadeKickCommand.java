@@ -1,11 +1,11 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,8 +37,14 @@ public class ShadeKickCommand implements CommandExecutor {
                 }
 
                 Player targetPlayer = Bukkit.getPlayerExact(args[0]);
-                FLPlayer flPlayer = FLPlayer.get(sender);
+                FlexPlayer flPlayer = FlexPlayer.get(sender);
 
+                if (targetPlayer == sender) {
+                    Utilities.msg(sender, Messages.KICK_ME);
+                    return true;
+                }
+
+                // Immunity to kick
                 if (flPlayer.has(Rank.ADMIN)) {
                     FlexingNetwork.kick(args[0], reason, sender.getName(), true);
                 } else if (flPlayer.has(Rank.SADMIN)) {
@@ -73,7 +79,7 @@ public class ShadeKickCommand implements CommandExecutor {
             }
         }
 
-        return true;
+        return false;
     }
 }
 

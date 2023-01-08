@@ -1,13 +1,13 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.Commons.F;
-import com.flexingstudios.Commons.player.Permission;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.F;
+import com.flexingstudios.Common.player.Permission;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,7 +47,12 @@ public class ShadeBanCommand implements CommandExecutor {
                     }
 
                     Player banned = Bukkit.getPlayerExact(args[0]);
-                    FLPlayer flPlayer = FLPlayer.get(sender);
+                    FlexPlayer flPlayer = FlexPlayer.get(sender);
+
+                    if (banned == sender) {
+                        Utilities.msg(sender, Messages.BAN_ME);
+                        return true;
+                    }
 
                     // Immunity to kick
                     if (flPlayer.has(Rank.ADMIN)) {

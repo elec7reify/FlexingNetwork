@@ -1,6 +1,6 @@
 package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
 
-import com.flexingstudios.Commons.F;
+import com.flexingstudios.Common.F;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;

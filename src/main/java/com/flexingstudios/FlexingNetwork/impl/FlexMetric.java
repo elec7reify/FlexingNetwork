@@ -8,11 +8,11 @@ import org.bukkit.Bukkit;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FMetrics implements Metrics {
+public class FlexMetric implements Metrics {
     private static final int FLUSH_INTERVAL_TICKS = 24000;
     private final HashMap<String, Value> map;
 
-    public FMetrics(FlexingNetworkPlugin plugin) {
+    public FlexMetric(FlexingNetworkPlugin plugin) {
         map = new HashMap<>();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::flush, 24000L, 24000L);
     }

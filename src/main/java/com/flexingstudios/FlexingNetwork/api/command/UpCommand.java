@@ -1,6 +1,6 @@
 package com.flexingstudios.FlexingNetwork.api.command;
 
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.command.Command;

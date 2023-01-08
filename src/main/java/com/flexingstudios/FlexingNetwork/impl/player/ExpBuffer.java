@@ -18,7 +18,7 @@ public class ExpBuffer {
     private void flush() {
         int total = 0;
         TIntObjectHashMap tIntObjectHashMap = new TIntObjectHashMap();
-        for (FLPlayer player : FLPlayer.PLAYERS.values()) {
+        for (FlexPlayer player : FlexPlayer.PLAYERS.values()) {
             if (player.expBuffer > 0) {
                 total += player.expBuffer;
                 TIntLinkedList list = (TIntLinkedList) tIntObjectHashMap.get(player.expBuffer);
@@ -37,7 +37,7 @@ public class ExpBuffer {
         tIntObjectHashMap.clear();
     }
 
-    public void saveNow(FLPlayer player) {
+    public void saveNow(FlexPlayer player) {
         if (player.expBuffer != 0) {
             plugin.mysql.query("UPDATE authme SET exp=exp+" + player.expBuffer + " WHERE id = " + player.id);
             player.expBuffer = 0;

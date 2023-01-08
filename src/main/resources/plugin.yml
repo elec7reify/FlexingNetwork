@@ -1,6 +1,6 @@
 name: FlexingNetwork
-author: FlexingStudios, Elec7reify
-version: '${project.version}'
+author: [ FlexingStudios, Elec7reify ]
+version: '${version}'
 
 main: com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
 
@@ -37,8 +37,6 @@ commands:
   donate:
   flexingnetwork:
     aliases: [flexingworld, flex, flexing, fn, fw]
-  language:
-    aliases: [lang]
   kick:
   shadekick:
     aliases: [shkick]

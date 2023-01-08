@@ -12,7 +12,6 @@ public class Config extends Configuration {
     public String lobbyServerHost;
     public boolean updaterEnabled;
     public boolean development;
-    public String language;
     public boolean allowPickUpItems;
 
     public Config(FlexingNetworkPlugin plugin) {
@@ -29,7 +28,6 @@ public class Config extends Configuration {
         addDefault("lobby.serverId", null);
         addDefault("development", false);
         addDefault("updater.enabled", true);
-        addDefault("language", "ru");
         addDefault("lobbyprotector.allowPickUpItems", true);
 
         plugin.saveDefaultConfig();
@@ -45,7 +43,6 @@ public class Config extends Configuration {
         lobbyServerId = getString("lobby.serverId");
         development = getBoolean("development", false);
         updaterEnabled = getBoolean("updater.enabled", true);
-        language = getString("language", "ru");
         allowPickUpItems = getBoolean("lobbyprotector.allowPickUpItems", true);
     }
 }

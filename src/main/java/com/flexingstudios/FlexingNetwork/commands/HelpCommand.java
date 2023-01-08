@@ -1,10 +1,10 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.Commons.player.Permission;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Permission;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,7 +45,7 @@ public class HelpCommand implements CommandExecutor {
             return true;
         }
 
-        List<Desc> cmds = getAllowedCommands(FLPlayer.get(sender.getName()));
+        List<Desc> cmds = getAllowedCommands(FlexPlayer.get(sender.getName()));
         int page = 0;
         int pages = (cmds.size() - 1) / 9;
 

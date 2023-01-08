@@ -1,21 +1,20 @@
 package com.flexingstudios.FlexingNetwork;
 
-import com.flexingstudios.Commons.F;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.F;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.event.PlayerBanEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
-import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
-import com.flexingstudios.FlexingNetwork.api.player.MessageOnJoin;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.JaroWinkler;
-import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.FlexingNetwork.commands.BanCommand;
 import com.flexingstudios.FlexingNetwork.friends.utils.Colour;
 import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,9 +29,6 @@ import org.bukkit.event.server.PluginDisableEvent;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 class WorldProtect implements Listener {
@@ -51,7 +47,7 @@ class WorldProtect implements Listener {
                 if (f.isFile()) {
                     if (f.getName().contains("messages_") && f.getName().contains(".yml")) {
                         String lang = f.getName().replace("messages_", "").replace(".yml", "");
-                        if (lang.equalsIgnoreCase(config.language)) {
+                        if (lang.equalsIgnoreCase("ru")) {
                             whatLang = f.getName().replace("messages_", "").replace(".yml", "");
                         }
                         if (Language.getLang(lang) == null) new Language(FlexingNetworkPlugin.getInstance(), lang);
@@ -70,8 +66,16 @@ class WorldProtect implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         event.setJoinMessage(null);
-        FLPlayer nplayer = FLPlayer.get(player);
-        plugin.mysql.addLoadPlayer(nplayer);
+        FlexPlayer flPlayer = FlexPlayer.get(player);
+        plugin.mysql.addLoadPlayer(flPlayer);
+
+        if (flPlayer.getRank().has(Rank.CHIKIBOMBASTER)) {
+            BanCommand.maxBanTime = F.toMilliSec("1w");
+        } else if (flPlayer.getRank().has(Rank.OWNER)) {
+            BanCommand.maxBanTime = F.toMilliSec("2h");
+        } else if (flPlayer.getRank().has(Rank.SPONSOR)) {
+            BanCommand.maxBanTime = 1800000;
+        }
 
         FlexingNetwork.mysql().select("SELECT restrictto FROM modrestrict WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
             if (rs.next()) {
@@ -80,9 +84,9 @@ class WorldProtect implements Listener {
 
                 if (restrictto > 0L && restrictto < currtime) {
                     FlexingNetwork.mysql().query("UPDATE modrestrict SET status = 0 WHERE username = '" + player.getName() + "'");
-                    nplayer.setRestrict(false);
+                    flPlayer.setRestrict(false);
                 } else {
-                    nplayer.setRestrict(true);
+                    flPlayer.setRestrict(true);
                 }
             }
         });
@@ -93,21 +97,24 @@ class WorldProtect implements Listener {
 
     @EventHandler
     public void onPlayerLoaded(PlayerLoadedEvent event) {
-        FLPlayer flPlayer = FLPlayer.get(event.getNetworkPlayer().getName());
+        FlexPlayer flPlayer = FlexPlayer.get(event.getNetworkPlayer().getName());
 
         if (flPlayer.getMessageOnJoin() != null) {
-            Utilities.bcast(Language.getList(flPlayer.getBukkitPlayer(), "msg" + flPlayer.getMessageOnJoin().getId()));
+            Utilities.bcast(flPlayer.getMessageOnJoin().getMessage()
+                    .replace("{rank}", flPlayer.getRank().getDisplayName())
+                    .replace("{player}", flPlayer.getName()));
         }
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        event.setQuitMessage(fireLeaveEvent(FLPlayer.get(player), event.getQuitMessage(), false));
-        for (String friend : FriendsManager.getPlayerFriends(event.getPlayer().getName())) {
-            OfflinePlayer player1 = Bukkit.getServer().getOfflinePlayer(friend);
-                player1.getPlayer().sendMessage(Colour.translate("&7Your friend &6" + player.getName() + " &7is now &coffline&7!"));
-        }
+        event.setQuitMessage(fireLeaveEvent(FlexPlayer.get(player), event.getQuitMessage(), false));
+    }
+
+    @EventHandler
+    public void onPlayerBan(PlayerBanEvent event) {
+        event.setBanMessage("");
     }
 
     @EventHandler
@@ -162,7 +169,7 @@ class WorldProtect implements Listener {
 
     @EventHandler
     public void onUnload(PlayerUnloadEvent event) {
-        FLPlayer player = (FLPlayer) event.getNetworkPlayer();
+        FlexPlayer player = (FlexPlayer) event.getNetworkPlayer();
         plugin.coins.saveNow(player);
         plugin.expBuffer.saveNow(player);
         if (plugin.metaSaver != null)
@@ -174,16 +181,16 @@ class WorldProtect implements Listener {
     @EventHandler
     public void onPluginDisable(PluginDisableEvent event) {
         if (event.getPlugin().getName().equals(plugin.getName()))
-            for (FLPlayer player : FLPlayer.PLAYERS.values())
+            for (FlexPlayer player : FlexPlayer.PLAYERS.values())
                 Bukkit.getPluginManager().callEvent(new PlayerUnloadEvent(player));
     }
 
-    private String fireLeaveEvent(FLPlayer player, String message, boolean isKick) {
+    private String fireLeaveEvent(FlexPlayer player, String message, boolean isKick) {
         PlayerLeaveEvent event = new PlayerLeaveEvent(player, message, isKick);
         Bukkit.getPluginManager().callEvent(event);
         Bukkit.getPluginManager().callEvent(new PlayerUnloadEvent(player));
-        FLPlayer.PLAYERS.remove(player.getName());
-        FLPlayer.IDS.remove(player.getId());
+        FlexPlayer.PLAYERS.remove(player.getName());
+        FlexPlayer.IDS.remove(player.getId());
         return event.getLeaveMessage();
     }
 

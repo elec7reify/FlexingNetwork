@@ -1,6 +1,6 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.Commons.player.Permission;
+import com.flexingstudios.Common.player.Permission;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.util.Invs;
 import com.flexingstudios.FlexingNetwork.api.util.Spectators;

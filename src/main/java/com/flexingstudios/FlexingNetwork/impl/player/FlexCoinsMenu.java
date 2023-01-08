@@ -3,7 +3,6 @@ package com.flexingstudios.FlexingNetwork.impl.player;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.util.*;
 import com.flexingstudios.FlexingNetwork.impl.GroupsMenu;
-import com.flexingstudios.FlexingNetwork.impl.player.FCShopMenu;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,10 +14,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Set;
 
-public class FCoinsMenu implements InvMenu {
+public class FlexCoinsMenu implements InvMenu {
     private final Inventory inv;
 
-    public FCoinsMenu(Player player) {
+    public FlexCoinsMenu(Player player) {
         this.inv = Bukkit.createInventory(this, 54, "FlexCoin");
         ItemStack INFO_BOOK = Items.name(Items.glow(Material.BOOK), "&a&lИнформация", "&9&lFlex&f&lCoin &f- особая игровая валюта, которую",
                 "&fМожно получить только за &a&lреальные деньги",

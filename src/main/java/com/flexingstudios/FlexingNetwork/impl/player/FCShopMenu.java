@@ -63,10 +63,10 @@ public class FCShopMenu implements InvMenu {
 
     @Override
     public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
-        FLPlayer flplayer = (FLPlayer) FlexingNetwork.getPlayer(player);
+        FlexPlayer flplayer = (FlexPlayer) FlexingNetwork.getPlayer(player);
         switch (slot) {
             case 8:
-                player.openInventory(new FCoinsMenu(player).getInventory());
+                player.openInventory(new FlexCoinsMenu(player).getInventory());
                 break;
             case 11:
                 break;

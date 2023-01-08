@@ -1,7 +1,7 @@
 package com.flexingstudios.FlexingNetwork.api.player;
 
-import com.flexingstudios.Commons.player.Permission;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Permission;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.entity.Player;

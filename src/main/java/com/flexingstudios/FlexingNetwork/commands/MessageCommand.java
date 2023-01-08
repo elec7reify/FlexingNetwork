@@ -1,11 +1,10 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -41,8 +40,8 @@ public class MessageCommand implements CommandExecutor {
                     Utilities.msg(sender, "§cИгрок " + args[0] + " не найден");
                     break;
                 }
-                senderInfo = (MysqlPlayer) FLPlayer.get(sender.getName());
-                recieverInfo = (MysqlPlayer) FLPlayer.get(player);
+                senderInfo = (MysqlPlayer) FlexPlayer.get(sender.getName());
+                recieverInfo = (MysqlPlayer) FlexPlayer.get(player);
 
                 message = args[1];
 
@@ -55,10 +54,10 @@ public class MessageCommand implements CommandExecutor {
                     Utilities.msg(sender, "&cИспользование: /" + label + " &f<сообщение");
                     return true;
                 }
-                senderInfo = (MysqlPlayer) FLPlayer.get(sender.getName());
+                senderInfo = (MysqlPlayer) FlexPlayer.get(sender.getName());
                 message = args[0];
 
-                if (senderInfo.lastWriter == null || (lastWriter = (MysqlPlayer) FLPlayer.PLAYERS.get(senderInfo.lastWriter)) == null) {
+                if (senderInfo.lastWriter == null || (lastWriter = (MysqlPlayer) FlexPlayer.PLAYERS.get(senderInfo.lastWriter)) == null) {
                     Utilities.msg(sender, "§cНекому ответить");
                     return true;
                 }
@@ -73,12 +72,12 @@ public class MessageCommand implements CommandExecutor {
     }
 
     private void trySendPrivateMessage(MysqlPlayer sender, MysqlPlayer reciever, String message) {
-        if (!sender.rank.has(Rank.ADMIN) && !FLPlayer.get(reciever.getBukkitPlayer()).settings.get(1)) {
+        if (!sender.rank.has(Rank.ADMIN) && !FlexPlayer.get(reciever.getBukkitPlayer()).settings.get(1)) {
             Utilities.msg(sender.player, reciever.getName() + " Отключил приватные сообщения");
             return;
         }
 
-        if (!FLPlayer.get(sender.getBukkitPlayer()).settings.get(1)) {
+        if (!FlexPlayer.get(sender.getBukkitPlayer()).settings.get(1)) {
             Utilities.msg(sender.player, T.error(sender.username, "Вы отключили личные сообщения"));
             return;
         }

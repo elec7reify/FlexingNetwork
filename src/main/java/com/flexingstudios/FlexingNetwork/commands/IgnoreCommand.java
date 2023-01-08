@@ -4,7 +4,7 @@ import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FLPlayer;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -21,11 +21,11 @@ public class IgnoreCommand implements CommandExecutor {
                 return true;
             }
 
-            MysqlPlayer flplayer = (MysqlPlayer) FLPlayer.get(sender.getName());
+            MysqlPlayer flplayer = (MysqlPlayer) FlexPlayer.get(sender.getName());
 
             if (args[0].equals("@all")) {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
-                FLPlayer.get(sender.getName()).settings.set(1, false);
+                FlexPlayer.get(sender.getName()).settings.set(1, false);
                 return true;
             }
 
@@ -56,11 +56,11 @@ public class IgnoreCommand implements CommandExecutor {
                 return true;
             }
 
-            MysqlPlayer flplayer = (MysqlPlayer) FLPlayer.get(sender.getName());
+            MysqlPlayer flplayer = (MysqlPlayer) FlexPlayer.get(sender.getName());
 
             if (args[0].equals("@all")) {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения теперь принимаются"));
-                FLPlayer.get(sender.getName()).settings.set(1, true);
+                FlexPlayer.get(sender.getName()).settings.set(1, true);
                 return true;
             }
 
@@ -79,14 +79,14 @@ public class IgnoreCommand implements CommandExecutor {
         }
 
         if (command.getName().equals("msgtoggle")) {
-            MysqlPlayer flplayer = (MysqlPlayer) FLPlayer.get(sender.getName());
+            MysqlPlayer flplayer = (MysqlPlayer) FlexPlayer.get(sender.getName());
 
-            if (FLPlayer.get(sender.getName()).settings.get(1)) {
+            if (FlexPlayer.get(sender.getName()).settings.get(1)) {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения больше не принимаются"));
-                FLPlayer.get(sender.getName()).settings.set(1, false);
+                FlexPlayer.get(sender.getName()).settings.set(1, false);
             } else {
                 Utilities.msg(sender, T.success("GOT IT!", "Личные сообщения теперь принимаются"));
-                FLPlayer.get(sender.getName()).settings.set(1, true);
+                FlexPlayer.get(sender.getName()).settings.set(1, true);
             }
         }
 

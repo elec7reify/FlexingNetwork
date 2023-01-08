@@ -1,15 +1,14 @@
 package com.flexingstudios.FlexingNetwork;
 
-import com.flexingstudios.Commons.player.Permission;
-import com.flexingstudios.Commons.player.Rank;
+import com.flexingstudios.Common.player.Permission;
+import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Lobby;
 import com.flexingstudios.FlexingNetwork.api.updater.UpdateWatcher;
-import com.flexingstudios.FlexingNetwork.api.util.Reflect;
 import com.flexingstudios.FlexingNetwork.commands.*;
 import com.flexingstudios.FlexingNetwork.commands.FriendCommand;
 import com.flexingstudios.FlexingNetwork.friends.listeners.GUIListener;
-import com.flexingstudios.FlexingNetwork.impl.FMetrics;
+import com.flexingstudios.FlexingNetwork.impl.FlexMetric;
 import com.flexingstudios.FlexingNetwork.impl.languages.*;
 import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
 import com.flexingstudios.FlexingNetwork.impl.player.*;
@@ -22,13 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.sql.Connection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -40,9 +32,9 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public Lobby lobby;
     public MysqlWorker mysql;
     public UpdateWatcher updateWatcher;
-    public FCoins coins;
+    public FlexCoin coins;
     public ExpBuffer expBuffer;
-    public FMetrics metrics;
+    public FlexMetric metrics;
     public VanishCommand vanishCommand;
     public PlayerMetaSaver metaSaver;
 
@@ -50,7 +42,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public void onLoad() {
         instance = this;
 
-        new English();
         new Russian();
     }
 
@@ -58,15 +49,15 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public void onEnable() {
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         config = new Config(this);
-        metrics = new FMetrics(this);
+        metrics = new FlexMetric(this);
         mysql = new MysqlWorker(this);
-        coins = new FCoins(this);
+        coins = new FlexCoin(this);
         expBuffer = new ExpBuffer(this);
         help = new HelpCommand();
         lobby = new MysqlLobby(this);
         updateWatcher = new UpdateWatcher(this);
         mysql.start();
-        FLPlayer.CONSTRUCTOR = MysqlPlayer::new;
+        FlexPlayer.CONSTRUCTOR = MysqlPlayer::new;
         BungeeBridge bungeeBridge = new BungeeBridge();
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerOutgoingPluginChannel(this, "FlexingBungee");
@@ -78,7 +69,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         //getServer().getPluginManager().registerEvents(new MessageOnJoinListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
-        getServer().getPluginManager().registerEvents(new LangListener(), this);
         getServer().getPluginManager().registerEvents(new FlexingChat(), this);
         getServer().getPluginManager().registerEvents(new ShulkerDispenseFix(), this);
 
@@ -113,7 +103,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("donate").setExecutor(new DonateCommand());
         getCommand("profile").setExecutor(new ProfileCommand());
         getCommand("friend").setExecutor(new FriendCommand());
-        getCommand("language").setExecutor(new LanguageCommand());
         getCommand("actions").setExecutor(new ActionsCommand());
         getCommand("report").setExecutor(new ReportCommand());
         getCommand("reports").setExecutor(new ReportsCommand());
@@ -166,5 +155,9 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         metrics.flush();
         mysql.finish();
         scheduledExecutorService.shutdownNow();
+    }
+
+    public static FlexingNetworkPlugin getInstance() {
+        return instance;
     }
 }

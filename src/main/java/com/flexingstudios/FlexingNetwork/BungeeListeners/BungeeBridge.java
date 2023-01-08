@@ -24,7 +24,7 @@ public class BungeeBridge implements PluginMessageListener {
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-        if (channel.equals("FlexingBungee")) {
+        if (channel.equals("FlexingBungee") || channel.equals("BungeeCord")) {
             String msg = new String(message, StandardCharsets.UTF_8);
             if (msg.startsWith("bcast"))
                 Bukkit.broadcastMessage(Utilities.colored(msg.substring(6)));

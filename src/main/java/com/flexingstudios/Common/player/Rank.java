@@ -1,4 +1,4 @@
-package com.flexingstudios.Commons.player;
+package com.flexingstudios.Common.player;
 
 import java.util.EnumSet;
 
@@ -44,9 +44,9 @@ public enum Rank {
 
     Rank(String color, String name, String prefix, String suffix) {
         this.color = color;
-        this.name = (name == null) ? "" : name;
-        this.prefix = (prefix == null) ? "" : prefix;
-        this.suffix = (suffix == null) ? "" : suffix;
+        this.name = name == null ? "" : name;
+        this.prefix = prefix == null ? "" : prefix;
+        this.suffix = suffix == null ? "" : suffix;
         this.permissions = EnumSet.noneOf(Permission.class);
     }
 
