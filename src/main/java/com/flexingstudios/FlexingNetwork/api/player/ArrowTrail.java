@@ -22,7 +22,7 @@ public enum ArrowTrail {
     private final String name;
     private final ItemStack itemStack;
     private final int price;
-    private ItemRarity rarity;
+    private final ItemRarity rarity;
     private final Attributes[] attributes;
     private static final TIntObjectHashMap<ArrowTrail> byId;
 
@@ -62,11 +62,6 @@ public enum ArrowTrail {
 
     public ItemRarity getRarity() {
         return rarity;
-    }
-
-    public ArrowTrail setRarity(ItemRarity rarity) {
-        this.rarity = rarity;
-        return this;
     }
 
     public Attributes[] getAttributes() {
