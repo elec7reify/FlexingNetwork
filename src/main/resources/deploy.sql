@@ -12,13 +12,15 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 CREATE TABLE `servers` (
-    `id` varchar(16) NOT NULL DEFAULT '',
-    `host` varchar(50) NOT NULL,
-    `port` int(11) NOT NULL DEFAULT '25565',
-    `online` int(10) unsigned DEFAULT NULL,
-    `max` int(11) unsigned DEFAULT NULL,
-    `connectable` tinyint(1) DEFAULT '1',
-    PRIMARY KEY (`id`)
+  `id` varchar(16) NOT NULL DEFAULT '',
+  `host` varchar(50) NOT NULL,
+  `port` int(11) NOT NULL DEFAULT '25565',
+  `updated` int(10) unsigned DEFAULT NULL,
+  `online` int(10) unsigned DEFAULT NULL,
+  `max` int(10) unsigned DEFAULT NULL,
+  `menu_status` varchar(255) DEFAULT NULL,
+  `connectable` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `reports` (

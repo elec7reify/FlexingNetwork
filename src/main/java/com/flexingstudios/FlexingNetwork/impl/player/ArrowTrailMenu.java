@@ -1,15 +1,17 @@
 package com.flexingstudios.FlexingNetwork.impl.player;
 
+import com.flexingstudios.FlexingNetwork.api.Attributes;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -18,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ArrowTrailMenu implements InvMenu {
     private final Inventory inv;
@@ -55,10 +59,11 @@ public class ArrowTrailMenu implements InvMenu {
             List<String> lore = new ArrayList<>();
             ItemStack is = trail.getItem();
 
-            if (trail.isNew()) {
-                title = replaceToAnyLang(trail) + " &c" + Messages.NEW;
+            if (trail.getAttributes() != null) {
+                String tag = Arrays.stream(trail.getAttributes()).map(attribute -> attribute.getColor() + attribute.getTag()).collect(Collectors.joining(" &7&&r "));
+                title = trail.getName() + " " + tag;
             } else  {
-                title = replaceToAnyLang(trail);
+                title = trail.getName();
             }
 
             if (player.availableArrowTrails.contains(trail.getId())) {
@@ -80,7 +85,7 @@ public class ArrowTrailMenu implements InvMenu {
                 lore.add("&fРедкость: &3" + trail.getRarity().getTag());
                 lore.add("");
                 lore.add("&cУ Вас недостаточно средств");
-                lore.add("&cЧтобы приобрести &6след от стрелы&c:&r " + replaceToAnyLang(trail));
+                lore.add("&cЧтобы приобрести &6след от стрелы&c:&r " + trail.getName());
             } else {
                 color = "&6";
                 lore.add("&fЦена: &3" + trail.getPrice());
@@ -125,7 +130,7 @@ public class ArrowTrailMenu implements InvMenu {
                 ConfirmMenu menu = new ConfirmMenu(getInventory(), () -> {
                     player.takeCoins(selected.getPrice());
                     player.unlockArrowTrail(selected);
-                }, Language.getMsg(bukkitPlayer, Messages.ARROWTRAIL_NAME + ArrowTrail.byId(selected.getId()).name().toLowerCase()));
+                }, selected.getName());
                 menu.setConfirmText("&a&lПОДТВЕРДИТЬ", "&7С Вас будет списано " + selected.getPrice() + " FlexCoin");
                 menu.setCancelText("&c&lОТМЕНИТЬ ДЕЙСТВИЕ");
                 bukkitPlayer.openInventory(menu.getInventory());
@@ -134,7 +139,7 @@ public class ArrowTrailMenu implements InvMenu {
                 Utilities.msg(bukkitPlayer, "&cУ Вас недостаточно коинов для покупки этого следа от стрелы.");
             }
         } else if (player.availableArrowTrails.contains(selected.getId()) && player.getArrowTrail() != selected) {
-            Utilities.msg(bukkitPlayer, Language.getMsg(player, Messages.ARROWTRAIL_SELECTED).replace("{trail_name}", replaceToAnyLang(selected)));
+            Utilities.msg(bukkitPlayer, Messages.ARROWTRAIL_SELECTED.replace("{trail_name}", selected.getName()));
             player.setArrowTrail(selected);
             bukkitPlayer.closeInventory();
         }
@@ -143,11 +148,5 @@ public class ArrowTrailMenu implements InvMenu {
     @Override
     public Inventory getInventory() {
         return inv;
-    }
-
-    private String replaceToAnyLang(ArrowTrail trail) {
-        return !Language.getPlayerLanguage(player.getBukkitPlayer()).exists(Messages.ARROWTRAIL_NAME + ArrowTrail.byId(trail.getId()).name().toLowerCase()) ?
-                trail.getName() :
-                Language.getMsg(player, Messages.ARROWTRAIL_NAME + ArrowTrail.byId(trail.getId()).name().toLowerCase());
     }
 }
