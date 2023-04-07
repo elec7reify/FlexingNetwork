@@ -3,9 +3,9 @@ package com.flexingstudios.FlexingNetwork;
 import com.flexingstudios.Common.player.Leveling;
 import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
@@ -81,7 +81,7 @@ public class MysqlWorker extends MysqlThread {
                             .replace("{reason}", reason)
                             .replace("{admin}", admin)
                             .replace("{time}", bantime)
-                            .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                            .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                                     .format(new Date(System.currentTimeMillis()))))));
                     return;
                 }

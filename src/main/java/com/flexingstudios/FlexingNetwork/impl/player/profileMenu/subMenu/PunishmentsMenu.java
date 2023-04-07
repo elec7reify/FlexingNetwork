@@ -2,8 +2,8 @@ package com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu;
 
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FlexPlayerMenu;
 import org.bukkit.Bukkit;
@@ -68,7 +68,7 @@ public class PunishmentsMenu implements InvMenu {
                 inv.setItem(getSlot(i), Items.name(PunishmentType.byId(punishment.action).is, "&e#" + i,
                         "&fИдентификатор лога &7" + punishment.id,
                         "&fАдмининистратор: &c" + admin,
-                        "&fДата и время: &6" + new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        "&fДата и время: &6" + new SimpleDateFormat(Messages.DATE_FORMAT)
                                 .format(new Date(punishment.time * 1000L)),
                         "&fДействие: &3" + PunishmentType.byId(punishment.action).action,
                         "&fНарушитель: &3" + punishment.data,

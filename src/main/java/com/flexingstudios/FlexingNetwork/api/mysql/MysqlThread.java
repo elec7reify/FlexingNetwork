@@ -39,7 +39,6 @@ public abstract class MysqlThread extends Thread {
         this.config = config;
         queries = new ConcurrentLinkedDeque<>();
         logger = plugin.getLogger();
-        SafeRunnable.class.getName();
     }
 
     public void query(@NotNull String query) {
@@ -206,7 +205,7 @@ public abstract class MysqlThread extends Thread {
                 url = addUnicodeParams(config.getUrl());
             db = DriverManager.getConnection(url, config.getUser(), config.getPass());
             if (isValid()) {
-                logger.info("Mysql connected.");
+                logger.info("MySQL connected.");
                 onConnect();
             }
         } catch (SQLException ex) {
@@ -216,13 +215,13 @@ public abstract class MysqlThread extends Thread {
 
     private String addUnicodeParams(String url) {
         if (url.contains("?")) {
-            if (url.contains("useUnicode=true&characterEncoding=utf-8"))
+            if (url.contains(UNICODE_PARAMS))
                 return url;
             url = url + "&";
         } else {
             url = url + "?";
         }
-        return url + "useUnicode=true&characterEncoding=utf-8";
+        return url + UNICODE_PARAMS;
     }
 
     private boolean isValid() throws SQLException {

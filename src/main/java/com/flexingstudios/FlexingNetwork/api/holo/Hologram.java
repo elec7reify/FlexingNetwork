@@ -1,6 +1,7 @@
 package com.flexingstudios.FlexingNetwork.api.holo;
 
 import com.flexingstudios.FlexingNetwork.api.util.EntityPersistor;
+import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -36,7 +37,7 @@ public class Hologram {
         Random random = new Random();
         Hologram hologram = new Hologram(random.nextInt(Integer.MAX_VALUE) + 1, loc.clone());
         for (String line : lines) {
-            hologram.append(line);
+            hologram.append(Utilities.colored(line));
         }
         return hologram;
     }
@@ -153,7 +154,7 @@ public class Hologram {
      * @param text The text to set the line to
      */
     public void setLine(int line, String text) {
-        stands.get(line).get().setCustomName(text);
+        stands.get(line).get().setCustomName(Utilities.colored(text));
     }
 
     /**

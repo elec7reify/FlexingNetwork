@@ -4,8 +4,8 @@ import com.flexingstudios.Common.F;
 import com.flexingstudios.Common.player.Permission;
 import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
+import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.T;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
@@ -13,8 +13,6 @@ import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
 import com.google.gson.Gson;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
-import net.minecraft.server.v1_12_R1.IChatBaseComponent;
-import net.minecraft.server.v1_12_R1.PacketPlayOutTitle;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -141,7 +139,7 @@ public class FlexingNetwork {
                         .replace("{admin}", "&cТеневой админ")
                         .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
                         .replace("{reason}", reason)
-                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                                 .format(new Date(System.currentTimeMillis())))));
                 logAction(admin, "shade.ban", target, reason);
             } else {
@@ -157,7 +155,7 @@ public class FlexingNetwork {
                         .replace("{admin}", "&3" + admin)
                         .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
                         .replace("{reason}", reason)
-                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                                 .format(new Date(System.currentTimeMillis())))));
                 logAction(admin, "ban", target, reason);
             }
@@ -175,7 +173,7 @@ public class FlexingNetwork {
                         .replace("{admin}", "&cnТеневой админ")
                         .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
                         .replace("{reason}", reason)
-                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                                 .format(new Date(System.currentTimeMillis())))));
                 logAction(admin, "shade.ban", target, reason);
             } else {
@@ -191,7 +189,7 @@ public class FlexingNetwork {
                         .replace("{admin}", "&3" + admin)
                         .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
                         .replace("{reason}", reason)
-                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                                 .format(new Date(System.currentTimeMillis())))));
                 logAction(admin, "ban", target, reason);
             }
@@ -230,7 +228,7 @@ public class FlexingNetwork {
                         .replace("{player}", target)
                         .replace("{kicked}", "&cТеневой админ")
                         .replace("{reason}", reason)
-                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                                 .format(new Date(System.currentTimeMillis())))));
             logAction(kicked, "shade.kick", target, reason);
             } else {
@@ -238,7 +236,7 @@ public class FlexingNetwork {
                     .replace("{player}", target)
                     .replace("{kicked}", "&cТеневой админ")
                     .replace("{reason}", reason)
-                    .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                    .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                             .format(new Date(System.currentTimeMillis())))));
             logAction(kicked, "kick", target, reason);
             }
@@ -248,7 +246,7 @@ public class FlexingNetwork {
                         .replace("{player}", target)
                         .replace("{kicked}", "&cТеневой админ")
                         .replace("{reason}", reason)
-                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                                 .format(new Date(System.currentTimeMillis())))));
                 logAction(kicked, "shade.kick", target, reason);
             } else {
@@ -256,7 +254,7 @@ public class FlexingNetwork {
                         .replace("{player}", target)
                         .replace("{kicked}", "&3" + kicked)
                         .replace("{reason}", reason)
-                        .replace("{date}", new SimpleDateFormat(Language.getMsg(player, "date-format"))
+                        .replace("{date}", new SimpleDateFormat(Messages.DATE_FORMAT)
                                 .format(new Date(System.currentTimeMillis())))));
                 logAction(kicked, "kick", target, reason);
             }

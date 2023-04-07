@@ -3,23 +3,32 @@ package com.flexingstudios.FlexingNetwork;
 import com.flexingstudios.Common.F;
 import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.FlexingNetwork.api.entity.NMSEntityUtils;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerBanEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
+import com.flexingstudios.FlexingNetwork.api.holo.Hologram;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.JaroWinkler;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.commands.BanCommand;
-import com.flexingstudios.FlexingNetwork.friends.utils.Colour;
-import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
 import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 
+import com.mojang.authlib.GameProfile;
+import net.minecraft.server.v1_12_R1.EntityBlaze;
+import net.minecraft.server.v1_12_R1.EntityHuman;
+import net.minecraft.server.v1_12_R1.PacketPlayOutNamedEntitySpawn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftBlaze;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,7 +36,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginDisableEvent;
 
-import java.io.File;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -38,28 +46,6 @@ class WorldProtect implements Listener {
 
     public WorldProtect(FlexingNetworkPlugin plugin) {
         this.plugin = plugin;
-        Config config = new Config(plugin);
-
-        String whatLang = "ru";
-        File[] langs = new File(plugin.getDataFolder(), "/Languages").listFiles();
-        if (langs != null) {
-            for (File f : langs) {
-                if (f.isFile()) {
-                    if (f.getName().contains("messages_") && f.getName().contains(".yml")) {
-                        String lang = f.getName().replace("messages_", "").replace(".yml", "");
-                        if (lang.equalsIgnoreCase("ru")) {
-                            whatLang = f.getName().replace("messages_", "").replace(".yml", "");
-                        }
-                        if (Language.getLang(lang) == null) new Language(FlexingNetworkPlugin.getInstance(), lang);
-                    }
-                }
-            }
-        }
-
-        Language def = Language.getLang(whatLang);
-
-        if (def == null) throw new IllegalStateException("Could not found default language: " + whatLang);
-        Language.setDefaultLanguage(def);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -69,12 +55,12 @@ class WorldProtect implements Listener {
         FlexPlayer flPlayer = FlexPlayer.get(player);
         plugin.mysql.addLoadPlayer(flPlayer);
 
-        if (flPlayer.getRank().has(Rank.CHIKIBOMBASTER)) {
-            BanCommand.maxBanTime = F.toMilliSec("1w");
+        if (flPlayer.getRank().has(Rank.SPONSOR)) {
+            BanCommand.maxBanTime = 1800000;
         } else if (flPlayer.getRank().has(Rank.OWNER)) {
             BanCommand.maxBanTime = F.toMilliSec("2h");
-        } else if (flPlayer.getRank().has(Rank.SPONSOR)) {
-            BanCommand.maxBanTime = 1800000;
+        } else if (flPlayer.getRank().has(Rank.CHIKIBOMBASTER)) {
+            BanCommand.maxBanTime = F.toMilliSec("1w");
         }
 
         FlexingNetwork.mysql().select("SELECT restrictto FROM modrestrict WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
@@ -90,7 +76,6 @@ class WorldProtect implements Listener {
                 }
             }
         });
-
         ((CraftPlayer) player).addChannel("BungeeCord");
         ((CraftPlayer) player).addChannel("FlexingBungee");
     }

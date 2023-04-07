@@ -31,6 +31,7 @@ public class Config extends Configuration {
         addDefault("lobbyprotector.allowPickUpItems", true);
 
         plugin.saveDefaultConfig();
+        save();
         loadConfig();
     }
 
