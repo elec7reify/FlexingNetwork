@@ -2,10 +2,13 @@ package com.flexingstudios.FlexingNetwork.api.entity;
 
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
@@ -23,27 +26,27 @@ public class NMSEntityUtils {
     private static Field EntityTypes_e;
     private static Method EntityTypes_registerEntity;
 
-    static {
-        try {
-            PathfinderGoalSelector_list1 = PathfinderGoalSelector.class.getDeclaredField("a");
-            PathfinderGoalSelector_list1.setAccessible(true);
-            PathfinderGoalSelector_list2 = PathfinderGoalSelector.class.getDeclaredField("b");
-            PathfinderGoalSelector_list2.setAccessible(true);
-            EntityInsentient_goalSelector = EntityInsentient.class.getDeclaredField("goalSelector");
-            EntityInsentient_goalSelector.setAccessible(true);
-            EntityInsentient_targetSelector = EntityInsentient.class.getDeclaredField("targetSelector");
-            EntityInsentient_targetSelector.setAccessible(true);
-            EntityTypes_registerEntity = EntityTypes.class.getDeclaredMethod("a", new Class[] { Class.class, String.class, int.class });
-            EntityTypes_registerEntity.setAccessible(true);
-            EntityTypes_d = EntityTypes.class.getDeclaredField("d");
-            EntityTypes_d.setAccessible(true);
-            EntityTypes_e = EntityTypes.class.getDeclaredField("e");
-            EntityTypes_e.setAccessible(true);
-        } catch (Exception e) {
-            FlexingNetworkPlugin.getInstance().getLogger().log(Level.SEVERE, "NMSEntityUtils initialization failed", e);
-            throw new RuntimeException(e);
-        }
-    }
+//    static {
+//        try {
+//            PathfinderGoalSelector_list1 = PathfinderGoalSelector.class.getDeclaredField("a");
+//            PathfinderGoalSelector_list1.setAccessible(true);
+//            PathfinderGoalSelector_list2 = PathfinderGoalSelector.class.getDeclaredField("b");
+//            PathfinderGoalSelector_list2.setAccessible(true);
+//            EntityInsentient_goalSelector = EntityInsentient.class.getDeclaredField("goalSelector");
+//            EntityInsentient_goalSelector.setAccessible(true);
+//            EntityInsentient_targetSelector = EntityInsentient.class.getDeclaredField("targetSelector");
+//            EntityInsentient_targetSelector.setAccessible(true);
+//            EntityTypes_registerEntity = EntityTypes.class.getDeclaredMethod("a", new Class[] { Class.class, String.class, int.class });
+//            EntityTypes_registerEntity.setAccessible(true);
+//            EntityTypes_d = EntityTypes.class.getDeclaredField("d");
+//            EntityTypes_d.setAccessible(true);
+//            EntityTypes_e = EntityTypes.class.getDeclaredField("e");
+//            EntityTypes_e.setAccessible(true);
+//        } catch (Exception e) {
+//            FlexingNetworkPlugin.getInstance().getLogger().log(Level.SEVERE, "NMSEntityUtils initialization failed", e);
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public static void safeRegisterCustomEntity(Class<? extends Entity> clazz, String name) {
         safeRegisterCustomEntity(clazz, clazz.getSuperclass(), name);
@@ -58,6 +61,15 @@ public class NMSEntityUtils {
         } catch (Exception e) {
             FlexingNetworkPlugin.getInstance().getLogger().log(Level.SEVERE, "NMSEntityUtils failed to register custom entity", e);
         }
+    }
+
+    public static Entity spawn(Entity entity, Location loc) {
+        entity.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+        getNMSWorld(loc.getWorld()).addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        Chunk chunk = loc.getBlock().getChunk();
+        if (!chunk.isLoaded())
+            chunk.load();
+        return entity;
     }
 
     public static void clearPathfinding(EntityInsentient entity) {
@@ -84,6 +96,16 @@ public class NMSEntityUtils {
 
     public static double getMovementSpeed(EntityLiving entity) {
         return entity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
+    }
+
+    /**
+     * Get EntityPlayer of the player.
+     *
+     * @param player the player.
+     * @return A EntityPlayer of the player.
+     */
+    public static EntityPlayer getNMSPlayer(Player player){
+        return ((CraftPlayer) player).getHandle();
     }
 
     public static WorldServer getNMSWorld(World bukkitWorld) {
