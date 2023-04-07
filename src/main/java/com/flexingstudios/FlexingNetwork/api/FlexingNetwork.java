@@ -19,6 +19,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -370,6 +372,23 @@ public class FlexingNetwork {
     public static void toServer(String server, Player... players) {
         for (Player player : players) {
             BungeeBridge.toServer(player, server);
+        }
+    }
+
+    /**
+     * Gets the plugin that called the calling method of this method
+     *
+     * @return The plugin which called the method
+     */
+    public static Plugin getCallingPlugin() {
+        Exception ex = new Exception();
+        try {
+            Class<?> clazz = Class.forName(ex.getStackTrace()[2].getClassName());
+            Plugin plugin = JavaPlugin.getProvidingPlugin(clazz);
+            return plugin.isEnabled() ? plugin : Bukkit.getPluginManager().getPlugin(plugin.getName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
