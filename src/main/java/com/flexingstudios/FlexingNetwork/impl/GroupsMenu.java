@@ -1,8 +1,9 @@
 package com.flexingstudios.FlexingNetwork.impl;
 
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
+import com.flexingstudios.FlexingNetwork.api.menu.InvMenuImpl;
+import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.FlexingNetwork.api.util.Invs;
 import com.flexingstudios.FlexingNetwork.api.util.ItemBuilder;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.api.util.SkullBuilder;
@@ -12,52 +13,58 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-public class GroupsMenu implements InvMenu {
+public class GroupsMenu extends InvMenuImpl {
     private static final Set<Integer> GLASS_PANE_SLOTS = ImmutableSet.of(0, 1, 2, 3, 4, 5, 6, 7, 9, 13, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 31, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53);
-    public final Inventory inv;
 
-    public GroupsMenu(Player player) {
-        inv = Bukkit.createInventory(this, 54, "Донат привилегии | Выживание");
-        List<String> lore = new ArrayList<>();
+    public GroupsMenu(NetworkPlayer player) {
+        super(Bukkit.createInventory(null, 54, "Донат привилегии | Выживание"));
 
         ItemStack GLASS_PANE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
-        ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
-        GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
-        GLASS_PANE.setItemMeta(GLASS_PANE_META);
-        GLASS_PANE_SLOTS.forEach(slot -> inv.setItem(slot, GLASS_PANE));
+        fill(0, 53, GLASS_PANE);
 
-        inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), Language.getMsg(player, Messages.CLOSE_DONATE_INVENTORY)));
-        inv.setItem(10, Items.name(Items.glow(Material.GRASS), "&f&lВы просматриваете возможности на &a&lВыживании"));
-        inv.setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
-        inv.setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
-        inv.setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
-        this.inv.setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
-        inv.setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
-        inv.setItem(40, Items.name(Items.glow(Material.ENDER_PEARL), "&9&lFlex&f&lCoins"));
+        getInventory().setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lЗакрыть меню"));
+        getInventory().setItem(10, Items.name(Items.glow(Material.GRASS), "&f&lВы просматриваете возможности на &a&lВыживании"));
+        getInventory().setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
+        getInventory().setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
+        getInventory().setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
+        getInventory().setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
+        getInventory().setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
+        getInventory().setItem(40, Items.name(Items.glow(Material.ENDER_PEARL), "&9&lFlex&f&lCoins"));
 
         // Статус VIP (Чикибамбвипка)
         ItemStack vip = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/2b6a97ba2793fe1fc83fd261e6de8ac3299f9f646f322bb8d40554baaecff", 1)).build();
-        for (String s : Language.getList(player, Messages.RANK_VIP_LORE_SURVIVAL)) {
-            lore.add(s.replace("{player_name}", player.getName()));
-        }
-        inv.setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.", lore));
-        lore.clear();
+        getInventory().setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.",
+                "",
+                " &a• &fПрефикс в чат и таб: &7«&a&lЧикибамбвипка&7» &7" + player.getName(),
+                " &a• &fПример сообщения в чате:",
+                "&7«&a&lЧикибамбвипка&7» &7" + player.getName() + " &8→ &7Hello World!",
+                "",
+                " &a◆ &fВозможность получить набор &a&lVIP: &a/kit vip",
+                " &a◆ &fВозможность включить режим полёта: &a/fly",
+                " &a◆ &fВозможность установить &a&l3 &fточки дома: &a/sethome",
+                " &a◆ &fВозможность открыть эндер сундук: &a/echest",
+                " &a◆ &fВозможность открыть верстак: &a/workbench",
+                " &a◆ &fВозможность телепортация к месту смерти: &a/back",
+                " &a◆ &fВозможность узнать рецепт крафта: &a/recipe",
+                "",
+                " &c▪ Донат выдается на &c&lвсе &cсервера.",
+                " &a▪ Донат &a&lостается &aпосле вайпа.",
+                " &f▪ Вы получите &b&l&n60&9&l Flex&f&lCoin &fза покупку",
+                "",
+                "&fПокупать донат на сайте: &3www.FlexingWorld.net"));
 
         // Статус premium (Премиумбамбони)
         ItemStack premium = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/279a2375363be891381d42c45b377553c2b6e0fbdc16def5fbc6b32ed5cad7a7", 1)).build();
-        this.inv.setItem(29, Items.name(premium, "&fПривилегия &5&lПремиумбамбони &f- &a&l49 Руб.&f/мес.",
+        getInventory().setItem(29, Items.name(premium, "&fПривилегия &5&lПремиумбамбони &f- &a&l49 Руб.&f/мес.",
                 "",
-                " &5• &fПрефикс в чат и таб: &7«&5&lПремиумбамбони&7» &7" + player.getDisplayName(),
+                " &5• &fПрефикс в чат и таб: &7«&5&lПремиумбамбони&7» &7" + player.getName(),
                 " &5• &fПример сообщения в чате:",
-                "&7«&5&lПремиумбамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&5&lПремиумбамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &5◆ &fВозможность получить набор &5&lPREMIUM: &5/kit premium",
                 " &5◆ &fВозможность одеть блок или предмет на голову: &5/hat",
@@ -77,11 +84,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус creative (Чикикреатив)
         ItemStack creative = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/f718dbf107c6a31763b30298d1b09fe9e836da634c556723ee41a475ddb2", 1)).build();
-        this.inv.setItem(30, Items.name(creative, "&fПривилегия &9&lЧикикреатив &f- &a&l69 Руб.&f/мес.",
+        getInventory().setItem(30, Items.name(creative, "&fПривилегия &9&lЧикикреатив &f- &a&l69 Руб.&f/мес.",
                 "",
-                " &9• &fПрефикс в чат и таб: &7«&9&lЧикикреатив&7» &7" + player.getDisplayName(),
+                " &9• &fПрефикс в чат и таб: &7«&9&lЧикикреатив&7» &7" + player.getName(),
                 " &9• &fПример сообщения в чате:",
-                "&7«&9&lЧикикреатив&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&9&lЧикикреатив&7» &7" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &9◆ &fВозможность запросить телепорт к себе: &9/tpahere",
                 " &9◆ &fВозможность установить &9&l12 &fточек дома: &9/sethome",
@@ -101,11 +108,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус moder (Чикимодератор)
         ItemStack moder = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/78d26c4293faad7e0fd1e91c71dc58b4ebc38c90dabac915559768d2d9f4af", 1)).build();
-        this.inv.setItem(37, Items.name(moder, "&fПривилегия &e&lЧикимодератор &f- &a&l99 Руб.",
+        getInventory().setItem(37, Items.name(moder, "&fПривилегия &e&lЧикимодератор &f- &a&l99 Руб.",
                 "",
-                " &e• &fПрефикс в чат и таб: &7«&e&lЧикимодератор&7» &7" + player.getDisplayName(),
+                " &e• &fПрефикс в чат и таб: &7«&e&lЧикимодератор&7» &7" + player.getName(),
                 " &e• &fПример сообщения в чате:",
-                "&7«&e&lЧикимодератор&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&e&lЧикимодератор&7» &7" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &e◆ &fВозможность выдать себе опыт: &e/exp",
                 " &e◆ &fВозможность установить &e&l15 &fточек дома: &e/sethome",
@@ -124,11 +131,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус chikibamboni (Чикибамбони)
         ItemStack chikibamboni = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/3f3c11c62e72fc963ea5bbda649ea9d45497256736fe3c1df1f2e38cf935b72", 1)).build();
-        this.inv.setItem(38, Items.name(chikibamboni, "&fПривилегия &3&lЧикибамбони &f- &a&l129 Руб.",
+        getInventory().setItem(38, Items.name(chikibamboni, "&fПривилегия &3&lЧикибамбони &f- &a&l129 Руб.",
                 "",
-                " &3• &fПрефикс в чат и таб: &7«&3&lЧикибамбони&7» &7" + player.getDisplayName(),
+                " &3• &fПрефикс в чат и таб: &7«&3&lЧикибамбони&7» &7" + player.getName(),
                 " &3• &fПример сообщения в чате:",
-                "&7«&3&lЧикибамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&3&lЧикибамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &3◆ &fВозможность тп к игрокам: &3/tp",
                 " &3◆ &fВозможность установить &3&l20&f точек дома: &3/sethome",
@@ -146,11 +153,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус admin (Чикибамбони)
         ItemStack admin = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/3e427adff356f0945ebba391ca0eef465ae17461ea7c53ad173fbb6c7f36a8", 1)).build();
-        this.inv.setItem(39, Items.name(admin, "&fПривилегия &b&lАдминобамбони &f- &a&l179 Руб.",
+        getInventory().setItem(39, Items.name(admin, "&fПривилегия &b&lАдминобамбони &f- &a&l179 Руб.",
                 "",
-                " &b• &fПрефикс в чат и таб: &7«&b&lАдминобамбони&7» &7" + player.getDisplayName(),
+                " &b• &fПрефикс в чат и таб: &7«&b&lАдминобамбони&7» &7" + player.getName(),
                 " &b• &fПример сообщения в чате:",
-                "&7«&b&lАдминобамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&b&lАдминобамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &b◆ &fВозможность изменить ник: &b/nick [новый ник]",
                 " &b◆ &fВозможность установить время только у себя: &b/ptime",
@@ -168,11 +175,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус chikybambonylla (Админобамбони)
         ItemStack chikybambonylla = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/58b3ffd37e6f32a4e7c1aba2cb484923cf695f447c879e712ec25a613e010", 1)).build();
-        this.inv.setItem(32, Items.name(chikybambonylla, "&fПривилегия &2&lЧикибамбонила &f- &a&l219 Руб.",
+        getInventory().setItem(32, Items.name(chikybambonylla, "&fПривилегия &2&lЧикибамбонила &f- &a&l219 Руб.",
                 "",
-                " &2• &fПрефикс в чат и таб: &7«&2&lЧикибамбонила&7» &7" + player.getDisplayName(),
+                " &2• &fПрефикс в чат и таб: &7«&2&lЧикибамбонила&7» &7" + player.getName(),
                 " &2• &fПример сообщения в чате:",
-                "&7«&2&lЧикибамбонила&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&2&lЧикибамбонила&7» &7" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &2◆ &fВозможность кикнуть недоброжелателя: &2/kick [ник игрока]",
                 " &2◆ &fВозможность открыть инвентарь игрока: &2/invsee [ник игрока]",
@@ -184,7 +191,7 @@ public class GroupsMenu implements InvMenu {
                 " &2◆ &fВозможность установить &2&l50 &fточек дома (максимум): &2/sethome",
                 " &2◆ &fВозможность писать цветным текстом в чате",
                 " &2• &fПример сообщения в чате:",
-                "&7«&2&lЧикибамбонила&7» &7" + player.getDisplayName() + " &8→ &3Fisting &5ass",
+                "&7«&2&lЧикибамбонила&7» &7" + player.getName() + " &8→ &3Fisting &5ass",
                 "",
                 " &c▪ Донат выдается на &c&lвсе &cсервера.",
                 " &6▪ Возможности &6&lпредыдущих &6донатов.",
@@ -195,11 +202,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус sponsor (Спонсорбамбони)
         ItemStack sponsor = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/c1df70dc9885e418b58d8e7486a81ed4ec2e7963c42569c468084d4f567c6", 1)).build();
-        inv.setItem(33, Items.name(sponsor, "&fПривилегия &d&lСпонсорбамбони &f- &a&l299 Руб.",
+        getInventory().setItem(33, Items.name(sponsor, "&fПривилегия &d&lСпонсорбамбони &f- &a&l299 Руб.",
                 "",
-                " &d• &fПрефикс в чат и таб: &7«&d&lСпонсорбамбони&7» &7" + player.getDisplayName(),
+                " &d• &fПрефикс в чат и таб: &7«&d&lСпонсорбамбони&7» &7" + player.getName(),
                 " &d• &fПример сообщения в чате:",
-                "&7«&d&lСпонсорбамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&d&lСпонсорбамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &d◆ &fВозможность забанить самых настырных: &d/ban 30m",
                 " &d◆ &fВозможность выдать флай другу: &d/fly",
@@ -219,11 +226,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус owner (Чикивладелец)
         ItemStack owner = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/6c92e3f45b49e405670224892f93ebc84fa7f8c96c36aab24a8854f2cbf0b8", 1)).build();
-        inv.setItem(34, Items.name(owner, "&fПривилегия &6&lЧикивладелец &f- &a&l449 Руб.",
+        getInventory().setItem(34, Items.name(owner, "&fПривилегия &6&lЧикивладелец &f- &a&l449 Руб.",
                 "",
-                " &6• &fПрефикс в чат и таб: &7«&6&lЧикивладелец&7» &7" + player.getDisplayName(),
+                " &6• &fПрефикс в чат и таб: &7«&6&lЧикивладелец&7» &7" + player.getName(),
                 " &6• &fПример сообщения в чате:",
-                "&7«&6&lЧикивладелец&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&6&lЧикивладелец&7» &7" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &6◆ &fУвеличено допустимое время для бана игрока: &6/ban 2h",
                 " &6◆ &fВозможность сетать территорию &6800 000 &fблоков",
@@ -249,11 +256,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус bombaster (Чикибомбастер)
         ItemStack bombaster = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/b88fb6b2b3efa6ab299f9f4e7d8c1a1d7338753bdf8fef81075f2155943bc69", 1)).build();
-        this.inv.setItem(41, Items.name(bombaster, "&fПривилегия &c&lЧикибомбастер &f- &a&l699 Руб.",
+        getInventory().setItem(41, Items.name(bombaster, "&fПривилегия &c&lЧикибомбастер &f- &a&l699 Руб.",
                 "",
-                " &c• &fПрефикс в чат и таб: &7«&c&lЧикибомбастер&7» &f" + player.getDisplayName(),
+                " &c• &fПрефикс в чат и таб: &7«&c&lЧикибомбастер&7» &f" + player.getName(),
                 " &c• &fПример сообщения в чате:",
-                "&7«&c&lЧикибомбастер&7» &f" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&c&lЧикибомбастер&7» &f" + player.getName() + " &8→ &7Hello World!",
                 "",
                 " &c◆ &fПолный доступ к &c&n&lRTP:&c /rtp help",
                 " &c◆ &fДоступ к ванишу: &c/vanish",
@@ -279,11 +286,11 @@ public class GroupsMenu implements InvMenu {
 
         // Статус god (Чикибомбастер)
         ItemStack god = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/b88fb6b2b3efa6ab299f9f4e7d8c1a1d7338753bdf8fef81075f2155943bc69", 1)).build();
-        this.inv.setItem(42, Items.name(god, "&fПривилегия &4&lЧикибамбог &f- &a&l2499 Руб.",
+        getInventory().setItem(42, Items.name(god, "&fПривилегия &4&lЧикибамбог &f- &a&l2499 Руб.",
                 "",
-                " &4• &fПрефикс в чат и таб: &7«&4&lЧикибамбог&7» &f" + player.getDisplayName(),
+                " &4• &fПрефикс в чат и таб: &7«&4&lЧикибамбог&7» &f" + player.getName(),
                 " &4• &fПример сообщения в чате:",
-                "&7«&4&lЧикибамбог&7» &f" + player.getDisplayName() + " &8→ &7Hello World!",
+                "&7«&4&lЧикибамбог&7» &f" + player.getName() + " &8→ &7Hello World!",
                 " &4• &fВключён &4&n&lиммунитет&f от бана/кика &7(но Админ сервера сможет забанить)",
                 "",
                 "&c&lВоистину королевская привилегия для олигархичей",
@@ -315,7 +322,7 @@ public class GroupsMenu implements InvMenu {
         // Информация
         ItemStack information = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/9c96be7886eb7df75525a363e5f549626c21388f0fda988a6e8bf487a53", 1)).build();
 
-        this.inv.setItem(43, Items.name(information, "&2&lИнформация", "", "&fЧтобы приобрести привилегию, нужно выполнить простой алгоритм:",
+        getInventory().setItem(43, Items.name(information, "&2&lИнформация", "", "&fЧтобы приобрести привилегию, нужно выполнить простой алгоритм:",
                 "&a• &fПерейти на сайт для покупки доната: &c&lFlexingWorld.net", "&a• &fВвести в первое поле свой игровой никнейм",
                 "&a• &fВыбрать привилегию во втором поле", "&a• &fПерейти по кнопке &aкупить &fна форму оплаты", "",
                 "&4&l[!] &fДонат привилегия будет выдана", "    &fмоментально и автоматически после покупки доната!", "",
@@ -323,67 +330,61 @@ public class GroupsMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
+    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clicktype) {
         switch (slot) {
             case 8:
-                player.closeInventory();
+                player.getBukkitPlayer().closeInventory();
                 break;
             case 11:
-                player.openInventory(new AnarchyMenu(player).getInventory());
+                Invs.forceOpen(player.getBukkitPlayer(), new AnarchyMenu(player));
                 break;
             case 12:
-                player.openInventory(new MiniGamesGroups(player).getInventory());
+                Invs.forceOpen(player.getBukkitPlayer(), new MiniGamesGroups(player));
                 break;
             case 14:
-                player.openInventory(new MoneyMenu(player).getInventory());
+                Invs.forceOpen(player.getBukkitPlayer(), new MoneyMenu(player));
                 break;
             case 15:
-                player.openInventory(new CautionMenu(player).getInventory());
+                Invs.forceOpen(player.getBukkitPlayer(), new CautionMenu(player));;
                 break;
             case 16:
-                player.openInventory(new AdminsMenu(player).getInventory());
+                Invs.forceOpen(player.getBukkitPlayer(), new AdminsMenu(player));
                 break;
             case 40:
-                player.openInventory(new FlexCoinsMenu(player).getInventory());
+                Invs.forceOpen(player.getBukkitPlayer(), new FlexCoinsMenu(player));
                 break;
         }
     }
 
-    @Override
-    public Inventory getInventory() {
-        return this.inv;
-    }
-
-    private static class MiniGamesGroups implements InvMenu {
+    private static class MiniGamesGroups extends InvMenuImpl {
         private static final Set<Integer> GLASS_PANE_SLOT = ImmutableSet.of(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(13), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(22), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(31), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(49), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
-        private final Inventory inv;
 
-        public MiniGamesGroups(Player player) {
-            this.inv = Bukkit.createInventory(this, 54, "Донат привилегии | Мини-игры");
+        public MiniGamesGroups(NetworkPlayer player) {
+            super(Bukkit.createInventory(null, 54, "Донат привилегии | Мини-игры"));
 
             ItemStack GLASS_PANE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
             ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
             GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
             GLASS_PANE.setItemMeta(GLASS_PANE_META);
-            this.GLASS_PANE_SLOT.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE));
+            this.GLASS_PANE_SLOT.forEach(slot -> getInventory().setItem(slot.intValue(), GLASS_PANE));
 
-            this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
-            this.inv.setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
-            this.inv.setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
-            this.inv.setItem(12, Items.name(Items.glow(Material.IRON_SWORD), "&f&lВы просматриваете возможности на &b&lМини-играх"));
-            this.inv.setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
-            this.inv.setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
-            this.inv.setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
-            this.inv.setItem(40, Items.name(Items.glow(Material.ENDER_PEARL), "&9&lFlex&f&lCoins"));
+            getInventory().setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
+            getInventory().setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
+            getInventory().setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
+            getInventory().setItem(12, Items.name(Items.glow(Material.IRON_SWORD), "&f&lВы просматриваете возможности на &b&lМини-играх"));
+            getInventory().setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
+            getInventory().setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
+            getInventory().setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
+            getInventory().setItem(40, Items.name(Items.glow(Material.ENDER_PEARL), "&9&lFlex&f&lCoins"));
 
             // Статус VIP (Чикибамбвипка)
             ItemStack vip = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
 
-            this.inv.setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.",
+            getInventory().setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.",
                     "",
-                    " &a• &fПрефикс в чат и таб: &7«&a&lЧикибамбвипка&7» &7" + player.getDisplayName(),
+                    " &a• &fПрефикс в чат и таб: &7«&a&lЧикибамбвипка&7» &7" + player.getName(),
                     " &a• &fПример сообщения в чате:",
-                    "&7«&a&lЧикибамбвипка&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&a&lЧикибамбвипка&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на мини-играх нет!",
                     "",
@@ -395,11 +396,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус premium (Премиумбамбони)
             ItemStack premium = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
-            this.inv.setItem(29, Items.name(premium, "&fПривилегия &5&lПремиумбамбони &f- &a&l49 Руб.&f/мес.",
+            getInventory().setItem(29, Items.name(premium, "&fПривилегия &5&lПремиумбамбони &f- &a&l49 Руб.&f/мес.",
                     "",
-                    " &5• &fПрефикс в чат и таб: &7«&5&lПремиумбамбони&7» &7" + player.getDisplayName(),
+                    " &5• &fПрефикс в чат и таб: &7«&5&lПремиумбамбони&7» &7" + player.getName(),
                     " &5• &fПример сообщения в чате:",
-                    "&7«&5&lПремиумбамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&5&lПремиумбамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на мини-играх нет!",
                     "",
@@ -412,11 +413,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус creative (Чикикреатив)
             ItemStack creative = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
-            this.inv.setItem(30, Items.name(creative, "&fПривилегия &9&lЧикикреатив &f- &a&l69 Руб.&f/мес.",
+            getInventory().setItem(30, Items.name(creative, "&fПривилегия &9&lЧикикреатив &f- &a&l69 Руб.&f/мес.",
                     "",
-                    " &9• &fПрефикс в чат и таб: &7«&9&lЧикикреатив&7» &7" + player.getDisplayName(),
+                    " &9• &fПрефикс в чат и таб: &7«&9&lЧикикреатив&7» &7" + player.getName(),
                     " &9• &fПример сообщения в чате:",
-                    "&7«&9&lЧикикреатив&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&9&lЧикикреатив&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на мини-играх нет!",
                     "",
@@ -429,11 +430,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус moder (Чикимодератор)
             ItemStack moder = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
-            this.inv.setItem(37, Items.name(moder, "&fПривилегия &e&lЧикимодератор &f- &a&l99 Руб.",
+            getInventory().setItem(37, Items.name(moder, "&fПривилегия &e&lЧикимодератор &f- &a&l99 Руб.",
                     "",
-                    " &e• &fПрефикс в чат и таб: &7«&e&lЧикимодератор&7»  &7" + player.getDisplayName(),
+                    " &e• &fПрефикс в чат и таб: &7«&e&lЧикимодератор&7»  &7" + player.getName(),
                     " &e• &fПример сообщения в чате:",
-                    "&7«&e&lЧикимодератор&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&e&lЧикимодератор&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на мини-играх нет!",
                     "",
@@ -446,11 +447,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус chikibamboni (Чикибамбони)
             ItemStack chikibamboni = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
-            this.inv.setItem(38, Items.name(chikibamboni, "&fПривилегия &3&lЧикибамбони &f- &a&l129 Руб.",
+            getInventory().setItem(38, Items.name(chikibamboni, "&fПривилегия &3&lЧикибамбони &f- &a&l129 Руб.",
                     "",
-                    " &3• &fПрефикс в чат и таб: &7«&3&lЧикибамбони&7» &7" + player.getDisplayName(),
+                    " &3• &fПрефикс в чат и таб: &7«&3&lЧикибамбони&7» &7" + player.getName(),
                     " &3• &fПример сообщения в чате:",
-                    "&7«&3&lЧикибамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&3&lЧикибамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на мини-играх нет!",
                     "",
@@ -463,11 +464,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус admin (Админобамбони)
             ItemStack admin = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/3e427adff356f0945ebba391ca0eef465ae17461ea7c53ad173fbb6c7f36a8", 1)).build();
-            this.inv.setItem(39, Items.name(admin, "&fПривилегия &b&lАдминобамбони &f- &a&l179 Руб.",
+            getInventory().setItem(39, Items.name(admin, "&fПривилегия &b&lАдминобамбони &f- &a&l179 Руб.",
                     "",
-                    " &b• &fПрефикс в чат и таб: &7«&b&lАдминобамбони&7» &7" + player.getDisplayName(),
+                    " &b• &fПрефикс в чат и таб: &7«&b&lАдминобамбони&7» &7" + player.getName(),
                     " &b• &fПример сообщения в чате:",
-                    "&7«&b&lАдминобамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&b&lАдминобамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &b◆ &fВозможность изменить ник: &b/nick [новый ник]",
                     " &b◆ &fВозможность узнать настоящий ник игрока: &b/realname [ник игрока]", "",
@@ -481,16 +482,16 @@ public class GroupsMenu implements InvMenu {
 
             // Статус chikybambonylla (Чикибамбонила)
             ItemStack chikybambonylla = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/58b3ffd37e6f32a4e7c1aba2cb484923cf695f447c879e712ec25a613e010", 1)).build();
-            this.inv.setItem(32, Items.name(chikybambonylla, "&fПривилегия &2&lЧикибамбонила &f- &a&l219 Руб.",
+            getInventory().setItem(32, Items.name(chikybambonylla, "&fПривилегия &2&lЧикибамбонила &f- &a&l219 Руб.",
                     "",
-                    " &2• &fПрефикс в чат и таб: &7«&2&lЧикибамбонила&7» &7" + player.getDisplayName(),
+                    " &2• &fПрефикс в чат и таб: &7«&2&lЧикибамбонила&7» &7" + player.getName(),
                     " &2• &fПример сообщения в чате:",
-                    "&7«&2&lЧикибамбонила&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&2&lЧикибамбонила&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &2◆ &fВозможность кикнуть недоброжелателя: &2/kick [ник игрока]",
                     " &2◆ &fВозможность писать цветным текстом в чате",
                     " &2• &fПример сообщения в чате:",
-                    "&7«&2&lЧикибамбонила&7» &7" + player.getDisplayName() + " &8→ &3Fisting &5ass",
+                    "&7«&2&lЧикибамбонила&7» &7" + player.getName() + " &8→ &3Fisting &5ass",
                     "",
                     " &c▪ Донат выдается на &c&lвсе &cсервера.",
                     " &6▪ Возможности &6&lпредыдущих &6донатов.",
@@ -505,11 +506,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус sponsor (Спонсорбамбони)
             ItemStack sponsor = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/c1df70dc9885e418b58d8e7486a81ed4ec2e7963c42569c468084d4f567c6", 1)).build();
-            this.inv.setItem(33, Items.name(sponsor, "&fПривилегия &d&lСпонсорбамбони &f- &a&l299 Руб.",
+            getInventory().setItem(33, Items.name(sponsor, "&fПривилегия &d&lСпонсорбамбони &f- &a&l299 Руб.",
                     "",
-                    " &d• &fПрефикс в чат и таб: &7«&d&lСпонсорбамбони&7» &7" + player.getDisplayName(),
+                    " &d• &fПрефикс в чат и таб: &7«&d&lСпонсорбамбони&7» &7" + player.getName(),
                     " &d• &fПример сообщения в чате:",
-                    "&7«&d&lСпонсорбамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&d&lСпонсорбамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &d◆ &fВозможность забанить самых настырных: &d/ban 30m",
                     "",
@@ -526,11 +527,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус owner (Чикивладелец)
             ItemStack owner = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/6c92e3f45b49e405670224892f93ebc84fa7f8c96c36aab24a8854f2cbf0b8", 1)).build();
-            this.inv.setItem(34, Items.name(owner, "&fПривилегия &6&lЧикивладелец &f- &a&l449 Руб.",
+            getInventory().setItem(34, Items.name(owner, "&fПривилегия &6&lЧикивладелец &f- &a&l449 Руб.",
                     "",
-                    " &6• &fПрефикс в чат и таб: &7«&6&lЧикивладелец&7» &7" + player.getDisplayName(),
+                    " &6• &fПрефикс в чат и таб: &7«&6&lЧикивладелец&7» &7" + player.getName(),
                     " &6• &fПример сообщения в чате:",
-                    "&7«&6&lЧикивладелец&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&6&lЧикивладелец&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "",
                     " &6◆ &fУвеличено допустимое время для бана игрока: &6/ban 2h",
@@ -548,11 +549,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус bombaster (Чикибомбастер)
             ItemStack bombaster = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/b88fb6b2b3efa6ab299f9f4e7d8c1a1d7338753bdf8fef81075f2155943bc69", 1)).build();
-            this.inv.setItem(41, Items.name(bombaster, "&fПривилегия &c&lЧикибомбастер &f- &a&l699 Руб.",
+            getInventory().setItem(41, Items.name(bombaster, "&fПривилегия &c&lЧикибомбастер &f- &a&l699 Руб.",
                     "",
-                    " &c• &fПрефикс в чат и таб: &7«&c&lЧикибомбастер&7» &f" + player.getDisplayName(),
+                    " &c• &fПрефикс в чат и таб: &7«&c&lЧикибомбастер&7» &f" + player.getName(),
                     " &c• &fПример сообщения в чате:",
-                    "&7«&c&lЧикибомбастер&7» &f" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&c&lЧикибомбастер&7» &f" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &c◆ &fУвеличено допустимое время для бана игрока: &c/ban 1week",
                     "",
@@ -565,11 +566,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус god (Чикибамбог)
             ItemStack god = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/b88fb6b2b3efa6ab299f9f4e7d8c1a1d7338753bdf8fef81075f2155943bc69", 1)).build();
-            this.inv.setItem(42, Items.name(god, "&fПривилегия &4&lЧикибамбог &f- &a&l2499 Руб.",
+            getInventory().setItem(42, Items.name(god, "&fПривилегия &4&lЧикибамбог &f- &a&l2499 Руб.",
                     "",
-                    " &4• &fПрефикс в чат и таб: &7«&4&lЧикибамбог&7» &7" + player.getDisplayName(),
+                    " &4• &fПрефикс в чат и таб: &7«&4&lЧикибамбог&7» &7" + player.getName(),
                     " &4• &fПример сообщения в чате:",
-                    "&7«&4&lЧикибамбог&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&4&lЧикибамбог&7» &7" + player.getName() + " &8→ &7Hello World!",
                     " &4• &fВключён &4&n&lиммунитет&f от бана/кика &7(но Админ сервера сможет забанить)",
                     "",
                     "&c&lВоистину королевская привилегия для олигархичей",
@@ -596,7 +597,7 @@ public class GroupsMenu implements InvMenu {
 
             // Информация
             ItemStack information = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/9c96be7886eb7df75525a363e5f549626c21388f0fda988a6e8bf487a53", 1)).build();
-            this.inv.setItem(43, Items.name(information, "&2&lИнформация", "", "&fЧтобы приобрести привилегию, нужно выполнить простой алгоритм:",
+            getInventory().setItem(43, Items.name(information, "&2&lИнформация", "", "&fЧтобы приобрести привилегию, нужно выполнить простой алгоритм:",
                     "&a• &fПерейти на сайт для покупки доната: &c&lFlexingWorld.net", "&a• &fВвести в первое поле свой игровой никнейм",
                     "&a• &fВыбрать привилегию во втором поле", "&a• &fПерейти по кнопке &aкупить &fна форму оплаты", "",
                     "&4&l[!] &fДонат привилегия будет выдана", "    &fмоментально и автоматически после покупки доната!", "",
@@ -604,66 +605,60 @@ public class GroupsMenu implements InvMenu {
         }
 
         @Override
-        public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
+        public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
                 case 10:
-                    player.openInventory(new GroupsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new GroupsMenu(player).getInventory());
                     break;
                 case 11:
-                    player.openInventory(new AnarchyMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new AnarchyMenu(player).getInventory());
                     break;
                 case 14:
-                    player.openInventory(new MoneyMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new MoneyMenu(player).getInventory());
                     break;
                 case 15:
-                    player.openInventory(new CautionMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new CautionMenu(player).getInventory());
                     break;
                 case 16:
-                    player.openInventory(new AdminsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new AdminsMenu(player).getInventory());
                     break;
                 case 40:
-                    player.openInventory(new FlexCoinsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new FlexCoinsMenu(player).getInventory());
                     break;
             }
         }
-
-        @Override
-        public Inventory getInventory() {
-            return this.inv;
-        }
     }
 
-    private static class AnarchyMenu implements InvMenu {
+    private static class AnarchyMenu extends InvMenuImpl {
         private static final Set<Integer> GLASS_PANE_SLOT = ImmutableSet.of(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(13), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(22), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(31), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(49), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
-        private final Inventory inv;
 
-        public AnarchyMenu(Player player) {
-            this.inv = Bukkit.createInventory(this, 54, "Донат привилегии | Анархия");
+        public AnarchyMenu(NetworkPlayer player) {
+            super(Bukkit.createInventory(null, 54, "Донат привилегии | Анархия"));
 
             ItemStack GLASS_PANE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
             ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
             GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
             GLASS_PANE.setItemMeta(GLASS_PANE_META);
-            this.GLASS_PANE_SLOT.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE));
+            this.GLASS_PANE_SLOT.forEach(slot -> getInventory().setItem(slot.intValue(), GLASS_PANE));
 
-            this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
-            this.inv.setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
-            this.inv.setItem(11, Items.name(Items.glow(Material.TNT), "&f&lВы просматриваете возможности на &c&lАнархии"));
-            this.inv.setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
-            this.inv.setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
-            this.inv.setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
-            this.inv.setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
-            this.inv.setItem(40, Items.name(Items.glow(Material.ENDER_PEARL), "&9&lFlex&f&lCoins"));
+            getInventory().setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
+            getInventory().setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
+            getInventory().setItem(11, Items.name(Items.glow(Material.TNT), "&f&lВы просматриваете возможности на &c&lАнархии"));
+            getInventory().setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
+            getInventory().setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
+            getInventory().setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
+            getInventory().setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
+            getInventory().setItem(40, Items.name(Items.glow(Material.ENDER_PEARL), "&9&lFlex&f&lCoins"));
 
             // Статус VIP (Чикибамбвипка)
             ItemStack vip = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
 
-            this.inv.setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.",
+            getInventory().setItem(28, Items.name(vip, "&fПривилегия &a&lЧикибамбвипка &f- &a&l29 Руб.&f/мес.",
                     "",
-                    " &a• &fПрефикс в чат и таб: &7«&a&lЧикибамбвипка&7» &7" + player.getDisplayName(),
+                    " &a• &fПрефикс в чат и таб: &7«&a&lЧикибамбвипка&7» &7" + player.getName(),
                     " &a• &fПример сообщения в чате:",
-                    "&7«&a&lЧикибамбвипка&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&a&lЧикибамбвипка&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на анархии нет!",
                     "",
@@ -675,11 +670,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус premium (Премиумбамбони)
             ItemStack premium = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
-            this.inv.setItem(29, Items.name(premium, "&fПривилегия &5&lПремиумбамбони &f- &a&l49 Руб.&f/мес.",
+            getInventory().setItem(29, Items.name(premium, "&fПривилегия &5&lПремиумбамбони &f- &a&l49 Руб.&f/мес.",
                     "",
-                    " &5• &fПрефикс в чат и таб: &7«&5&lПремиумбамбони&7» &7" + player.getDisplayName(),
+                    " &5• &fПрефикс в чат и таб: &7«&5&lПремиумбамбони&7» &7" + player.getName(),
                     " &5• &fПример сообщения в чате:",
-                    "&7«&5&lПремиумбамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&5&lПремиумбамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на анархии нет!",
                     "",
@@ -692,11 +687,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус creative (Чикикреатив)
             ItemStack creative = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
-            this.inv.setItem(30, Items.name(creative, "&fПривилегия &9&lЧикикреатив &f- &a&l69 Руб.&f/мес.",
+            getInventory().setItem(30, Items.name(creative, "&fПривилегия &9&lЧикикреатив &f- &a&l69 Руб.&f/мес.",
                     "",
-                    " &9• &fПрефикс в чат и таб: &7«&9&lЧикикреатив&7» &7" + player.getDisplayName(),
+                    " &9• &fПрефикс в чат и таб: &7«&9&lЧикикреатив&7» &7" + player.getName(),
                     " &9• &fПример сообщения в чате:",
-                    "&7«&9&lЧикикреатив&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&9&lЧикикреатив&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на анархии нет!",
                     "",
@@ -709,11 +704,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус moder (Чикимодератор)
             ItemStack moder = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
-            this.inv.setItem(37, Items.name(moder, "&fПривилегия &e&lЧикимодератор &f- &a&l99 Руб.",
+            getInventory().setItem(37, Items.name(moder, "&fПривилегия &e&lЧикимодератор &f- &a&l99 Руб.",
                     "",
-                    " &e• &fПрефикс в чат и таб: &7«&e&lЧикимодератор&7»  &7" + player.getDisplayName(),
+                    " &e• &fПрефикс в чат и таб: &7«&e&lЧикимодератор&7»  &7" + player.getName(),
                     " &e• &fПример сообщения в чате:",
-                    "&7«&e&lЧикимодератор&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&e&lЧикимодератор&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на анархии нет!",
                     "",
@@ -726,11 +721,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус chikibamboni (Чикибамбони)
             ItemStack chikibamboni = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/595aca72dcce1298475398fb7adff8447c9a670e6cf64dd3933bbc94918e99", 1)).build();
-            this.inv.setItem(38, Items.name(chikibamboni, "&fПривилегия &3&lЧикибамбони &f- &a&l129 Руб.",
+            getInventory().setItem(38, Items.name(chikibamboni, "&fПривилегия &3&lЧикибамбони &f- &a&l129 Руб.",
                     "",
-                    " &3• &fПрефикс в чат и таб: &7«&3&lЧикибамбони&7» &7" + player.getDisplayName(),
+                    " &3• &fПрефикс в чат и таб: &7«&3&lЧикибамбони&7» &7" + player.getName(),
                     " &3• &fПример сообщения в чате:",
-                    "&7«&3&lЧикибамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&3&lЧикибамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     "&c&lУ данной привилегии прав на анархии нет!",
                     "",
@@ -743,11 +738,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус admin (Админобамбони)
             ItemStack admin = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/3e427adff356f0945ebba391ca0eef465ae17461ea7c53ad173fbb6c7f36a8", 1)).build();
-            this.inv.setItem(39, Items.name(admin, "&fПривилегия &b&lАдминобамбони &f- &a&l179 Руб.",
+            getInventory().setItem(39, Items.name(admin, "&fПривилегия &b&lАдминобамбони &f- &a&l179 Руб.",
                     "",
-                    " &b• &fПрефикс в чат и таб: &7«&b&lАдминобамбони&7» &7" + player.getDisplayName(),
+                    " &b• &fПрефикс в чат и таб: &7«&b&lАдминобамбони&7» &7" + player.getName(),
                     " &b• &fПример сообщения в чате:",
-                    "&7«&b&lАдминобамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&b&lАдминобамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &b◆ &fВозможность изменить ник: &b/nick [новый ник]",
                     "",
@@ -760,16 +755,16 @@ public class GroupsMenu implements InvMenu {
 
             // Статус chikybambonylla (Чикибамбонила)
             ItemStack chikybambonylla = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/58b3ffd37e6f32a4e7c1aba2cb484923cf695f447c879e712ec25a613e010", 1)).build();
-            this.inv.setItem(32, Items.name(chikybambonylla, "&fПривилегия &2&lЧикибамбонила &f- &a&l219 Руб.",
+            getInventory().setItem(32, Items.name(chikybambonylla, "&fПривилегия &2&lЧикибамбонила &f- &a&l219 Руб.",
                     "",
-                    " &2• &fПрефикс в чат и таб: &7«&2&lЧикибамбонила&7» &7" + player.getDisplayName(),
+                    " &2• &fПрефикс в чат и таб: &7«&2&lЧикибамбонила&7» &7" + player.getName(),
                     " &2• &fПример сообщения в чате:",
-                    "&7«&2&lЧикибамбонила&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&2&lЧикибамбонила&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &2◆ &fВозможность кикнуть недоброжелателя: &2/kick [ник игрока]",
                     " &2◆ &fВозможность писать цветным текстом в чате",
                     " &2• &fПример сообщения в чате:",
-                    " &7«&2&lЧикибамбонила&7» &7" + player.getDisplayName() + " &8→ &3Fisting &5ass",
+                    " &7«&2&lЧикибамбонила&7» &7" + player.getName() + " &8→ &3Fisting &5ass",
                     "",
                     " &c▪ Донат выдается на &c&lвсе &cсервера.",
                     " &6▪ Возможности &6&lпредыдущих &6донатов.",
@@ -784,11 +779,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус sponsor (Спонсорбамбони)
             ItemStack sponsor = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/c1df70dc9885e418b58d8e7486a81ed4ec2e7963c42569c468084d4f567c6", 1)).build();
-            this.inv.setItem(33, Items.name(sponsor, "&fПривилегия &d&lСпонсорбамбони &f- &a&l299 Руб.",
+            getInventory().setItem(33, Items.name(sponsor, "&fПривилегия &d&lСпонсорбамбони &f- &a&l299 Руб.",
                     "",
-                    " &d• &fПрефикс в чат и таб: &7«&d&lСпонсорбамбони&7» &7" + player.getDisplayName(),
+                    " &d• &fПрефикс в чат и таб: &7«&d&lСпонсорбамбони&7» &7" + player.getName(),
                     " &d• &fПример сообщения в чате:",
-                    "&7«&d&lСпонсорбамбони&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&d&lСпонсорбамбони&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &d◆ &fВозможность забанить самых настырных: &d/ban 30m",
                     "",
@@ -805,11 +800,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус owner (Чикивладелец)
             ItemStack owner = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/6c92e3f45b49e405670224892f93ebc84fa7f8c96c36aab24a8854f2cbf0b8", 1)).build();
-            this.inv.setItem(34, Items.name(owner, "&fПривилегия &6&lЧикивладелец &f- &a&l449 Руб.",
+            getInventory().setItem(34, Items.name(owner, "&fПривилегия &6&lЧикивладелец &f- &a&l449 Руб.",
                     "",
-                    " &6• &fПрефикс в чат и таб: &7«&6&lЧикивладелец&7» &7" + player.getDisplayName(),
+                    " &6• &fПрефикс в чат и таб: &7«&6&lЧикивладелец&7» &7" + player.getName(),
                     " &6• &fПример сообщения в чате:",
-                    "&7«&6&lЧикивладелец&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&6&lЧикивладелец&7» &7" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &6◆ &fУвеличено допустимое время для бана игрока: &6/ban 2h",
                     "",
@@ -826,11 +821,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус bombaster (Чикибомбастер)
             ItemStack bombaster = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/b88fb6b2b3efa6ab299f9f4e7d8c1a1d7338753bdf8fef81075f2155943bc69", 1)).build();
-            this.inv.setItem(41, Items.name(bombaster, "&fПривилегия &c&lЧикибомбастер &f- &a&l699 Руб.",
+            getInventory().setItem(41, Items.name(bombaster, "&fПривилегия &c&lЧикибомбастер &f- &a&l699 Руб.",
                     "",
-                    " &c• &fПрефикс в чат и таб: &7«&c&lЧикибомбастер&7» &f" + player.getDisplayName(),
+                    " &c• &fПрефикс в чат и таб: &7«&c&lЧикибомбастер&7» &f" + player.getName(),
                     " &c• &fПример сообщения в чате:",
-                    "&7«&c&lЧикибомбастер&7» &f" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&c&lЧикибомбастер&7» &f" + player.getName() + " &8→ &7Hello World!",
                     "",
                     " &c◆ &fУвеличено допустимое время для бана игрока: &c/ban 1week",
                     "",
@@ -843,11 +838,11 @@ public class GroupsMenu implements InvMenu {
 
             // Статус god (Чикибомбастер)
             ItemStack god = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/b88fb6b2b3efa6ab299f9f4e7d8c1a1d7338753bdf8fef81075f2155943bc69", 1)).build();
-            this.inv.setItem(42, Items.name(god, "&fПривилегия &4&lЧикибамбог &f- &a&l2499 Руб.",
+            getInventory().setItem(42, Items.name(god, "&fПривилегия &4&lЧикибамбог &f- &a&l2499 Руб.",
                     "",
-                    " &4• &fПрефикс в чат и таб: &7«&4&lЧикибамбог&7» &7" + player.getDisplayName(),
+                    " &4• &fПрефикс в чат и таб: &7«&4&lЧикибамбог&7» &7" + player.getName(),
                     " &4• &fПример сообщения в чате:",
-                    "&7«&4&lЧикибамбог&7» &7" + player.getDisplayName() + " &8→ &7Hello World!",
+                    "&7«&4&lЧикибамбог&7» &7" + player.getName() + " &8→ &7Hello World!",
                     " &4• &fВключён &4&n&lиммунитет&f от бана/кика &7(но Админ сервера сможет забанить)",
                     "",
                     "&c&lВоистину королевская привилегия для олигархичей",
@@ -874,7 +869,7 @@ public class GroupsMenu implements InvMenu {
 
             // Информация
             ItemStack information = new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/9c96be7886eb7df75525a363e5f549626c21388f0fda988a6e8bf487a53", 1)).build();
-            this.inv.setItem(43, Items.name(information, "&2&lИнформация", "", "&fЧтобы приобрести привилегию, нужно выполнить простой алгоритм:",
+            getInventory().setItem(43, Items.name(information, "&2&lИнформация", "", "&fЧтобы приобрести привилегию, нужно выполнить простой алгоритм:",
                     "&a• &fПерейти на сайт для покупки доната: &c&lFlexingWorld.net", "&a• &fВвести в первое поле свой игровой никнейм",
                     "&a• &fВыбрать привилегию во втором поле", "&a• &fПерейти по кнопке &aкупить &fна форму оплаты", "",
                     "&4&l[!] &fДонат привилегия будет выдана", "    &fмоментально и автоматически после покупки доната!", "",
@@ -882,196 +877,173 @@ public class GroupsMenu implements InvMenu {
         }
 
         @Override
-        public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
+        public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
                 case 10:
-                    player.openInventory(new GroupsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new GroupsMenu(player).getInventory());
                     break;
                 case 12:
-                    player.openInventory(new MiniGamesGroups(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new MiniGamesGroups(player).getInventory());
                     break;
                 case 14:
-                    player.openInventory(new MoneyMenu(player).getInventory());;
+                    Invs.forceOpen(player.getBukkitPlayer(), new MoneyMenu(player).getInventory());;
                     break;
                 case 15:
-                    player.openInventory(new CautionMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new CautionMenu(player).getInventory());
                     break;
                 case 16:
-                    player.openInventory(new AdminsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new AdminsMenu(player).getInventory());
                     break;
                 case 40:
-                    player.openInventory(new FlexCoinsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new FlexCoinsMenu(player).getInventory());
                     break;
             }
         }
-
-        @Override
-        public Inventory getInventory() {
-            return this.inv;
-        }
     }
 
-    private static class MoneyMenu implements InvMenu {
+    private static class MoneyMenu extends InvMenuImpl {
         private static final Set<Integer> GLASS_PANE_SLOT = ImmutableSet.of(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(13), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(28), Integer.valueOf(29), Integer.valueOf(30), Integer.valueOf(31), Integer.valueOf(32), Integer.valueOf(33), Integer.valueOf(34), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(37), Integer.valueOf(39), Integer.valueOf(41), Integer.valueOf(42), Integer.valueOf(43), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(49), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
-        private final Inventory inv;
 
-        public MoneyMenu(Player player) {
-            this.inv = Bukkit.createInventory(this, 54, "Куда уйдут деньги с покупки?");
+        public MoneyMenu(NetworkPlayer player) {
+            super(Bukkit.createInventory(null, 54, "Куда уйдут деньги с покупки?"));
 
             ItemStack GLASS_PANE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
             ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
             GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
             GLASS_PANE.setItemMeta(GLASS_PANE_META);
-            this.GLASS_PANE_SLOT.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE));
+            this.GLASS_PANE_SLOT.forEach(slot -> getInventory().setItem(slot.intValue(), GLASS_PANE));
 
-            this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
-            this.inv.setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
-            this.inv.setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
-            this.inv.setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
-            this.inv.setItem(14, Items.name(Items.glow(Material.QUARTZ), "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
-            this.inv.setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
-            this.inv.setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
-            this.inv.setItem(22, Items.name(Items.glow(Material.BOOK), "&b&lКуда уйдут ваши деньги?", "&fБудьте спокойны за свои деньги", "&fОни попадут в хорошие руки"));
-            this.inv.setItem(38, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/82cde068e99a4f98c31f87b4cc06be14b229aca4f7281a416c7e2f553223db74", 1)).build(), "&e&l№1. &fРазвитие сервера", "&fНа сервер тоже требуются деньги!", "&fОплата хостинга, техническое обслуживание", "&fРазработка новых режимов — всё это требует денег"));
-            this.inv.setItem(40, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/82cde068e99a4f98c31f87b4cc06be14b229aca4f7281a416c7e2f553223db74", 1)).build(), "&e&l№2. &fСпонсирование мероприятий", "&fВремя от времени проводятся состязания по BedWars и строительству", "&fПобедители получают денежное вознаграждение!", "&fВсе деньги берутся из бюджета нашего сервера"));
-            this.inv.setItem(42, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/82cde068e99a4f98c31f87b4cc06be14b229aca4f7281a416c7e2f553223db74", 1)).build(), "&e&l№3. &fАдминам и модераторам", "&fАдмины тоже люди!", "&fКаждый из них имеет право получать вознаграждение", "&fЗа все свои труды и силы, которые они вкладывают в сервер"));
+            getInventory().setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
+            getInventory().setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
+            getInventory().setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
+            getInventory().setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
+            getInventory().setItem(14, Items.name(Items.glow(Material.QUARTZ), "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
+            getInventory().setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
+            getInventory().setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
+            getInventory().setItem(22, Items.name(Items.glow(Material.BOOK), "&b&lКуда уйдут ваши деньги?", "&fБудьте спокойны за свои деньги", "&fОни попадут в хорошие руки"));
+            getInventory().setItem(38, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/82cde068e99a4f98c31f87b4cc06be14b229aca4f7281a416c7e2f553223db74", 1)).build(), "&e&l№1. &fРазвитие сервера", "&fНа сервер тоже требуются деньги!", "&fОплата хостинга, техническое обслуживание", "&fРазработка новых режимов — всё это требует денег"));
+            getInventory().setItem(40, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/82cde068e99a4f98c31f87b4cc06be14b229aca4f7281a416c7e2f553223db74", 1)).build(), "&e&l№2. &fСпонсирование мероприятий", "&fВремя от времени проводятся состязания по BedWars и строительству", "&fПобедители получают денежное вознаграждение!", "&fВсе деньги берутся из бюджета нашего сервера"));
+            getInventory().setItem(42, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/82cde068e99a4f98c31f87b4cc06be14b229aca4f7281a416c7e2f553223db74", 1)).build(), "&e&l№3. &fАдминам и модераторам", "&fАдмины тоже люди!", "&fКаждый из них имеет право получать вознаграждение", "&fЗа все свои труды и силы, которые они вкладывают в сервер"));
         }
 
         @Override
-        public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
+        public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
                 case 10:
-                    player.openInventory(new GroupsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new GroupsMenu(player).getInventory());
                     break;
                 case 11:
-                    player.openInventory(new AnarchyMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new AnarchyMenu(player).getInventory());
                     break;
                 case 12:
-                    player.openInventory(new MiniGamesGroups(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new MiniGamesGroups(player).getInventory());
                     break;
                 case 15:
-                    player.openInventory(new CautionMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new CautionMenu(player).getInventory());
                     break;
                 case 16:
-                    player.openInventory(new AdminsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new AdminsMenu(player).getInventory());
                     break;
             }
         }
-
-        @Override
-        public Inventory getInventory() {
-            return this.inv;
-        }
     }
 
-    private static class CautionMenu implements InvMenu {
+    private static class CautionMenu extends InvMenuImpl {
         private static final Set<Integer> GLASS_PANE_SLOT = ImmutableSet.of(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(13), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(28), Integer.valueOf(29), Integer.valueOf(30), Integer.valueOf(31), Integer.valueOf(32), Integer.valueOf(33), Integer.valueOf(34), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(37), Integer.valueOf(39), Integer.valueOf(41), Integer.valueOf(42), Integer.valueOf(43), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(49), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
-        private final Inventory inv;
 
-        public CautionMenu(Player player) {
-            this.inv = Bukkit.createInventory(this, 54, "Обратите внимание");
+        public CautionMenu(NetworkPlayer player) {
+            super(Bukkit.createInventory(null, 54, "Обратите внимание"));
 
             ItemStack GLASS_PANE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
             ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
             GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
             GLASS_PANE.setItemMeta(GLASS_PANE_META);
-            this.GLASS_PANE_SLOT.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE));
+            this.GLASS_PANE_SLOT.forEach(slot -> getInventory().setItem(slot.intValue(), GLASS_PANE));
 
-            this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
-            this.inv.setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
-            this.inv.setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
-            this.inv.setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
-            this.inv.setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
-            this.inv.setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
-            this.inv.setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Администрации", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Администрации", "&7И их возможностях"));
-            this.inv.setItem(22, Items.name(Items.glow(Material.BOOK), "&b&lПредупреждения", "&fЭто три главных условия приобретения доната"));
-            this.inv.setItem(38, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/e7f9c6fef2ad96b3a5465642ba954671be1c4543e2e25e56aef0a47d5f1f", 1)).build(), "&c&l№1", "&fПокупая любую привилегию", "&fВы подтверждаете своё согласие", "&fС &a&lнашими правилами"));
-            this.inv.setItem(40, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/e7f9c6fef2ad96b3a5465642ba954671be1c4543e2e25e56aef0a47d5f1f", 1)).build(), "&c&l№2", "&fВозврат средств за купленную привилегию", "&c&lНе осуществляется &fни при каких обстоятельствах"));
-            this.inv.setItem(42, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/e7f9c6fef2ad96b3a5465642ba954671be1c4543e2e25e56aef0a47d5f1f", 1)).build(), "&c&l№3", "&fЕсли вы совершите серьёзное нарушение", "&fАдмины &c&lвправе &fотобрать у вас привилегию", "&fИмейте это ввиду, используйте свои возможности с умом"));
+            getInventory().setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
+            getInventory().setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
+            getInventory().setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
+            getInventory().setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
+            getInventory().setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
+            getInventory().setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
+            getInventory().setItem(16, Items.name(Material.MAGMA_CREAM, "&a&lВозможности Администрации", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Администрации", "&7И их возможностях"));
+            getInventory().setItem(22, Items.name(Items.glow(Material.BOOK), "&b&lПредупреждения", "&fЭто три главных условия приобретения доната"));
+            getInventory().setItem(38, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/e7f9c6fef2ad96b3a5465642ba954671be1c4543e2e25e56aef0a47d5f1f", 1)).build(), "&c&l№1", "&fПокупая любую привилегию", "&fВы подтверждаете своё согласие", "&fС &a&lнашими правилами"));
+            getInventory().setItem(40, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/e7f9c6fef2ad96b3a5465642ba954671be1c4543e2e25e56aef0a47d5f1f", 1)).build(), "&c&l№2", "&fВозврат средств за купленную привилегию", "&c&lНе осуществляется &fни при каких обстоятельствах"));
+            getInventory().setItem(42, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/e7f9c6fef2ad96b3a5465642ba954671be1c4543e2e25e56aef0a47d5f1f", 1)).build(), "&c&l№3", "&fЕсли вы совершите серьёзное нарушение", "&fАдмины &c&lвправе &fотобрать у вас привилегию", "&fИмейте это ввиду, используйте свои возможности с умом"));
         }
 
         @Override
-        public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
+        public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
                 case 10:
-                    player.openInventory(new GroupsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new GroupsMenu(player).getInventory());
                     break;
                 case 11:
-                    player.openInventory(new AnarchyMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new AnarchyMenu(player).getInventory());
                     break;
                 case 12:
-                    player.openInventory(new MiniGamesGroups(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new MiniGamesGroups(player).getInventory());
                     break;
                 case 14:
-                    player.openInventory(new MoneyMenu(player).getInventory());;
+                    Invs.forceOpen(player.getBukkitPlayer(), new MoneyMenu(player).getInventory());;
                     break;
                 case 16:
-                    player.openInventory(new AdminsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new AdminsMenu(player).getInventory());
                     break;
             }
         }
-
-        @Override
-        public Inventory getInventory() {
-            return this.inv;
-        }
     }
 
-    private static class AdminsMenu implements InvMenu {
+    private static class AdminsMenu extends InvMenuImpl {
         private static final Set<Integer> GLASS_PANE_SLOT = ImmutableSet.of(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4), Integer.valueOf(5), Integer.valueOf(6), Integer.valueOf(7), Integer.valueOf(9), Integer.valueOf(13), Integer.valueOf(17), Integer.valueOf(18), Integer.valueOf(19), Integer.valueOf(20), Integer.valueOf(21), Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(25), Integer.valueOf(26), Integer.valueOf(27), Integer.valueOf(29), Integer.valueOf(31), Integer.valueOf(33), Integer.valueOf(35), Integer.valueOf(36), Integer.valueOf(37), Integer.valueOf(38), Integer.valueOf(39), Integer.valueOf(40), Integer.valueOf(41), Integer.valueOf(42), Integer.valueOf(43), Integer.valueOf(44), Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(47), Integer.valueOf(48), Integer.valueOf(49), Integer.valueOf(50), Integer.valueOf(51), Integer.valueOf(52), Integer.valueOf(53));
-        private final Inventory inv;
 
-        public AdminsMenu(Player player) {
-            this.inv = Bukkit.createInventory(this, 54, "Возможности Админов");
+        public AdminsMenu(NetworkPlayer player) {
+            super(Bukkit.createInventory(null, 54, "Возможности Админов"));
 
             ItemStack GLASS_PANE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15);
             ItemMeta GLASS_PANE_META = GLASS_PANE.getItemMeta();
             GLASS_PANE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
             GLASS_PANE.setItemMeta(GLASS_PANE_META);
-            this.GLASS_PANE_SLOT.forEach(slot -> this.inv.setItem(slot.intValue(), GLASS_PANE));
+            this.GLASS_PANE_SLOT.forEach(slot -> getInventory().setItem(slot.intValue(), GLASS_PANE));
 
-            this.inv.setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
-            this.inv.setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
-            this.inv.setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
-            this.inv.setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
-            this.inv.setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
-            this.inv.setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
-            this.inv.setItem(16, Items.name(Items.glow(Material.MAGMA_CREAM), "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
-            this.inv.setItem(22, Items.name(Items.glow(Material.BOOK), "&b&lПривилегии Администрации", "&fУвидели такого на сервере?", "&fЗначит стоит быть осторожнее", "&fЭти ребята могут дать наказание любому"));
-            this.inv.setItem(28, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/39227fcadc3776d426e56b57882edcf9b08ea1ce8ba2a6da2cccac3e65b5", 1)).build(), "&9&lКибербамбонёнок", "&a&lНаши стажёры", "&fНовички в нашей команде", "&fИм даётся минимальный минимум команд Админов", "&fНо при этом они смогут забанить даже &4&lЧикибамбога", "&fЗато к ним достаточно строгое отношение", "&fАдмины внимательно следят за их действиями"));
-            this.inv.setItem(30, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/fac5013b227a494ec16c4eafab1f84dea572efb2f3c4b5c3ff88252f356a02b", 1)).build(), "&4&lМладший кибербамбони", "&a&lТе, кто показали свои способности", "&fПолноправные Админы сервера", "&fКоторые имеют больше возможностей", "&fНежели наши стажёры", "&fИмеют гораздо более широкий инструментарий", "&fДля Администрирования"));
-            this.inv.setItem(32, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/fac5013b227a494ec16c4eafab1f84dea572efb2f3c4b5c3ff88252f356a02b", 1)).build(), "&4&lСтарший кибербамбони", "&a&lВетераны, заслужившие наше доверие", "&fНа этой должности работают люди", "&fКоторые показали все свои лучшие качества", "&fИ внесли огромный вклад в развитие сервера", "&fУ них есть практически полный доступ к серверу", "&fИ они не ограничены в выдаче наказаний", "&7Разве что опки нет"));
-            this.inv.setItem(34, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/fac5013b227a494ec16c4eafab1f84dea572efb2f3c4b5c3ff88252f356a02b", 1)).build(), "&4&lГлавный кибербамбони", "&c&lНастоящие прародители сервера", "&fЭто действительно влиятельные люди", "&fКоторые работали над сервером", "&fС самого его открытия", "&fУ них есть абсолютно полный доступ", "&fКо всем системам сервера", "&fА также опка", "&fС такими ребятами", "&fЛучше вообще не вступать в конфликты"));
+            getInventory().setItem(8, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/647cf0f3b9ec9df2485a9cd4795b60a391c8e6ebac96354de06e3357a9a88607", 1)).build(), "&3&lНа главную"));
+            getInventory().setItem(10, Items.name(Material.GRASS, "&f&lВозможности на &a&lВыживании"));
+            getInventory().setItem(11, Items.name(Material.TNT, "&f&lВозможности на &c&lАнархии"));
+            getInventory().setItem(12, Items.name(Material.IRON_SWORD, "&f&lВозможности на &b&lМини-играх"));
+            getInventory().setItem(14, Items.name(Material.QUARTZ, "&e&lКуда уйдут деньги с покупки?", "&7Прочитайте этот пункт", "&7Если вам интересно", "&7Что произойдёт с вашими деньгами"));
+            getInventory().setItem(15, Items.name(Items.glow(Material.REDSTONE), "&c&lОбратите внимание", "&7Прочитайте этот пункт", "&7И узнайте об особенностях покупки", "&7Которые нужно учитывать"));
+            getInventory().setItem(16, Items.name(Items.glow(Material.MAGMA_CREAM), "&a&lВозможности Админов", "&7Рекомендуется прочитать этот пункт", "&7Чтобы узнать больше об Админах", "&7И их возможностях"));
+            getInventory().setItem(22, Items.name(Items.glow(Material.BOOK), "&b&lПривилегии Администрации", "&fУвидели такого на сервере?", "&fЗначит стоит быть осторожнее", "&fЭти ребята могут дать наказание любому"));
+            getInventory().setItem(28, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/39227fcadc3776d426e56b57882edcf9b08ea1ce8ba2a6da2cccac3e65b5", 1)).build(), "&9&lКибербамбонёнок", "&a&lНаши стажёры", "&fНовички в нашей команде", "&fИм даётся минимальный минимум команд Админов", "&fНо при этом они смогут забанить даже &4&lЧикибамбога", "&fЗато к ним достаточно строгое отношение", "&fАдмины внимательно следят за их действиями"));
+            getInventory().setItem(30, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/fac5013b227a494ec16c4eafab1f84dea572efb2f3c4b5c3ff88252f356a02b", 1)).build(), "&4&lМладший кибербамбони", "&a&lТе, кто показали свои способности", "&fПолноправные Админы сервера", "&fКоторые имеют больше возможностей", "&fНежели наши стажёры", "&fИмеют гораздо более широкий инструментарий", "&fДля Администрирования"));
+            getInventory().setItem(32, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/fac5013b227a494ec16c4eafab1f84dea572efb2f3c4b5c3ff88252f356a02b", 1)).build(), "&4&lСтарший кибербамбони", "&a&lВетераны, заслужившие наше доверие", "&fНа этой должности работают люди", "&fКоторые показали все свои лучшие качества", "&fИ внесли огромный вклад в развитие сервера", "&fУ них есть практически полный доступ к серверу", "&fИ они не ограничены в выдаче наказаний", "&7Разве что опки нет"));
+            getInventory().setItem(34, Items.name(new ItemBuilder(SkullBuilder.getSkull("https://textures.minecraft.net/texture/fac5013b227a494ec16c4eafab1f84dea572efb2f3c4b5c3ff88252f356a02b", 1)).build(), "&4&lГлавный кибербамбони", "&c&lНастоящие прародители сервера", "&fЭто действительно влиятельные люди", "&fКоторые работали над сервером", "&fС самого его открытия", "&fУ них есть абсолютно полный доступ", "&fКо всем системам сервера", "&fА также опка", "&fС такими ребятами", "&fЛучше вообще не вступать в конфликты"));
         }
 
         @Override
-        public void onClick(ItemStack is, Player player, int slot, ClickType clicktype) {
+        public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clicktype) {
             switch (slot) {
                 case 8:
                 case 10:
-                    player.openInventory(new GroupsMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new GroupsMenu(player).getInventory());
                     break;
                 case 11:
-                    player.openInventory(new AnarchyMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new AnarchyMenu(player).getInventory());
                     break;
                 case 12:
-                    player.openInventory(new MiniGamesGroups(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new MiniGamesGroups(player).getInventory());
                     break;
                 case 14:
-                    player.openInventory(new MoneyMenu(player).getInventory());;
+                    Invs.forceOpen(player.getBukkitPlayer(), new MoneyMenu(player).getInventory());;
                     break;
                 case 15:
-                    player.openInventory(new CautionMenu(player).getInventory());
+                    Invs.forceOpen(player.getBukkitPlayer(), new CautionMenu(player).getInventory());
                     break;
             }
-        }
-
-        @Override
-        public Inventory getInventory() {
-            return this.inv;
         }
     }
 }

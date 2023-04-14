@@ -6,7 +6,7 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
-import com.flexingstudios.FlexingNetwork.api.util.T;
+import com.flexingstudios.FlexingNetwork.api.util.Notifications;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
@@ -76,7 +76,7 @@ public class MysqlWorker extends MysqlThread {
                 } else {
                     String bantime = banto == 0L ? "навсегда" : F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(banto - banfrom + 1)) + "";
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
-                            player.player.kickPlayer(Utilities.colored(T.BanMessage(player.player)
+                            player.player.kickPlayer(Utilities.colored(Notifications.banMessage()
                             .replace("{player}", username)
                             .replace("{reason}", reason)
                             .replace("{admin}", admin)

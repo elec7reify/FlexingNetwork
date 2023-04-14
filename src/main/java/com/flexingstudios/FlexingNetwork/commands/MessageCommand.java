@@ -1,7 +1,7 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
 import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.util.T;
+import com.flexingstudios.FlexingNetwork.api.util.Notifications;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
@@ -78,17 +78,17 @@ public class MessageCommand implements CommandExecutor {
         }
 
         if (!FlexPlayer.get(sender.getBukkitPlayer()).settings.get(1)) {
-            Utilities.msg(sender.player, T.error(sender.username, "Вы отключили личные сообщения"));
+            Utilities.msg(sender.player, Notifications.error(sender.username, "Вы отключили личные сообщения"));
             return;
         }
 
         if (sender.ignored.contains(reciever.getName())) {
-            Utilities.msg(sender.player, T.error("FlexingWorld", "Игрок " + reciever.getName() + " у Вас в игноре."));
+            Utilities.msg(sender.player, Notifications.error("FlexingWorld", "Игрок " + reciever.getName() + " у Вас в игноре."));
             return;
         }
 
         if (!sender.rank.has(Rank.ADMIN) && reciever.ignored.contains(sender.getName())) {
-            Utilities.msg(sender.player, T.error(reciever.getName(),"&cВы в игноре у этого игрока"));
+            Utilities.msg(sender.player, Notifications.error(reciever.getName(),"&cВы в игноре у этого игрока"));
             return;
         }
 

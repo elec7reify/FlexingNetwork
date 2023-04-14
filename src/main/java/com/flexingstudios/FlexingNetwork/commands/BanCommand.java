@@ -5,8 +5,6 @@ import com.flexingstudios.Common.player.Permission;
 import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import org.bukkit.Bukkit;
@@ -34,7 +32,7 @@ public class BanCommand implements CommandExecutor {
 
         if (command.getName().equals("ban")) {
             if (args.length == 0) {
-                Utilities.msg(sender, Language.getMsg(sender, Messages.COMMAND_BAN_USAGE).replace("{command}", "/" + command.getName()));
+                Utilities.msg(sender, Messages.COMMAND_BAN_USAGE.replace("{command}", "/" + command.getName()));
             } else {
                 long time;
                 String reason = "";

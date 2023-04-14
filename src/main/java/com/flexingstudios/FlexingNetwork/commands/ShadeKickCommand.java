@@ -3,7 +3,6 @@ package com.flexingstudios.FlexingNetwork.commands;
 import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import org.bukkit.Bukkit;
@@ -23,7 +22,7 @@ public class ShadeKickCommand implements CommandExecutor {
 
         if (command.getName().equals("shadekick")) {
             if (args.length == 0) {
-                Utilities.msg(commandSender, Language.getMsg(sender, Messages.COMMAND_KICK_USAGE).replace("{command}", "/" + command.getName()));
+                Utilities.msg(commandSender, Messages.COMMAND_KICK_USAGE.replace("{command}", command.getName()));
             } else {
                 String reason = "";
                 if (args.length > 1) {
@@ -33,7 +32,7 @@ public class ShadeKickCommand implements CommandExecutor {
                     reason = sb.substring(0, sb.length() - 1);
                 } else {
                     for (Player players : Bukkit.getOnlinePlayers())
-                        reason = Language.getMsg(players, Messages.REASON_NOT_SPECIFIED);
+                        reason = Messages.REASON_NOT_SPECIFIED;
                 }
 
                 Player targetPlayer = Bukkit.getPlayerExact(args[0]);
@@ -65,13 +64,13 @@ public class ShadeKickCommand implements CommandExecutor {
 
                 if (targetPlayer != null) {
                     for (Player players : Bukkit.getOnlinePlayers())
-                        Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
+                        Utilities.msg(players, Messages.KICKED_BY_ADMIN
                                 .replace("{kicked}", "&cТеневой админ")
                                 .replace("{targetName}", targetPlayer.getName())
                                 .replace("{reason}", reason));
                 } else {
                     for (Player players : Bukkit.getOnlinePlayers())
-                        Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
+                        Utilities.msg(players, Messages.KICKED_BY_ADMIN
                                 .replace("{kicked}", "&cТеневой админ")
                                 .replace("{targetName}", args[0])
                                 .replace("{reason}", reason));

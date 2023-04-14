@@ -4,6 +4,7 @@ import com.flexingstudios.Common.player.Permission;
 import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import gnu.trove.set.hash.TIntHashSet;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -22,16 +23,6 @@ public interface NetworkPlayer {
     void toServer(String id);
     void takeCoins(int amount);
 
-    /**
-     * Set a player language.
-     */
-    void setLanguage(Player player, String iso);
-
-    /**
-     * Get a player language.
-     */
-    String getLanguage(UUID player);
-
     Rank getRank();
 
     default boolean has(Permission permission) {
@@ -45,14 +36,14 @@ public interface NetworkPlayer {
     default boolean hasAndNotify(Rank rank) {
         if (getRank().has(rank))
             return true;
-        Utilities.msg(getBukkitPlayer(), Language.getMsg(getBukkitPlayer(), Messages.NO_RANK).replace("{status}", rank.getColor() + rank.getName()));
+        Utilities.msg(getBukkitPlayer(), Messages.NO_RANK.replace("{status}", rank.getColor() + rank.getName()));
         return false;
     }
 
     default boolean hasAndNotify(Permission permission) {
         if (getRank().has(permission))
             return true;
-        Utilities.msg(getBukkitPlayer(), Language.getMsg(getBukkitPlayer(), Messages.NO_PERMISSION));
+        Utilities.msg(getBukkitPlayer(), Messages.NO_PERMISSION);
         return false;
     }
 
@@ -69,6 +60,8 @@ public interface NetworkPlayer {
     void setMessageOnJoin(MessageOnJoin msg);
     void unlockArrowTrail(ArrowTrail trail);
     void unlockJoinMessage(MessageOnJoin msg);
+    TIntHashSet getAvailableArrowTrails();
+    TIntHashSet getAvailableJoinMessages();
     long getLoginTime();
     int getLevel();
     int getTotalExp();

@@ -3,6 +3,7 @@ package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu;
 import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
+import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.*;
 import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
 import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
@@ -63,8 +64,9 @@ public class ActionsMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
-        MysqlPlayer flPlayer = (MysqlPlayer) FlexPlayer.get(player);
+    public void onClick(ItemStack item, NetworkPlayer nplayer, int slot, ClickType clickType) {
+        MysqlPlayer flPlayer = (MysqlPlayer) FlexPlayer.get(nplayer.getBukkitPlayer());
+        Player player = nplayer.getBukkitPlayer();
 
         switch (slot) {
             case 19:
@@ -78,11 +80,11 @@ public class ActionsMenu implements InvMenu {
                 if (!flPlayer.ignored.contains(target)) {
                     flPlayer.ignored.add(target);
                     player.closeInventory();
-                    Utilities.msg(player, T.success("GOT IT!", "Теперь вы игнорируете игрока " + target));
+                    Utilities.msg(player, Notifications.success("GOT IT!", "Теперь вы игнорируете игрока " + target));
                 } else {
                     flPlayer.ignored.remove(target);
                     player.closeInventory();
-                    Utilities.msg(player, T.success("GOT IT!", "Вы больше не игнорируете игрока " + target));
+                    Utilities.msg(player, Notifications.success("GOT IT!", "Вы больше не игнорируете игрока " + target));
                 }
                 break;
             case 37:

@@ -7,7 +7,7 @@ import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.T;
+import com.flexingstudios.FlexingNetwork.api.util.Notifications;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
@@ -136,7 +136,7 @@ public class FlexingNetwork {
                         System.currentTimeMillis() + ", 1, '" +
                         StringEscapeUtils.escapeSql(admin) + "')");
 
-                player.kickPlayer(Utilities.colored(T.BanMessage(player)
+                player.kickPlayer(Utilities.colored(Notifications.banMessage()
                         .replace("{player}", target)
                         .replace("{admin}", "&cТеневой админ")
                         .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
@@ -152,7 +152,7 @@ public class FlexingNetwork {
                         System.currentTimeMillis() + ", 1, '" +
                         StringEscapeUtils.escapeSql(admin) + "')");
 
-                player.kickPlayer(Utilities.colored(T.BanMessage(player)
+                player.kickPlayer(Utilities.colored(Notifications.banMessage()
                         .replace("{player}", target)
                         .replace("{admin}", "&3" + admin)
                         .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
@@ -170,7 +170,7 @@ public class FlexingNetwork {
                         System.currentTimeMillis() + ", 1, '" +
                         StringEscapeUtils.escapeSql(admin) + "')");
 
-                BungeeBridge.kickPlayer(target, Utilities.colored(T.BanMessage(player)
+                BungeeBridge.kickPlayer(target, Utilities.colored(Notifications.banMessage()
                         .replace("{player}", target)
                         .replace("{admin}", "&cnТеневой админ")
                         .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
@@ -186,7 +186,7 @@ public class FlexingNetwork {
                         System.currentTimeMillis() + ", 1, '" +
                         StringEscapeUtils.escapeSql(admin) + "')");
 
-                BungeeBridge.kickPlayer(target, Utilities.colored(T.BanMessage(player)
+                BungeeBridge.kickPlayer(target, Utilities.colored(Notifications.banMessage()
                         .replace("{player}", target)
                         .replace("{admin}", "&3" + admin)
                         .replace("{time}", F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(time)))
@@ -226,7 +226,7 @@ public class FlexingNetwork {
         Player player = Bukkit.getPlayer(target);
         if (player != null) {
             if (shadeKick) {
-                player.kickPlayer(Utilities.colored(T.formattedKickMessage(player)
+                player.kickPlayer(Utilities.colored(Notifications.kickMessage()
                         .replace("{player}", target)
                         .replace("{kicked}", "&cТеневой админ")
                         .replace("{reason}", reason)
@@ -234,7 +234,7 @@ public class FlexingNetwork {
                                 .format(new Date(System.currentTimeMillis())))));
             logAction(kicked, "shade.kick", target, reason);
             } else {
-            player.kickPlayer(Utilities.colored(T.formattedKickMessage(player)
+            player.kickPlayer(Utilities.colored(Notifications.kickMessage()
                     .replace("{player}", target)
                     .replace("{kicked}", "&cТеневой админ")
                     .replace("{reason}", reason)
@@ -244,7 +244,7 @@ public class FlexingNetwork {
             }
         } else {
             if (shadeKick) {
-                BungeeBridge.kickPlayer(target, Utilities.colored(T.formattedKickMessage(player)
+                BungeeBridge.kickPlayer(target, Utilities.colored(Notifications.kickMessage()
                         .replace("{player}", target)
                         .replace("{kicked}", "&cТеневой админ")
                         .replace("{reason}", reason)
@@ -252,7 +252,7 @@ public class FlexingNetwork {
                                 .format(new Date(System.currentTimeMillis())))));
                 logAction(kicked, "shade.kick", target, reason);
             } else {
-                BungeeBridge.kickPlayer(target, Utilities.colored(T.formattedKickMessage(player)
+                BungeeBridge.kickPlayer(target, Utilities.colored(Notifications.kickMessage()
                         .replace("{player}", target)
                         .replace("{kicked}", "&3" + kicked)
                         .replace("{reason}", reason)
@@ -278,12 +278,13 @@ public class FlexingNetwork {
         mysql().query("INSERT INTO `user_log_actions` (`username`, `time`, `action`, `data`, `comment`) VALUES ('" + username + "', " + System.currentTimeMillis() / 1000L + ", '" + action + "', " + target + ", " + comment + ")");
     }
 
+
     /**
-     * @param player the minecraft username of the player.
+     * @param username the minecraft username of the player.
      * @return proxy player
      */
-    public static NetworkPlayer getPlayer(String player) {
-        return FlexPlayer.get(player);
+    public static NetworkPlayer getPlayer(String username) {
+        return FlexPlayer.get(username);
     }
 
     /**
@@ -303,18 +304,7 @@ public class FlexingNetwork {
     }
 
     /**
-     * Get EntityPlayer of the player.
-     *
-     * @param player the player.
-     * @return A EntityPlayer of the player.
-     */
-    private static EntityPlayer getPlayerNMS(Player player){
-        return ((CraftPlayer) player).getHandle();
-    }
-
-    /**
      * Checks if the player is online
-     *
      * @param player player entity
      * @return Online / Offline player
      */
@@ -324,7 +314,6 @@ public class FlexingNetwork {
 
     /**
      * Checks if the player is online
-     *
      * @param player player username
      * @return Online / Offline player
      */
@@ -334,7 +323,6 @@ public class FlexingNetwork {
 
     /**
      * Checks if the player is online
-     *
      * @param userid of the player
      * @return Online / Offline player
      */

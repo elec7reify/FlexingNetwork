@@ -3,8 +3,7 @@ package com.flexingstudios.FlexingNetwork.listeners;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.ItemsDef;
 import com.flexingstudios.FlexingNetwork.api.event.ItemClickedEvent;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
-import com.flexingstudios.FlexingNetwork.api.util.IC;
+import com.flexingstudios.FlexingNetwork.api.util.ClickType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -12,8 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import java.util.logging.Logger;
 
 public class ServiceItems implements Listener {
     @EventHandler
@@ -36,7 +33,7 @@ public class ServiceItems implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onItemClicked(ItemClickedEvent event) {
-        if (IC.isRightClick(event)) {
+        if (ClickType.isRightClick(event)) {
             Material id = event.getItem().getType();
             int meta = event.getItem().getDurability();
             if (id == new ItemsDef(event.getPlayer()).ITEM_TO_LOBBY.getType() && meta == 0) {

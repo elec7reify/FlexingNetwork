@@ -2,6 +2,7 @@ package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
 
 import com.flexingstudios.Common.F;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
+import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;
 import com.google.common.collect.ImmutableSet;
@@ -74,12 +75,12 @@ public class BanMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
-        if (slot == 49) player.openInventory(new ActionsMenu(target).getInventory());
+    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
+        if (slot == 49) player.getBukkitPlayer().openInventory(new ActionsMenu(target).getInventory());
 
         int index = getIndex(slot);
         if (index >= 0 && index < BanMenu.REASON.size()) {
-            player.openInventory(new TimeValueMenu(target, getInventory()).getInventory());
+            player.getBukkitPlayer().openInventory(new TimeValueMenu(target, getInventory()).getInventory());
         }
     }
 

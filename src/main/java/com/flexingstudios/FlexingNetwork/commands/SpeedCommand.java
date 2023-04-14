@@ -1,6 +1,6 @@
 package com.flexingstudios.FlexingNetwork.commands;
 
-import com.flexingstudios.FlexingNetwork.api.util.T;
+import com.flexingstudios.FlexingNetwork.api.util.Notifications;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,10 +38,10 @@ public class SpeedCommand implements CommandExecutor {
 
         if (player.isFlying()) {
             player.setFlySpeed(0.1F + 0.05F * (speed - 1));
-            Utilities.msg(sender, T.success("GOT IT!", "&fСкорость &aполёта &fустановлен на &a" + speed));
+            Utilities.msg(sender, Notifications.success("GOT IT!", "&fСкорость &aполёта &fустановлен на &a" + speed));
         } else {
             player.setWalkSpeed(0.2F + 0.08F * (speed - 1));
-            Utilities.msg(sender, T.success("GOT IT!", "&fСкорость &aходьбы &fустановлен на &a" + speed));
+            Utilities.msg(sender, Notifications.success("GOT IT!", "&fСкорость &aходьбы &fустановлен на &a" + speed));
         }
 
         return true;

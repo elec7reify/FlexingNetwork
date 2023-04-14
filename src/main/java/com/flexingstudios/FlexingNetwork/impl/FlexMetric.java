@@ -14,7 +14,7 @@ public class FlexMetric implements Metrics {
 
     public FlexMetric(FlexingNetworkPlugin plugin) {
         map = new HashMap<>();
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::flush, 24000L, 24000L);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::flush, FLUSH_INTERVAL_TICKS, FLUSH_INTERVAL_TICKS);
     }
 
     @Override
@@ -37,9 +37,7 @@ public class FlexMetric implements Metrics {
     }
 
     private static class Value {
-
-        private Value() {
-            // no instances
+        public Value() {
         }
 
         boolean inserted = false;

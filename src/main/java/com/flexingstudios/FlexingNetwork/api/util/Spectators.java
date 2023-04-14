@@ -39,11 +39,11 @@ public class Spectators implements Listener {
             }*/
             player.setAllowFlight(spectator);
             player.setFlying(spectator);
-            if (TrailMenu.isEnabled()) {
-                TrailMenu.TrailPlayer trailPlayer = TrailMenu.getPlayer(player.getName());
-                if (trailPlayer != null)
-                    trailPlayer.visible = !spectator;
-            }
+//            if (TrailMenu.isEnabled()) {
+//                TrailMenu.TrailPlayer trailPlayer = TrailMenu.getPlayer(player.getName());
+//                if (trailPlayer != null)
+//                    trailPlayer.visible = !spectator;
+//            }
         });
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }

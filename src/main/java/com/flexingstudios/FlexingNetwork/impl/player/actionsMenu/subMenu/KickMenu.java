@@ -3,7 +3,7 @@ package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
+import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;
@@ -72,15 +72,15 @@ public class KickMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
-        if (slot == 22) player.openInventory(new ActionsMenu(target).getInventory());
+    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
+        if (slot == 22) player.getBukkitPlayer().openInventory(new ActionsMenu(target).getInventory());
 
         int index = getIndex(slot);
         if (index >= 0 && index < REASON.size()) {
             String object = REASON.get(index);
             ConfirmMenu menu = new ConfirmMenu(getInventory(), () -> {
                 for (Player players : Bukkit.getOnlinePlayers())
-                    Utilities.msg(players, Language.getMsg(players, Messages.KICKED_BY_ADMIN)
+                    Utilities.msg(players, Messages.KICKED_BY_ADMIN
                             .replace("{admin}", player.getName())
                             .replace("{targetName}", target)
                             .replace("{reason}", object));
@@ -107,7 +107,7 @@ public class KickMenu implements InvMenu {
             menu.setBackOnConfirm(false);
             menu.setConfirmText("&aКикнуть игрока с сервера");
             menu.setCancelText("&cОтменить действие");
-            player.openInventory(menu.getInventory());
+            player.getBukkitPlayer().openInventory(menu.getInventory());
         }
     }
 
