@@ -2,9 +2,9 @@ package com.flexingstudios.FlexingNetwork.commands;
 
 import com.flexingstudios.Common.F;
 import com.flexingstudios.Common.player.Rank;
+import com.flexingstudios.FlexingNetwork.Debug;
 import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
 import com.flexingstudios.FlexingNetwork.Config;
-import com.flexingstudios.FlexingNetwork.Debug;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.command.CmdSub;
@@ -221,10 +221,15 @@ public class FlexingNetworkCommand extends UpCommand {
      @CmdSub(value = "restart", rank = Rank.ADMIN)
      private void restart(dataCommand data) {
          if (data.hasArgs()) {
-             Restart.restart();
+             Restart.Companion.restart();
          } else {
-             Restart.countdown();
+             Restart.Companion.countdown();
          }
+    }
+
+    @CmdSub(value = "reload", rank = Rank.ADMIN)
+    private void reload(dataCommand data) {
+        new Config(FlexingNetworkPlugin.getInstance()).reload();
     }
 
     @CmdSub(value = "help", ranks = {Rank.ADMIN, Rank.SADMIN, Rank.VADMIN}, hidden = true)

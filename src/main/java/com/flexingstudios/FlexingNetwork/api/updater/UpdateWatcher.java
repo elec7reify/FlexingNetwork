@@ -174,7 +174,7 @@ public class UpdateWatcher implements Listener {
     public void tryToRestart() {
         this.restartNeeded = true;
         if (!this.restartScheduled && FlexPlayer.PLAYERS.isEmpty()) {
-            Restart.restart();
+            Restart.Companion.restart();
             this.restartScheduled = true;
         }
     }

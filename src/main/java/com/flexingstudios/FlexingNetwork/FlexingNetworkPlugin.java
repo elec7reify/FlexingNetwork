@@ -14,7 +14,6 @@ import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
 import com.flexingstudios.FlexingNetwork.impl.player.*;
 import com.flexingstudios.FlexingNetwork.listeners.*;
 import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
-import com.flexingstudios.FlexingNetwork.tasks.MemoryFix;
 import com.flexingstudios.FlexingNetwork.tasks.PlayerMetaSaver;
 import com.flexingstudios.FlexingNetwork.tasks.Restart;
 import org.bukkit.Bukkit;
@@ -75,11 +74,10 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         /*
          * Block - commands
          */
-        MessageCommand messageCommand = new MessageCommand();
         CommandExecutor executor = new GamemodeCommand();
         IgnoreCommand ignoreCommand = new IgnoreCommand();
-        getCommand("msg").setExecutor(messageCommand);
-        getCommand("r").setExecutor(messageCommand);
+        getCommand("msg").setExecutor(new MessageCommand());
+        getCommand("r").setExecutor(new MessageCommand());
         getCommand("ignore").setExecutor(ignoreCommand);
         getCommand("unignore").setExecutor(ignoreCommand);
         getCommand("msgtoggle").setExecutor(ignoreCommand);
@@ -135,11 +133,10 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         });
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayerMetaSaver(this), 20L, 20L);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new MemoryFix(), 100L, 100L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             if (!FlexingNetwork.isDevelopment() && FlexingNetwork.features().AUTO_RESTART.isEnabled())
-                Restart.schedule();
+                Restart.Companion.schedule();
         });
     }
 
