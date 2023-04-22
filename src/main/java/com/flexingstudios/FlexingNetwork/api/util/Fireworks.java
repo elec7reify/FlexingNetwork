@@ -12,22 +12,23 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 public class Fireworks {
     private static final FireworkEffect[] FIREWORK_EFFECTS = new FireworkEffect[] {
-            FireworkEffect.builder().withColor(new Color[] { Color.RED, Color.PURPLE, Color.MAROON }).build(),
-            FireworkEffect.builder().withColor(new Color[] { Color.BLUE, Color.AQUA, Color.NAVY, Color.TEAL }).build(),
-            FireworkEffect.builder().withColor(new Color[] { Color.FUCHSIA, Color.AQUA, Color.ORANGE }).build(),
+            FireworkEffect.builder().withColor(Color.RED, Color.PURPLE, Color.MAROON ).build(),
+            FireworkEffect.builder().withColor(Color.BLUE, Color.AQUA, Color.NAVY, Color.TEAL ).build(),
+            FireworkEffect.builder().withColor(Color.FUCHSIA, Color.AQUA, Color.ORANGE ).build(),
             FireworkEffect.builder().withColor(Color.FUCHSIA, Color.WHITE).withTrail().build(),
-            FireworkEffect.builder().withColor(new Color[] { Color.GRAY, Color.SILVER, Color.GREEN }).build(),
-            FireworkEffect.builder().withColor(new Color[] { Color.GREEN, Color.LIME }).build(),
-            FireworkEffect.builder().withColor(new Color[] { Color.RED, Color.YELLOW }).build(),
-            FireworkEffect.builder().withColor(new Color[] { Color.GREEN, Color.GRAY, Color.FUCHSIA }).build(),
-            FireworkEffect.builder().withColor(new Color[] { Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.AQUA }).build(),
-            FireworkEffect.builder().withColor(new Color[] { Color.PURPLE, Color.GREEN, Color.YELLOW }).build(),
+            FireworkEffect.builder().withColor(Color.GRAY, Color.SILVER, Color.GREEN ).build(),
+            FireworkEffect.builder().withColor(Color.GREEN, Color.LIME ).build(),
+            FireworkEffect.builder().withColor(Color.RED, Color.YELLOW ).build(),
+            FireworkEffect.builder().withColor(Color.GREEN, Color.GRAY, Color.FUCHSIA ).build(),
+            FireworkEffect.builder().withColor(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.AQUA ).build(),
+            FireworkEffect.builder().withColor(Color.PURPLE, Color.GREEN, Color.YELLOW ).build(),
             FireworkEffect.builder().withColor(Color.BLUE, Color.MAROON, Color.WHITE).withTrail().build(),
             FireworkEffect.builder().withColor(Color.BLUE, Color.YELLOW).withTrail().build(),
             FireworkEffect.builder().withColor(Color.FUCHSIA, Color.NAVY, Color.RED).withTrail().build(),
             FireworkEffect.builder().withColor(Color.LIME, Color.ORANGE, Color.TEAL).withTrail().build(),
             FireworkEffect.builder().withColor(Color.GRAY, Color.MAROON, Color.NAVY).withTrail().build(),
-            FireworkEffect.builder().withColor(Color.AQUA, Color.RED, Color.FUCHSIA).withTrail().build() };
+            FireworkEffect.builder().withColor(Color.AQUA, Color.RED, Color.FUCHSIA).withTrail().build()
+    };
 
     public static void play(Location loc, FireworkEffect fe) {
         Firework fw = loc.getWorld().spawn(loc, Firework.class);
@@ -60,6 +61,6 @@ public class Fireworks {
     }
 
     public static FireworkEffect getRandomEffect() {
-        return Rand.<FireworkEffect>of(FIREWORK_EFFECTS);
+        return Rand.of(FIREWORK_EFFECTS);
     }
 }

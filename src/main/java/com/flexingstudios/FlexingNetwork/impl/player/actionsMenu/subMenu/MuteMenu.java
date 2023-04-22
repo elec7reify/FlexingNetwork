@@ -2,6 +2,7 @@ package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
 
 import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
+import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;
 import com.google.common.collect.ImmutableSet;
@@ -75,19 +76,19 @@ public class MuteMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
-        if (slot == 49) player.openInventory(parent.getInventory());
+    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
+        if (slot == 49) player.getBukkitPlayer().openInventory(parent.getInventory());
 
         int index = getIndex(slot);
         if (index >= 0 && index < REASON.size()) {
             for (Pair<String, String> object : REASON) {
                 ConfirmMenu menu = new ConfirmMenu(getInventory(), () -> {
-                    Bukkit.dispatchCommand(player, "mute " + target + " " + object.getLeft() + " " + object.getRight());
+                    Bukkit.dispatchCommand(player.getBukkitPlayer(), "mute " + target + " " + object.getLeft() + " " + object.getRight());
                 }, "Подтвердите действия");
                 menu.setBackOnConfirm(false);
                 menu.setConfirmText("&aВыдать мут игроку", "&fВремя мута: &6" + object.getLeft());
                 menu.setCancelText("&cОтменить действие");
-                player.openInventory(menu.getInventory());
+                player.getBukkitPlayer().openInventory(menu.getInventory());
             }
         }
     }

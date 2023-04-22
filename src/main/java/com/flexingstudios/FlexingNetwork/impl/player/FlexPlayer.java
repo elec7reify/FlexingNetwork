@@ -6,7 +6,7 @@ import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.player.*;
 import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
-import com.flexingstudios.FlexingNetwork.api.util.T;
+import com.flexingstudios.FlexingNetwork.api.util.Notifications;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import gnu.trove.set.hash.TIntHashSet;
 import org.bukkit.Bukkit;
@@ -34,14 +34,13 @@ public abstract class FlexPlayer implements NetworkPlayer {
     private ArrowTrail arrowTrail = null;
     private MessageOnJoin messageOnJoin = null;
     public TIntHashSet availableArrowTrails;
-    public TIntHashSet availableJoinMessages;
+    private final TIntHashSet availableJoinMessages;
     public Collectable settings;
     public Player lastDamager = null;
     public Entity lastDamagerEntity = null;
     public int lastDamagerPurgeTask = -1;
     public long lastDamageFromPlayer = 0L;
     public long lastDeath = 0L;
-    public Language playerLanguage;
     public int coins = 0;
     public volatile int coinsAddBuffer = 0;
     public int level = 0;
@@ -169,12 +168,12 @@ public abstract class FlexPlayer implements NetworkPlayer {
     }
 
     public void unlockArrowTrail(ArrowTrail trail) {
-        if (availableArrowTrails.add(trail.getId()))
+        if (getAvailableArrowTrails().add(trail.getId()))
             saveAvailableArrowTrails();
     }
 
     public void unlockJoinMessage(MessageOnJoin msg) {
-        if (availableJoinMessages.add(msg.getId()))
+        if (getAvailableJoinMessages().add(msg.getId()))
             saveAvailableMessagesOnJoin();
     }
 
@@ -193,7 +192,7 @@ public abstract class FlexPlayer implements NetworkPlayer {
             boolean changed = false;
             for (String str : val.split(",")) {
                 try {
-                    availableArrowTrails.add(Integer.parseInt(str));
+                    getAvailableArrowTrails().add(Integer.parseInt(str));
                 } catch (Exception ex) {
                     plugin.getLogger().warning("[" + username + "] ArrowTrail " + val + " not exists [2]");
                     changed = true;
@@ -219,7 +218,7 @@ public abstract class FlexPlayer implements NetworkPlayer {
             boolean changed = false;
             for (String str : val.split(",")) {
                 try {
-                    availableJoinMessages.add(Integer.parseInt(str));
+                    getAvailableJoinMessages().add(Integer.parseInt(str));
                 } catch (Exception ex) {
                     plugin.getLogger().warning("[" + username + "] MessageOnJoin " + val + " not exists [2]");
                     changed = true;
@@ -233,7 +232,7 @@ public abstract class FlexPlayer implements NetworkPlayer {
     private void saveAvailableArrowTrails() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
-        for (int id : availableArrowTrails.toArray()) {
+        for (int id : getAvailableArrowTrails().toArray()) {
             if (first) {
                 first = false;
             } else {
@@ -247,7 +246,7 @@ public abstract class FlexPlayer implements NetworkPlayer {
     private void saveAvailableMessagesOnJoin() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
-        for (int id : availableJoinMessages.toArray()) {
+        for (int id : getAvailableJoinMessages().toArray()) {
             if (first) {
                 first = false;
             } else {
@@ -261,6 +260,14 @@ public abstract class FlexPlayer implements NetworkPlayer {
     public boolean setRestrict(boolean flag) {
         restrict = flag;
         return flag;
+    }
+
+    public TIntHashSet getAvailableArrowTrails() {
+        return availableArrowTrails;
+    }
+
+    public TIntHashSet getAvailableJoinMessages() {
+        return availableJoinMessages;
     }
 
     /**
@@ -301,7 +308,7 @@ public abstract class FlexPlayer implements NetworkPlayer {
     public void updateExp(int given) {
         if (this.exp >= Leveling.getTotalExp(this.level + 1)) {
             this.level = Leveling.getLevel(this.exp);
-            Utilities.msg(this.player, T.success("Flexing&f&lWorld", "Вы получили &3" + this.level + " &fуровень!"));
+            Utilities.msg(this.player, Notifications.success("Flexing&f&lWorld", "Вы получили &3" + this.level + " &fуровень!"));
             boolean launchFirework = true;
 
             if (launchFirework)

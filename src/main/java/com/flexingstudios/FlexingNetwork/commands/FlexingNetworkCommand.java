@@ -10,12 +10,16 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.command.CmdSub;
 import com.flexingstudios.FlexingNetwork.api.command.UpCommand;
 import com.flexingstudios.FlexingNetwork.api.command.dataCommand;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.FlexingNetwork.api.util.ChatUtil;
 import com.flexingstudios.FlexingNetwork.api.util.ParsedTime;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
 import com.flexingstudios.FlexingNetwork.tasks.Restart;
 import com.google.common.base.Joiner;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -157,9 +161,11 @@ public class FlexingNetworkCommand extends UpCommand {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> [Статус]");
             return;
         }
-        if (data.getArgs()[1] == null) {
+        if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&aВсе доступные статусы: &f" + Arrays.toString(Rank.values()));
         } else {
+            FlexPlayer flexPlayer = FlexPlayer.get(data.getArgs()[0]);
+            flexPlayer.rank = Rank.getRank(data.getArgs()[1]);
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "lp user " + data.getArgs()[0] + " parent set " + data.getArgs()[1]);
             FlexingNetwork.mysql().query("UPDATE authme SET status='" + data.getArgs()[1].toUpperCase() + "' WHERE username = '" + data.getArgs()[0] + "'");
             data.getSender().sendMessage(Utilities.colored("&aСтатус &f" + data.getArgs()[1].toUpperCase() + " &aвыдан игроку &f" + data.getArgs()[0] + "&a!"));
@@ -221,22 +227,19 @@ public class FlexingNetworkCommand extends UpCommand {
          }
     }
 
-    @CmdSub(value = "reload", rank = Rank.ADMIN)
-    private void reload(dataCommand data) {
-        for (Language l : Language.getLanguages()){
-            l.reload();
-            data.getSender().sendMessage("§7" + l.getLangName() + " reloaded!");
-        }
-        new Config(FlexingNetworkPlugin.getInstance()).reload();
-    }
-
     @CmdSub(value = "help", ranks = {Rank.ADMIN, Rank.SADMIN, Rank.VADMIN}, hidden = true)
     private void help(dataCommand data) {
         List<String> cmds = new ArrayList<>();
         Rank rank = getRank(data.getSender());
         for (PublicSub sub : getPublicSubs()) {
-            if (sub.sub.isAvailableFor(rank, null))
+            if (sub.sub.isAvailableFor(rank, null)) {
                 cmds.add(sub.cmd);
+                ChatUtil.createMessage(
+                        sub.cmd,
+                        new ClickEvent(ClickEvent.Action.RUN_COMMAND, data.getLabel() + " " + sub.cmd),
+                        new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText("&7Нажмите, чтобы ввести команду"))
+                );
+            }
         }
         data.getSender().sendMessage(Joiner.on(", ").join(cmds));
     }

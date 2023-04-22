@@ -2,6 +2,7 @@ package com.flexingstudios.FlexingNetwork;
 
 import com.flexingstudios.Common.player.Permission;
 import com.flexingstudios.Common.player.Rank;
+import com.flexingstudios.FlexingNetwork.api.Features;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Lobby;
 import com.flexingstudios.FlexingNetwork.api.updater.UpdateWatcher;
@@ -9,7 +10,6 @@ import com.flexingstudios.FlexingNetwork.commands.*;
 import com.flexingstudios.FlexingNetwork.commands.FriendCommand;
 import com.flexingstudios.FlexingNetwork.friends.listeners.GUIListener;
 import com.flexingstudios.FlexingNetwork.impl.FlexMetric;
-import com.flexingstudios.FlexingNetwork.impl.languages.*;
 import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
 import com.flexingstudios.FlexingNetwork.impl.player.*;
 import com.flexingstudios.FlexingNetwork.listeners.*;
@@ -41,8 +41,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     @Override
     public void onLoad() {
         instance = this;
-
-        new Russian();
     }
 
     @Override
@@ -62,17 +60,19 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerOutgoingPluginChannel(this, "FlexingBungee");
         getServer().getMessenger().registerIncomingPluginChannel(this, "FlexingBungee", bungeeBridge);
+
         getServer().getPluginManager().registerEvents(new WorldProtect(this), this);
         getServer().getPluginManager().registerEvents(new PerWorldTablist(), this);
         getServer().getPluginManager().registerEvents(new ServiceItems(), this);
         getServer().getPluginManager().registerEvents(new ArrowTrailListener(), this);
-        //getServer().getPluginManager().registerEvents(new MessageOnJoinListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new FlexingChat(), this);
         getServer().getPluginManager().registerEvents(new ShulkerDispenseFix(), this);
+        if (FlexingNetwork.features().SIT.isEnabled())
+            getServer().getPluginManager().registerEvents(new SitDownListener(), this);
 
-        /**
+        /*
          * Block - commands
          */
         MessageCommand messageCommand = new MessageCommand();
@@ -104,10 +104,9 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("profile").setExecutor(new ProfileCommand());
         getCommand("friend").setExecutor(new FriendCommand());
         getCommand("actions").setExecutor(new ActionsCommand());
-        getCommand("report").setExecutor(new ReportCommand());
-        getCommand("reports").setExecutor(new ReportsCommand());
         getCommand("restrict").setExecutor(new RestrictCommand());
         getCommand("help").setExecutor(help);
+        getCommand("firework").setExecutor(new FireworkCommand());
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             help.addCommand("banlist", "Банлист", Permission.BAN);

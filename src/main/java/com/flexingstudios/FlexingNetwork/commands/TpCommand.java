@@ -6,7 +6,7 @@ import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.ServerType;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Spectators;
-import com.flexingstudios.FlexingNetwork.api.util.T;
+import com.flexingstudios.FlexingNetwork.api.util.Notifications;
 import com.flexingstudios.FlexingNetwork.api.util.Utilities;
 import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
@@ -103,7 +103,7 @@ public class TpCommand implements CommandExecutor {
 
     private void teleport(CommandSender sender, Player entity) {
         teleport(sender, entity.getLocation());
-        Utilities.msg(sender, T.success("GOT IT!", "&fВы телепортированы к игркоку &a" + entity.getName()));
+        Utilities.msg(sender, Notifications.success("GOT IT!", "&fВы телепортированы к игркоку &a" + entity.getName()));
     }
 
     private void teleport(CommandSender sender, Location loc) {

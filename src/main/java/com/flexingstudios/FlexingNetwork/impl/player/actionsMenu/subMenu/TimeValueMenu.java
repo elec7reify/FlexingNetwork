@@ -5,8 +5,10 @@ import com.flexingstudios.Common.player.Rank;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
+import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.graph.Network;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -50,7 +52,8 @@ public class TimeValueMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
+    public void onClick(ItemStack item, NetworkPlayer nplayer, int slot, ClickType clickType) {
+        Player player = nplayer.getBukkitPlayer();
         switch (slot) {
             case 10:
                 if (!FlexingNetwork.hasRank(player, Rank.CHIKIBOMBASTER, true)) {

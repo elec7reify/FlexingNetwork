@@ -4,8 +4,11 @@ import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Language.Messages;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
+import com.flexingstudios.FlexingNetwork.api.menu.InvMenuImpl;
+import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.FlexingNetwork.api.util.Invs;
 import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.FlexPlayerMenu;
+import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.ProfileMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,18 +19,17 @@ import org.bukkit.inventory.ItemStack;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class PunishmentsMenu implements InvMenu {
-    private final Inventory inv;
-    private final Player player;
-    private final FlexPlayerMenu parent;
+public class PunishmentsMenu extends InvMenuImpl {
+    private final ProfileMenu parent;
+    private final NetworkPlayer player;
     private ArrayList<Punishment> punishments = new ArrayList<>();
 
-    public PunishmentsMenu(Player player, FlexPlayerMenu parent) {
-        inv = Bukkit.createInventory(this, 54, "История наказаний");
-        this.player = player;
+    public PunishmentsMenu(NetworkPlayer player, ProfileMenu parent) {
+        super(Bukkit.createInventory(player.getBukkitPlayer(), 54, "История наказаний"));
         this.parent = parent;
-
-        inv.setItem(40, Items.name(Material.FEATHER, "&aВернуться назад &7(Мой профиль)"));
+        this.player = player;
+        requestPunishments();
+        getInventory().setItem(40, Items.name(Material.FEATHER, "&aВернуться назад &7(Мой профиль)"));
     }
 
     private void requestPunishments() {
@@ -58,14 +60,14 @@ public class PunishmentsMenu implements InvMenu {
             Punishment punishment = punishments.get(i);
 
             if (punishment == null) {
-                inv.setItem(13, Items.name(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), "&aУ вас нет наказаний!"));
+                getInventory().setItem(13, Items.name(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), "&aУ вас нет наказаний!"));
             } else {
                 if (punishment.action.startsWith("shade")) {
                     admin = "&cТеневой админ";
                 } else {
                     admin = punishment.username;
                 }
-                inv.setItem(getSlot(i), Items.name(PunishmentType.byId(punishment.action).is, "&e#" + i,
+                getInventory().setItem(getSlot(i), Items.name(PunishmentType.byId(punishment.action).is, "&e#" + i,
                         "&fИдентификатор лога &7" + punishment.id,
                         "&fАдмининистратор: &c" + admin,
                         "&fДата и время: &6" + new SimpleDateFormat(Messages.DATE_FORMAT)
@@ -86,14 +88,8 @@ public class PunishmentsMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
-        if (slot == 40) player.openInventory(parent.getInventory());
-    }
-
-    @Override
-    public Inventory getInventory() {
-        requestPunishments();
-        return inv;
+    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
+        if (slot == 40) Invs.forceOpen(player.getBukkitPlayer(), parent.getInventory());
     }
 
     private static class Punishment {

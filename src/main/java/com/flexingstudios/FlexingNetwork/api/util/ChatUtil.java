@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ChatUtil {
 
-    private ChatUtil() {
+    public ChatUtil() {
         throw new UnsupportedOperationException("This class cannot be instantiated");
     }
 
@@ -26,6 +26,14 @@ public class ChatUtil {
     public static BaseComponent createMessage(@NotNull String message, ClickEvent clickEvent, HoverEvent hoverEvent) {
         TextComponent element = new TextComponent(new ComponentBuilder(message)
                 .event(clickEvent)
+                .event(hoverEvent)
+                .create());
+
+        return element;
+    }
+
+    public static BaseComponent createMessage(@NotNull String message, HoverEvent hoverEvent) {
+        TextComponent element = new TextComponent(new ComponentBuilder(message)
                 .event(hoverEvent)
                 .create());
 

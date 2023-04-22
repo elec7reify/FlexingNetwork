@@ -1,8 +1,5 @@
 package com.flexingstudios.FlexingNetwork.impl.player;
 
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.player.Language;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -59,18 +56,6 @@ public class MysqlPlayer extends FlexPlayer {
             newMap.put(entry.getKey(), (entry.getValue()).value);
 
         return newMap;
-    }
-
-    @Override
-    public void setLanguage(Player player, String iso) {
-        FlexingNetwork.mysql().query("UPDATE authme SET language = '" + iso + "' WHERE username = '" + player.getName() + "'");
-    }
-
-    @Override
-    public String getLanguage(UUID uuid) {
-        Player player = Bukkit.getPlayer(uuid);
-        FlexingNetwork.mysql().query("SELECT language FROM authme WHERE username = " + player.getName());
-        return Language.getDefaultLanguage().getIso();
     }
 
     public void dispose() {

@@ -1,5 +1,6 @@
 package com.flexingstudios.FlexingNetwork.listeners;
 
+import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
 import com.flexingstudios.FlexingNetwork.api.menu.MenuClosable;
 import org.bukkit.Bukkit;
@@ -26,7 +27,7 @@ public class InventoryListener implements Listener {
         if (topHolder instanceof InvMenu) {
             if (event.getCurrentItem() != null && event.getClickedInventory().getHolder() instanceof InvMenu)
                 try {
-                    ((InvMenu) topHolder).onClick(event.getCurrentItem(), (Player) event.getWhoClicked(), event.getSlot(), event.getClick());
+                    ((InvMenu) topHolder).onClick(event.getCurrentItem(), FlexingNetwork.getPlayer((Player) event.getWhoClicked()), event.getSlot(), event.getClick());
                 } catch (Exception e) {
                     Bukkit.getLogger().log(Level.WARNING, topHolder.getClass().getName(), e);
                 }

@@ -20,8 +20,6 @@ commands:
   gmsp:
   fly:
   alert:
-  report:
-  reports:
   friend:
     aliases: [friends, f]
   profile:
@@ -48,3 +46,4 @@ commands:
     aliases: [shunban]
   actions:
   restrict:
+  firework:

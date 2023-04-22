@@ -1,6 +1,7 @@
 package com.flexingstudios.FlexingNetwork.impl.player;
 
 import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
+import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.*;
 import com.flexingstudios.FlexingNetwork.impl.GroupsMenu;
 import com.google.common.collect.ImmutableSet;
@@ -17,7 +18,7 @@ import java.util.Set;
 public class FlexCoinsMenu implements InvMenu {
     private final Inventory inv;
 
-    public FlexCoinsMenu(Player player) {
+    public FlexCoinsMenu(NetworkPlayer player) {
         this.inv = Bukkit.createInventory(this, 54, "FlexCoin");
         ItemStack INFO_BOOK = Items.name(Items.glow(Material.BOOK), "&a&lИнформация", "&9&lFlex&f&lCoin &f- особая игровая валюта, которую",
                 "&fМожно получить только за &a&lреальные деньги",
@@ -52,13 +53,13 @@ public class FlexCoinsMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack is, Player player, int slot, ClickType clickType) {
+    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
         switch (slot) {
             case 8:
-                player.openInventory(new GroupsMenu(player).getInventory());
+                player.getBukkitPlayer().openInventory(new GroupsMenu(player).getInventory());
                 break;
             case 49:
-                player.openInventory(new FCShopMenu(player).getInventory());
+                player.getBukkitPlayer().openInventory(new FCShopMenu(player).getInventory());
                 break;
             case 28:
             case 30:
@@ -68,7 +69,7 @@ public class FlexCoinsMenu implements InvMenu {
             case 39:
             case 41:
             case 43:
-                Utilities.msg(player, "&fДля покупки &9&lFlex&f&lCoin", "&fВы должны перейти на сайт &7↴", "&ehttps://vk.com/zzzrazum", "&fи написать администратору.");
+                Utilities.msg(player.getBukkitPlayer(), "&fДля покупки &9&lFlex&f&lCoin", "&fВы должны перейти на сайт &7↴", "&ehttps://vk.com/zzzrazum", "&fи написать администратору.");
                 break;
         }
     }
