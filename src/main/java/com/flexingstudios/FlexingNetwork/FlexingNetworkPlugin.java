@@ -2,12 +2,10 @@ package com.flexingstudios.FlexingNetwork;
 
 import com.flexingstudios.Common.player.Permission;
 import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.Features;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
 import com.flexingstudios.FlexingNetwork.api.Lobby;
 import com.flexingstudios.FlexingNetwork.api.updater.UpdateWatcher;
 import com.flexingstudios.FlexingNetwork.commands.*;
-import com.flexingstudios.FlexingNetwork.commands.FriendCommand;
 import com.flexingstudios.FlexingNetwork.friends.listeners.GUIListener;
 import com.flexingstudios.FlexingNetwork.impl.FlexMetric;
 import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
@@ -100,7 +98,6 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getCommand("stp").setExecutor(new StpCommand());
         getCommand("donate").setExecutor(new DonateCommand());
         getCommand("profile").setExecutor(new ProfileCommand());
-        getCommand("friend").setExecutor(new FriendCommand());
         getCommand("actions").setExecutor(new ActionsCommand());
         getCommand("restrict").setExecutor(new RestrictCommand());
         getCommand("help").setExecutor(help);

@@ -20,8 +20,6 @@ commands:
   gmsp:
   fly:
   alert:
-  friend:
-    aliases: [friends, f]
   profile:
     aliases: [me, я, профиль]
   help:
