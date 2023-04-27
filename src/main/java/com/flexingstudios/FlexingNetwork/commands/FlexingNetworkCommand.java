@@ -7,9 +7,9 @@ import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
 import com.flexingstudios.FlexingNetwork.Config;
 import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
 import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.command.CmdSub;
+import com.flexingstudios.FlexingNetwork.api.command.SubCommand;
+import com.flexingstudios.FlexingNetwork.api.command.SubCommandData;
 import com.flexingstudios.FlexingNetwork.api.command.UpCommand;
-import com.flexingstudios.FlexingNetwork.api.command.dataCommand;
 import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
 import com.flexingstudios.FlexingNetwork.api.util.ChatUtil;
 import com.flexingstudios.FlexingNetwork.api.util.ParsedTime;
@@ -51,12 +51,12 @@ public class FlexingNetworkCommand extends UpCommand {
 
     @Override
     protected boolean main(CommandSender sender, Command command, String label, String[] args) {
-        help(new dataCommand(sender, label, "help", args));
+        help(new SubCommandData(sender, label, "help", args));
         return false;
     }
 
-    @CmdSub(value = "tolobby", rank = Rank.VADMIN)
-    private void toLobby(dataCommand data) {
+    @SubCommand(name = "tolobby", rank = Rank.VADMIN)
+    private void toLobby(SubCommandData data) {
         if (data.getArgs().length == 0) {
             Utilities.msg(data.getSender(), "&cИспользование /" + data.getLabel() + " " + data.getSub() + " <игрок>");
             return;
@@ -69,14 +69,14 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = "tolobbyall", rank = Rank.ADMIN)
-    private void toLobbyAll(dataCommand data) {
+    @SubCommand(name = "tolobbyall", rank = Rank.ADMIN)
+    private void toLobbyAll(SubCommandData data) {
         Utilities.msg(data.getSender(), "&aВсе игроки отправлены в лобби ");
         FlexingNetwork.toLobby((Player) Bukkit.getOnlinePlayers());
     }
 
-    @CmdSub(value = "toserver", rank = Rank.ADMIN)
-    private void toServer(dataCommand data) {
+    @SubCommand(name = "toserver", rank = Rank.ADMIN)
+    private void toServer(SubCommandData data) {
         if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <сервер>");
             return;
@@ -91,8 +91,8 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = "toserverall", rank = Rank.ADMIN)
-    private void toServerAll(dataCommand data) {
+    @SubCommand(name = "toserverall", rank = Rank.ADMIN)
+    private void toServerAll(SubCommandData data) {
         if (data.getArgs().length != 1) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <сервер>");
             return;
@@ -102,8 +102,8 @@ public class FlexingNetworkCommand extends UpCommand {
             FlexingNetwork.toServer(data.getArgs()[0], player);
     }
 
-    @CmdSub(value = "addcoins", rank = Rank.ADMIN)
-    private void addCoins(dataCommand data) {
+    @SubCommand(name = "addcoins", rank = Rank.ADMIN)
+    private void addCoins(SubCommandData data) {
         if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
             return;
@@ -119,8 +119,8 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = "takecoins", rank = Rank.ADMIN)
-    private void takeCoins(dataCommand data) {
+    @SubCommand(name = "takecoins", rank = Rank.ADMIN)
+    private void takeCoins(SubCommandData data) {
         if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
             return;
@@ -136,8 +136,8 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = "giveexp", rank = Rank.SADMIN)
-    private void giveExp(dataCommand data) {
+    @SubCommand(name = "giveexp", rank = Rank.SADMIN)
+    private void giveExp(SubCommandData data) {
         if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> <количество>");
             return;
@@ -155,8 +155,8 @@ public class FlexingNetworkCommand extends UpCommand {
     }
 
 
-    @CmdSub(value = "givestatus", rank = Rank.ADMIN)
-    private void givestatus(dataCommand data) {
+    @SubCommand(name = "givestatus", rank = Rank.ADMIN)
+    private void givestatus(SubCommandData data) {
         if (data.getArgs().length != 2) {
             Utilities.msg(data.getSender(), "&c/" + data.getLabel() + " " + data.getSub() + " <игрок> [Статус]");
             return;
@@ -172,8 +172,8 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-    @CmdSub(value = "stats", aliases = "status", rank = Rank.SADMIN)
-    private void stats(dataCommand data) {
+    @SubCommand(name = "stats", aliases = "status", rank = Rank.SADMIN)
+    private void stats(SubCommandData data) {
         Runtime runtime = Runtime.getRuntime();
         List<String> lines = new ArrayList<>();
         lines.add("&3------------ &fСтатистика &3------------");
@@ -184,15 +184,15 @@ public class FlexingNetworkCommand extends UpCommand {
         Utilities.msg(data.getSender(), lines);
     }
 
-    @CmdSub(value = "gc", rank = Rank.ADMIN)
-    private void gc(dataCommand data) {
+    @SubCommand(name = "gc", rank = Rank.ADMIN)
+    private void gc(SubCommandData data) {
         long start = System.nanoTime();
         System.gc();
         Utilities.msg(data.getSender(), "System " + F.formatFloat((float) (System.nanoTime() - start) / 1000000.0F, 2) + " ms.");
     }
 
-    @CmdSub(value = "debug", rank = Rank.ADMIN)
-    private void debug(dataCommand data) {
+    @SubCommand(name = "debug", rank = Rank.ADMIN)
+    private void debug(SubCommandData data) {
         try {
             Debug group = Debug.valueOf(data.getArgs()[0].toUpperCase());
             if (group.isEnabled()) {
@@ -218,8 +218,8 @@ public class FlexingNetworkCommand extends UpCommand {
         }
     }
 
-     @CmdSub(value = "restart", rank = Rank.ADMIN)
-     private void restart(dataCommand data) {
+     @SubCommand(name = "restart", rank = Rank.ADMIN)
+     private void restart(SubCommandData data) {
          if (data.hasArgs()) {
              Restart.Companion.restart();
          } else {
@@ -227,13 +227,13 @@ public class FlexingNetworkCommand extends UpCommand {
          }
     }
 
-    @CmdSub(value = "reload", rank = Rank.ADMIN)
-    private void reload(dataCommand data) {
+    @SubCommand(name = "reload", rank = Rank.ADMIN)
+    private void reload(SubCommandData data) {
         new Config(FlexingNetworkPlugin.getInstance()).reload();
     }
 
-    @CmdSub(value = "help", ranks = {Rank.ADMIN, Rank.SADMIN, Rank.VADMIN}, hidden = true)
-    private void help(dataCommand data) {
+    @SubCommand(name = "help", ranks = {Rank.ADMIN, Rank.SADMIN, Rank.VADMIN}, hidden = true)
+    private void help(SubCommandData data) {
         List<String> cmds = new ArrayList<>();
         Rank rank = getRank(data.getSender());
         for (PublicSub sub : getPublicSubs()) {

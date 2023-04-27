@@ -25,24 +25,22 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
         do {
             for (Method method : clazz.getDeclaredMethods()) {
                 method.setAccessible(true);
-                if (method.isAnnotationPresent(CmdSub.class)) {
+                if (method.isAnnotationPresent(SubCommand.class)) {
                     RegisteredSub rsub = new RegisteredSub(method);
-                    CmdSub asub = method.getAnnotation(CmdSub.class);
+                    SubCommand subCommand = method.getAnnotation(SubCommand.class);
 
-                    rsub.hidden = asub.hidden();
-                    for (String name : asub.value()) {
-                        if (!rsub.hidden)
-                            publicSubs.add(new PublicSub(name.toLowerCase(), rsub));
-                        adsb.accept(name.toLowerCase(), rsub);
-                    }
-                    for (String alias : asub.aliases())
+                    rsub.hidden = subCommand.hidden();
+                    if (!rsub.hidden)
+                        publicSubs.add(new PublicSub(subCommand.name().toLowerCase(), rsub));
+                    adsb.accept(subCommand.name().toLowerCase(), rsub);
+                    for (String alias : subCommand.aliases())
                         adsb.accept(alias.toLowerCase(), rsub);
-                    if ((asub.ranks()).length == 0) {
+                    if ((subCommand.ranks()).length == 0) {
                         rsub.rankExact = false;
-                        rsub.ranks = new Rank[] { asub.rank() };
+                        rsub.ranks = new Rank[] { subCommand.rank() };
                     } else {
                         rsub.rankExact = true;
-                        rsub.ranks = asub.ranks();
+                        rsub.ranks = subCommand.ranks();
                     }
                 }
             }
@@ -68,7 +66,7 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
 
             runCommand(() -> {
                 try {
-                    rsub.method.invoke(this, new dataCommand(sender, label, args[0].toLowerCase(), str));
+                    rsub.method.invoke(this, new SubCommandData(sender, label, args[0].toLowerCase(), str));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
