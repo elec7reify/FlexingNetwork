@@ -1,4 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.plugin.extraProperties
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java")
@@ -7,7 +9,7 @@ plugins {
 }
 
 group = "com.flexingstudios"
-version = "1.0-SNAPSHOT"
+version = "0.7.2"
 
 repositories {
     mavenCentral()
@@ -31,6 +33,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
 tasks.processResources {
     val props = mapOf("version" to version)
     inputs.properties(props)
@@ -38,10 +44,6 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand(props)
     }
-}
-
-tasks.named<ShadowJar>("shadowJar") {
-    archiveClassifier.set("shaded")
 }
 
 sourceSets.main {
