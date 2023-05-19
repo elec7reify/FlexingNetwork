@@ -33,9 +33,14 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
-}
+tasks
+    .withType<JavaCompile>()
+    .matching { it.name == "compileJava" || it.name == "compileTestJava" }
+    .configureEach {
+        options.compilerArgs.addAll(listOf("-Xlint:all"))
+        options.isDeprecation = true
+        options.encoding = "UTF-8"
+    }
 
 tasks.processResources {
     val props = mapOf("version" to version)
