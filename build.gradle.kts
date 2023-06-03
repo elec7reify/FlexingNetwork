@@ -1,36 +1,65 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.gradle.plugin.extraProperties
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("java")
+    java
+    `java-library`
+    id("maven-publish")
     kotlin("jvm") version "1.8.0"
-    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("xyz.jpenilla.run-paper") version "2.0.1"
 }
 
 group = "com.flexingstudios"
-version = "0.7.2"
+version = "0.7.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven(url = "https://oss.sonatype.org/content/groups/public/")
-    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
-    maven(url = "https://oss.sonatype.org/content/repositories/central")
     mavenLocal()
+    maven { url = uri("https://repo.papermc.io/repository/maven-releases/")}
+    maven { url = uri("https://repo.papermc.io/repository/maven-snapshots/")}
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    compileOnly("org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT") {
+        exclude("com.google.code.gson", "gson")
+        exclude("org.slf4j", "slf4j-api")
+        exclude("junit", "junit")
+    }
+    compileOnly("org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT") {
+        exclude("junit", "junit")
+    }
+    compileOnly("com.mojang:authlib:1.5.25")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("net.kyori:adventure-api:4.13.1")
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-RC")
+    implementation("org.jetbrains:annotations:24.0.1")
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-tasks.test {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+}
+
+tasks.runServer {
+    minecraftVersion("1.12.2")
+}
+
+configure<PublishingExtension> {
+    publications {
+        register<MavenPublication>("maven") {
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
+                }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
 }
 
 tasks
@@ -39,15 +68,45 @@ tasks
     .configureEach {
         options.compilerArgs.addAll(listOf("-Xlint:all"))
         options.isDeprecation = true
-        options.encoding = "UTF-8"
+        options.encoding = Charsets.UTF_8.name()
+        options.compilerArgs.add("-parameters")
     }
 
-tasks.processResources {
-    val props = mapOf("version" to version)
+tasks.named<ShadowJar>("shadowJar") {
+    archiveClassifier.set("")
+    dependencies {
+        relocate("kotlin", "com.flexingstudios.kotlin")
+    }
+    exclude("GradleStart**")
+    minimize()
+}
+
+tasks.named<Copy>("processResources") {
+    filteringCharset = Charsets.UTF_8.name()
+    val props = mapOf(
+        "name" to project.name,
+        "version" to version
+    )
     inputs.properties(props)
-    filteringCharset = "UTF-8"
     filesMatching("plugin.yml") {
         expand(props)
+    }
+}
+
+tasks.named("assemble").configure {
+    dependsOn("shadowJar")
+}
+
+tasks.register("apiJar", Jar::class).configure {
+    archiveClassifier.set("api")
+    from(sourceSets.main.get().output) {
+        include("com/flexingstudios/FlexingNetwork/api/**")
+    }
+}
+
+configure<PublishingExtension> {
+    publications.named<MavenPublication>("maven") {
+        from(components["java"])
     }
 }
 

@@ -1,4 +1,4 @@
-name: FlexingNetwork
+name: '${name}'
 author: [ FlexingStudios, Elec7reify ]
 version: '${version}'
 
