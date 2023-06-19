@@ -1,14 +1,11 @@
-package com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu;
+package com.flexingstudios.flexingnetwork.impl.player.profileMenu.subMenu;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenuImpl;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Invs;
-import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.impl.player.profileMenu.ProfileMenu;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.impl.player.profileMenu.ProfileMenu;
+import com.flexingstudios.flexingnetwork.api.Language.Messages;
+import com.flexingstudios.flexingnetwork.api.menu.InvMenu;
+import com.flexingstudios.flexingnetwork.api.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,21 +16,22 @@ import org.bukkit.inventory.ItemStack;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class PunishmentsMenu extends InvMenuImpl {
+public class PunishmentsMenu implements InvMenu {
+    private final Inventory inv;
+    private final Player player;
     private final ProfileMenu parent;
-    private final NetworkPlayer player;
     private ArrayList<Punishment> punishments = new ArrayList<>();
 
-    public PunishmentsMenu(NetworkPlayer player, ProfileMenu parent) {
-        super(Bukkit.createInventory(player.getBukkitPlayer(), 54, "История наказаний"));
-        this.parent = parent;
+    public PunishmentsMenu(Player player, ProfileMenu parent) {
+        inv = Bukkit.createInventory(this, 54, "История наказаний");
         this.player = player;
-        requestPunishments();
-        getInventory().setItem(40, Items.name(Material.FEATHER, "&aВернуться назад &7(Мой профиль)"));
+        this.parent = parent;
+
+        inv.setItem(40, Items.name(Material.FEATHER, "&aВернуться назад &7(Мой профиль)"));
     }
 
     private void requestPunishments() {
-        FlexingNetwork.mysql().select("SELECT * FROM `user_log_actions` WHERE `data` = '" + player.getName() + "'", rs -> {
+        FlexingNetwork.INSTANCE.mysql().select("SELECT * FROM `user_log_actions` WHERE `data` = '" + player.getName() + "'", rs -> {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String username = rs.getString("username");
@@ -60,14 +58,14 @@ public class PunishmentsMenu extends InvMenuImpl {
             Punishment punishment = punishments.get(i);
 
             if (punishment == null) {
-                getInventory().setItem(13, Items.name(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), "&aУ вас нет наказаний!"));
+                inv.setItem(13, Items.name(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15), "&aУ вас нет наказаний!"));
             } else {
                 if (punishment.action.startsWith("shade")) {
                     admin = "&cТеневой админ";
                 } else {
                     admin = punishment.username;
                 }
-                getInventory().setItem(getSlot(i), Items.name(PunishmentType.byId(punishment.action).is, "&e#" + i,
+                inv.setItem(getSlot(i), Items.name(PunishmentType.byId(punishment.action).is, "&e#" + i,
                         "&fИдентификатор лога &7" + punishment.id,
                         "&fАдмининистратор: &c" + admin,
                         "&fДата и время: &6" + new SimpleDateFormat(Messages.DATE_FORMAT)
@@ -88,8 +86,14 @@ public class PunishmentsMenu extends InvMenuImpl {
     }
 
     @Override
-    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
-        if (slot == 40) Invs.forceOpen(player.getBukkitPlayer(), parent.getInventory());
+    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
+        if (slot == 40) player.openInventory(parent.getInventory());
+    }
+
+    @Override
+    public Inventory getInventory() {
+        requestPunishments();
+        return inv;
     }
 
     private static class Punishment {

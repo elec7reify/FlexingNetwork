@@ -1,14 +1,14 @@
-package com.flexingstudios.FlexingNetwork.api.player;
+package com.flexingstudios.flexingnetwork.api.player;
 
-import com.flexingstudios.Common.player.Permission;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.common.player.Permission;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.Language.Messages;
+import com.flexingstudios.flexingnetwork.api.ServerType;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import gnu.trove.set.hash.TIntHashSet;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
-import java.util.UUID;
 
 public interface NetworkPlayer {
     String getMeta(String key);
@@ -20,7 +20,7 @@ public interface NetworkPlayer {
     void addCoinsExact(int amount);
     int getCoins();
     void toLobby();
-    void toServer(String id);
+    void toServer(ServerType id);
     void takeCoins(int amount);
 
     Rank getRank();
@@ -36,14 +36,14 @@ public interface NetworkPlayer {
     default boolean hasAndNotify(Rank rank) {
         if (getRank().has(rank))
             return true;
-        Utilities.msg(getBukkitPlayer(), Messages.NO_RANK.replace("{status}", rank.getColor() + rank.getName()));
+        Utils.msg(getBukkitPlayer(), Messages.NO_RANK.replace("{status}", rank.getColor() + rank.getName()));
         return false;
     }
 
     default boolean hasAndNotify(Permission permission) {
         if (getRank().has(permission))
             return true;
-        Utilities.msg(getBukkitPlayer(), Messages.NO_PERMISSION);
+        Utils.msg(getBukkitPlayer(), Messages.NO_PERMISSION);
         return false;
     }
 
@@ -68,5 +68,6 @@ public interface NetworkPlayer {
     int getPartialExp();
     void giveExp(int exp);
     void giveExpExact(int exp);
+    void setRestrict(boolean flag);
     boolean getRestrict();
 }

@@ -1,22 +1,26 @@
-package com.flexingstudios.FlexingNetwork;
+package com.flexingstudios.flexingnetwork;
 
-import com.flexingstudios.Common.player.Permission;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.Lobby;
-import com.flexingstudios.FlexingNetwork.api.updater.UpdateWatcher;
-import com.flexingstudios.FlexingNetwork.commands.*;
-import com.flexingstudios.FlexingNetwork.friends.listeners.GUIListener;
-import com.flexingstudios.FlexingNetwork.impl.FlexMetric;
-import com.flexingstudios.FlexingNetwork.impl.lobby.MysqlLobby;
-import com.flexingstudios.FlexingNetwork.impl.player.*;
-import com.flexingstudios.FlexingNetwork.listeners.*;
-import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
-import com.flexingstudios.FlexingNetwork.tasks.PlayerMetaSaver;
-import com.flexingstudios.FlexingNetwork.tasks.Restart;
+import com.flexingstudios.common.player.Permission;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.BungeeListeners.BungeeBridge;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.impl.FlexMetric;
+import com.flexingstudios.flexingnetwork.impl.lobby.MysqlLobby;
+import com.flexingstudios.flexingnetwork.tasks.PlayerMetaSaver;
+import com.flexingstudios.flexingnetwork.api.Lobby;
+import com.flexingstudios.flexingnetwork.api.updater.UpdateWatcher;
+import com.flexingstudios.flexingnetwork.commands.*;
+import com.flexingstudios.flexingnetwork.listeners.*;
+import com.flexingstudios.flexingnetwork.impl.player.ExpBuffer;
+import com.flexingstudios.flexingnetwork.impl.player.FlexCoin;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
+import com.flexingstudios.flexingnetwork.impl.player.MysqlPlayer;
+import com.flexingstudios.flexingnetwork.tasks.Restart;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -35,6 +39,8 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
     public VanishCommand vanishCommand;
     public PlayerMetaSaver metaSaver;
 
+    private BukkitAudiences adventure;
+
     @Override
     public void onLoad() {
         instance = this;
@@ -52,7 +58,10 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         lobby = new MysqlLobby(this);
         updateWatcher = new UpdateWatcher(this);
         mysql.start();
+        adventure = BukkitAudiences.create(this);
+
         FlexPlayer.CONSTRUCTOR = MysqlPlayer::new;
+
         BungeeBridge bungeeBridge = new BungeeBridge();
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerOutgoingPluginChannel(this, "FlexingBungee");
@@ -63,10 +72,9 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ServiceItems(), this);
         getServer().getPluginManager().registerEvents(new ArrowTrailListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
-        getServer().getPluginManager().registerEvents(new GUIListener(), this);
         getServer().getPluginManager().registerEvents(new FlexingChat(), this);
         getServer().getPluginManager().registerEvents(new ShulkerDispenseFix(), this);
-        if (FlexingNetwork.features().SIT.isEnabled())
+        if (FlexingNetwork.INSTANCE.features().SIT.isEnabled())
             getServer().getPluginManager().registerEvents(new SitDownListener(), this);
 
         /*
@@ -132,7 +140,7 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayerMetaSaver(this), 20L, 20L);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            if (!FlexingNetwork.isDevelopment() && FlexingNetwork.features().AUTO_RESTART.isEnabled())
+            if (!FlexingNetwork.INSTANCE.isDevelopment() && FlexingNetwork.INSTANCE.features().AUTO_RESTART.isEnabled())
                 Restart.Companion.schedule();
         });
     }
@@ -146,8 +154,19 @@ public final class FlexingNetworkPlugin extends JavaPlugin {
         coins.finish();
         expBuffer.finish();
         metrics.flush();
+        if (adventure != null) {
+            adventure.close();
+            adventure = null;
+        }
         mysql.finish();
         scheduledExecutorService.shutdownNow();
+    }
+
+    public @NotNull BukkitAudiences adventure() {
+        if(adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return adventure;
     }
 
     public static FlexingNetworkPlugin getInstance() {

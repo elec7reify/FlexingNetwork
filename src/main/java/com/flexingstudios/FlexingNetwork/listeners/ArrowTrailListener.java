@@ -1,25 +1,22 @@
-package com.flexingstudios.FlexingNetwork.listeners;
+package com.flexingstudios.flexingnetwork.listeners;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Particles;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.player.ArrowTrail;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.util.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-
-import java.util.logging.Logger;
 
 public class ArrowTrailListener implements Listener {
     @EventHandler
     public void onPlayerShootArrow(EntityShootBowEvent event) {
         if (event.getProjectile().getType() == EntityType.ARROW && event.getEntity().getType() == EntityType.PLAYER) {
-            NetworkPlayer player = FlexingNetwork.getPlayer(event.getEntity().getName());
+            NetworkPlayer player = FlexingNetwork.INSTANCE.getPlayer(event.getEntity().getName());
 
             if (player.getArrowTrail() != null) {
                 Trailer trailer = new Trailer((Arrow) event.getProjectile(), player.getArrowTrail());

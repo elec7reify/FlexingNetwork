@@ -1,8 +1,8 @@
-package com.flexingstudios.FlexingNetwork.tasks;
+package com.flexingstudios.flexingnetwork.tasks;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
-import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
+import com.flexingstudios.flexingnetwork.impl.player.MysqlPlayer;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.util.Collection;

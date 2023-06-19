@@ -1,10 +1,10 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.FlexingNetwork.BungeeListeners.BungeeBridge;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.ServerType;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.flexingnetwork.BungeeListeners.BungeeBridge;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.Language.Messages;
+import com.flexingstudios.flexingnetwork.api.ServerType;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,11 +17,11 @@ public class HubCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (FlexingNetwork.lobby().getServerType() == ServerType.LOBBY) {
-            Utilities.msg(player, Messages.COMMAND_LOBBY_ERROR);
+        if (FlexingNetwork.INSTANCE.lobby().getServerType() == ServerType.LOBBY) {
+            Utils.msg(player, Messages.COMMAND_LOBBY_ERROR);
         } else {
             BungeeBridge.toLobby(player);
-            Utilities.msg(player, Messages.COMMAND_LOBBY_SUCCESSFUL);
+            Utils.msg(player, Messages.COMMAND_LOBBY_SUCCESSFUL);
         }
 
         return true;

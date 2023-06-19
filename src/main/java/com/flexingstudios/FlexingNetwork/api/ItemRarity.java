@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api;
+package com.flexingstudios.flexingnetwork.api;
 
 public enum ItemRarity {
     COMMON("Обычный"),

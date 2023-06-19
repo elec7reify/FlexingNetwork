@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api;
+package com.flexingstudios.flexingnetwork.api;
 
 public interface Metrics {
     default void add(String key) {

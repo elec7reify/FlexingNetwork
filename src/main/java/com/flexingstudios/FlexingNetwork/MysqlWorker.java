@@ -1,16 +1,16 @@
-package com.flexingstudios.FlexingNetwork;
+package com.flexingstudios.flexingnetwork;
 
-import com.flexingstudios.Common.player.Leveling;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
-import com.flexingstudios.FlexingNetwork.api.mysql.MysqlThread;
-import com.flexingstudios.FlexingNetwork.api.util.Notifications;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
-import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
-import com.flexingstudios.Common.F;
+import com.flexingstudios.common.F;
+import com.flexingstudios.common.player.Leveling;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.Language.Messages;
+import com.flexingstudios.flexingnetwork.api.event.PlayerLoadedEvent;
+import com.flexingstudios.flexingnetwork.api.mysql.MysqlThread;
+import com.flexingstudios.flexingnetwork.api.util.Notifications;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
+import com.flexingstudios.flexingnetwork.impl.player.MysqlPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -54,7 +54,7 @@ public class MysqlWorker extends MysqlThread {
         if (success)
             queryCounter++;
         if (Debug.MYSQL.isEnabled())
-            logger.info("- [" + F.formatFloat((float)(System.nanoTime() - queryStartTime) / 1000000.0F, 1) + " ms.] " + query);
+            LOGGER.info("- [" + F.formatFloat((float)(System.nanoTime() - queryStartTime) / 1000000.0F, 1) + " ms.] " + query);
     }
 
     public int getExecutedQueries() {
@@ -76,7 +76,7 @@ public class MysqlWorker extends MysqlThread {
                 } else {
                     String bantime = banto == 0L ? "навсегда" : F.formatSecondsShort((int) TimeUnit.MILLISECONDS.toSeconds(banto - banfrom + 1)) + "";
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
-                            player.player.kickPlayer(Utilities.colored(Notifications.banMessage()
+                            player.player.kickPlayer(Utils.colored(Notifications.banMessage()
                             .replace("{player}", username)
                             .replace("{reason}", reason)
                             .replace("{admin}", admin)
@@ -142,7 +142,7 @@ public class MysqlWorker extends MysqlThread {
             player.onMetaLoaded();
             if (player.rank == Rank.PLAYER)
                 return;
-            if ((FlexingNetwork.features()).CHANGE_PLAYER_LIST_NAMES.isEnabled()) {
+            if ((FlexingNetwork.INSTANCE.features()).CHANGE_PLAYER_LIST_NAMES.isEnabled()) {
                 String name = player.rank.getColor() + player.rank.getName() + " " + player.username;
                 if (name.length() > 16)
                     name = name.substring(0, 15);

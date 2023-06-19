@@ -1,7 +1,7 @@
-package com.flexingstudios.FlexingNetwork.impl.player;
+package com.flexingstudios.flexingnetwork.impl.player;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.list.linked.TIntLinkedList;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -28,7 +28,7 @@ public class ExpBuffer {
                 player.expBuffer = 0;
             }
         }
-        FlexingNetwork.metrics().add("exp.added", total);
+        FlexingNetwork.INSTANCE.metrics().add("exp.added", total);
         TIntObjectIterator<TIntLinkedList> it = tIntObjectHashMap.iterator();
         while (it.hasNext()) {
             it.advance();

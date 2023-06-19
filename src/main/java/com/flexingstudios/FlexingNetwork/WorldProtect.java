@@ -1,34 +1,21 @@
-package com.flexingstudios.FlexingNetwork;
+package com.flexingstudios.flexingnetwork;
 
-import com.flexingstudios.Common.F;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.entity.NMSEntityUtils;
-import com.flexingstudios.FlexingNetwork.api.event.PlayerBanEvent;
-import com.flexingstudios.FlexingNetwork.api.event.PlayerLeaveEvent;
-import com.flexingstudios.FlexingNetwork.api.event.PlayerLoadedEvent;
-import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
-import com.flexingstudios.FlexingNetwork.api.holo.Hologram;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.JaroWinkler;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.commands.BanCommand;
-import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
+import com.flexingstudios.common.F;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.event.PlayerBanEvent;
+import com.flexingstudios.flexingnetwork.api.event.PlayerLeaveEvent;
+import com.flexingstudios.flexingnetwork.api.event.PlayerLoadedEvent;
+import com.flexingstudios.flexingnetwork.api.event.PlayerUnloadEvent;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.util.JaroWinkler;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.flexingstudios.flexingnetwork.commands.BanCommand;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
 
-import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_12_R1.EntityBlaze;
-import net.minecraft.server.v1_12_R1.EntityHuman;
-import net.minecraft.server.v1_12_R1.PacketPlayOutNamedEntitySpawn;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftBlaze;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -63,13 +50,13 @@ class WorldProtect implements Listener {
             BanCommand.maxBanTime = F.toMilliSec("1w");
         }
 
-        FlexingNetwork.mysql().select("SELECT restrictto FROM modrestrict WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
+        FlexingNetwork.INSTANCE.mysql().select("SELECT restrictto FROM modrestrict WHERE status = 1 AND username = '" + player.getName() + "'", rs -> {
             if (rs.next()) {
                 long currtime = System.currentTimeMillis();
                 long restrictto = rs.getLong("restrictto");
 
                 if (restrictto > 0L && restrictto < currtime) {
-                    FlexingNetwork.mysql().query("UPDATE modrestrict SET status = 0 WHERE username = '" + player.getName() + "'");
+                    FlexingNetwork.INSTANCE.mysql().query("UPDATE modrestrict SET status = 0 WHERE username = '" + player.getName() + "'");
                     flPlayer.setRestrict(false);
                 } else {
                     flPlayer.setRestrict(true);
@@ -85,7 +72,7 @@ class WorldProtect implements Listener {
         FlexPlayer flPlayer = FlexPlayer.get(event.getNetworkPlayer().getName());
 
         if (flPlayer.getMessageOnJoin() != null) {
-            Utilities.bcast(flPlayer.getMessageOnJoin().getMessage()
+            Utils.bcast(flPlayer.getMessageOnJoin().getMessage()
                     .replace("{rank}", flPlayer.getRank().getDisplayName())
                     .replace("{player}", flPlayer.getName()));
         }
@@ -93,8 +80,7 @@ class WorldProtect implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        event.setQuitMessage(fireLeaveEvent(FlexPlayer.get(player), event.getQuitMessage(), false));
+        event.setQuitMessage(null);
     }
 
     @EventHandler
@@ -140,7 +126,7 @@ class WorldProtect implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onChatHigh(AsyncPlayerChatEvent event) {
-        NetworkPlayer player = FlexingNetwork.getPlayer(event.getPlayer());
+        NetworkPlayer player = FlexingNetwork.INSTANCE.getPlayer(event.getPlayer());
 //        if ((FlexingNetwork.features()).CHANGE_CHAT.isEnabled()) {
 //            String msgColor = "&f";
 //            if (player.has(Rank.PLAYER)) {
@@ -170,13 +156,12 @@ class WorldProtect implements Listener {
                 Bukkit.getPluginManager().callEvent(new PlayerUnloadEvent(player));
     }
 
-    private String fireLeaveEvent(FlexPlayer player, String message, boolean isKick) {
-        PlayerLeaveEvent event = new PlayerLeaveEvent(player, message, isKick);
+    public static void fireLeaveEvent(FlexPlayer player, boolean isKick) {
+        PlayerLeaveEvent event = new PlayerLeaveEvent(player, null, isKick);
         Bukkit.getPluginManager().callEvent(event);
         Bukkit.getPluginManager().callEvent(new PlayerUnloadEvent(player));
         FlexPlayer.PLAYERS.remove(player.getName());
         FlexPlayer.IDS.remove(player.getId());
-        return event.getLeaveMessage();
     }
 
     public String checkMessage(String name, String message){

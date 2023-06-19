@@ -1,38 +1,53 @@
-package com.flexingstudios.FlexingNetwork.impl.player;
+package com.flexingstudios.flexingnetwork.impl.player;
 
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenuImpl;
-import com.flexingstudios.FlexingNetwork.api.player.ArrowTrail;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Invs;
-import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.flexingnetwork.api.Language.Messages;
+import com.flexingstudios.flexingnetwork.api.menu.ConfirmMenu;
+import com.flexingstudios.flexingnetwork.api.menu.InvMenu;
+import com.flexingstudios.flexingnetwork.api.player.ArrowTrail;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.util.Items;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ArrowTrailMenu extends InvMenuImpl {
+public class ArrowTrailMenu implements InvMenu {
+    private final Inventory inv;
+    private final FlexPlayer player;
     private final FCShopMenu parent;
     private int page = 0;
     private boolean hasNextPage;
 
-    public ArrowTrailMenu(NetworkPlayer player, FCShopMenu parent) {
-        super(Bukkit.createInventory(null, 54, "Следы за стрелой"));
+    public ArrowTrailMenu(NetworkPlayer nplayer, FCShopMenu parent) {
+        inv = Bukkit.createInventory(this, 54, "Следы за стрелой");
+        player = (FlexPlayer) nplayer;
         this.parent = parent;
 
         ItemStack GLASS_PANE_BLUE = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
-        fill(0, 53, GLASS_PANE_BLUE);
+        ItemMeta GLASS_PANE_BLUE_META = GLASS_PANE_BLUE.getItemMeta();
+        GLASS_PANE_BLUE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
+        GLASS_PANE_BLUE.setItemMeta(GLASS_PANE_BLUE_META);
+
+        Set<Integer> GLASS_PANE_BLUE_SLOTS = ImmutableSet.of(0, 8, 9, 17, 18, 26, 27, 35, 36, 38, 39, 41, 42, 44, 45, 53);
+        GLASS_PANE_BLUE_SLOTS.forEach(slot -> inv.setItem(slot, GLASS_PANE_BLUE));
 
         ItemStack GLASS_PANE_WHITE = new ItemStack(Material.STAINED_GLASS_PANE, 1);
-        fill(1, 52, GLASS_PANE_WHITE);
+        ItemMeta GLASS_PANE_WHITE_META = GLASS_PANE_WHITE.getItemMeta();
+        GLASS_PANE_WHITE_META.setDisplayName("§6§k|§a§k|§e§k|§c§k|");
+        GLASS_PANE_WHITE.setItemMeta(GLASS_PANE_WHITE_META);
 
-        getInventory().setItem(40, Items.name(Material.FEATHER, "&3Вернуться назад", "&3► &7Вернуться в Магазин FlexCoin"));
+        Set<Integer> GLASS_PANE_WHITE_SLOTS = ImmutableSet.of(1, 2, 3, 4, 5, 6, 7, 37, 43, 46, 47, 48, 49, 50, 51, 52);
+        GLASS_PANE_WHITE_SLOTS.forEach(slot -> inv.setItem(slot, GLASS_PANE_WHITE));
+
+        inv.setItem(40, Items.name(Material.FEATHER, "&3Вернуться назад", "&3► &7Вернуться в Магазин FlexCoin"));
 
         int index = 0;
         for (ArrowTrail trail : ArrowTrail.values()) {
@@ -47,7 +62,7 @@ public class ArrowTrailMenu extends InvMenuImpl {
                 title = trail.getName();
             }
 
-            if (player.getAvailableArrowTrails().contains(trail.getId())) {
+            if (player.availableArrowTrails.contains(trail.getId())) {
                 if (player.getArrowTrail() == trail) {
                     color = "&a";
                     lore.add("&fРедкость: &3" + trail.getRarity().getTag());
@@ -77,8 +92,7 @@ public class ArrowTrailMenu extends InvMenuImpl {
             }
 
             Items.name(is, color + title, lore);
-            Arrays.sort(ArrowTrail.values(), Comparator.comparingInt(ArrowTrail::getPrice));
-            getInventory().setItem(getSlot(index++), is);
+            inv.setItem(getSlot(index++), is);
         }
     }
 
@@ -100,15 +114,14 @@ public class ArrowTrailMenu extends InvMenuImpl {
     }
 
     @Override
-    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
-        Player bukkitPlayer = player.getBukkitPlayer();
-        if (slot == 40) Invs.forceOpen(player.getBukkitPlayer(), parent.getInventory());
+    public void onClick(ItemStack is, Player bukkitPlayer, int slot, ClickType clickType) {
+        if (slot == 40) bukkitPlayer.openInventory(parent.getInventory());
 
         int index = getIndex(slot);
         if (index < 0 || index >= ArrowTrail.values().length) return;
 
         ArrowTrail selected = ArrowTrail.values()[index];
-        if (!player.getAvailableArrowTrails().contains(selected.getId())) {
+        if (!player.availableArrowTrails.contains(selected.getId())) {
             if (player.getCoins() >= selected.getPrice()) {
                 ConfirmMenu menu = new ConfirmMenu(getInventory(), () -> {
                     player.takeCoins(selected.getPrice());
@@ -119,12 +132,17 @@ public class ArrowTrailMenu extends InvMenuImpl {
                 bukkitPlayer.openInventory(menu.getInventory());
             } else {
                 bukkitPlayer.closeInventory();
-                Utilities.msg(bukkitPlayer, "&cУ Вас недостаточно коинов для покупки этого следа от стрелы.");
+                Utils.msg(bukkitPlayer, "&cУ Вас недостаточно коинов для покупки этого следа от стрелы.");
             }
-        } else if (player.getAvailableArrowTrails().contains(selected.getId()) && player.getArrowTrail() != selected) {
-            Utilities.msg(bukkitPlayer, Messages.ARROWTRAIL_SELECTED.replace("{trail_name}", selected.getName()));
+        } else if (player.availableArrowTrails.contains(selected.getId()) && player.getArrowTrail() != selected) {
+            Utils.msg(bukkitPlayer, Messages.ARROWTRAIL_SELECTED.replace("{trail_name}", selected.getName()));
             player.setArrowTrail(selected);
             bukkitPlayer.closeInventory();
         }
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return inv;
     }
 }

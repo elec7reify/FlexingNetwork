@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.updater;
+package com.flexingstudios.flexingnetwork.api.updater;
 
-import com.flexingstudios.FlexingNetwork.api.event.FileUpdateEvent;
+import com.flexingstudios.flexingnetwork.api.event.FileUpdateEvent;
 import org.bukkit.Bukkit;
 
 import java.io.File;

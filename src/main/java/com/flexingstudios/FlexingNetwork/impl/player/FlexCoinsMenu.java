@@ -1,9 +1,11 @@
-package com.flexingstudios.FlexingNetwork.impl.player;
+package com.flexingstudios.flexingnetwork.impl.player;
 
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.*;
-import com.flexingstudios.FlexingNetwork.impl.GroupsMenu;
+import com.flexingstudios.flexingnetwork.api.util.ItemBuilder;
+import com.flexingstudios.flexingnetwork.api.util.Items;
+import com.flexingstudios.flexingnetwork.api.util.SkullBuilder;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.flexingstudios.flexingnetwork.impl.GroupsMenu;
+import com.flexingstudios.flexingnetwork.api.menu.InvMenu;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,7 +20,7 @@ import java.util.Set;
 public class FlexCoinsMenu implements InvMenu {
     private final Inventory inv;
 
-    public FlexCoinsMenu(NetworkPlayer player) {
+    public FlexCoinsMenu(Player player) {
         this.inv = Bukkit.createInventory(this, 54, "FlexCoin");
         ItemStack INFO_BOOK = Items.name(Items.glow(Material.BOOK), "&a&lИнформация", "&9&lFlex&f&lCoin &f- особая игровая валюта, которую",
                 "&fМожно получить только за &a&lреальные деньги",
@@ -53,13 +55,13 @@ public class FlexCoinsMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
+    public void onClick(ItemStack is, Player player, int slot, ClickType clickType) {
         switch (slot) {
             case 8:
-                player.getBukkitPlayer().openInventory(new GroupsMenu(player).getInventory());
+                player.openInventory(new GroupsMenu(player).getInventory());
                 break;
             case 49:
-                player.getBukkitPlayer().openInventory(new FCShopMenu(player).getInventory());
+                player.openInventory(new FCShopMenu(player).getInventory());
                 break;
             case 28:
             case 30:
@@ -69,7 +71,7 @@ public class FlexCoinsMenu implements InvMenu {
             case 39:
             case 41:
             case 43:
-                Utilities.msg(player.getBukkitPlayer(), "&fДля покупки &9&lFlex&f&lCoin", "&fВы должны перейти на сайт &7↴", "&ehttps://vk.com/zzzrazum", "&fи написать администратору.");
+                Utils.msg(player, "&fДля покупки &9&lFlex&f&lCoin", "&fВы должны перейти на сайт &7↴", "&ehttps://vk.com/zzzrazum", "&fи написать администратору.");
                 break;
         }
     }

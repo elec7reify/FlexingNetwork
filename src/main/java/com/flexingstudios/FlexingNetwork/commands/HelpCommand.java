@@ -1,10 +1,10 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.Common.player.Permission;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
+import com.flexingstudios.common.player.Permission;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,7 +41,7 @@ public class HelpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            Utilities.msg(sender, "&cPlayer only commands!");
+            Utils.msg(sender, "&cPlayer only commands!");
             return true;
         }
 
@@ -57,7 +57,7 @@ public class HelpCommand implements CommandExecutor {
                 if (page < 0)
                     page = 0;
             } catch (NumberFormatException numberFormatException) {}
-        Utilities.msg(sender, "&3============== &fПомощь &7[" + (page + 1) + "&8/&7" + (pages + 1) + "] &3==============");
+        Utils.msg(sender, "&3============== &fПомощь &7[" + (page + 1) + "&8/&7" + (pages + 1) + "] &3==============");
         int index = page * 9;
 
         for (int i = index; i < cmds.size() && i < index + 9; i++) {
@@ -82,8 +82,8 @@ public class HelpCommand implements CommandExecutor {
         String help;
 
         Desc(String command, String help) {
-            this.command = Utilities.colored(command);
-            this.help = Utilities.colored(help);
+            this.command = Utils.colored(command);
+            this.help = Utils.colored(help);
         }
 
         public abstract boolean canUse(NetworkPlayer param1NetworkPlayer);

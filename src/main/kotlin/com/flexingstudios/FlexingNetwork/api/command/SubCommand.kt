@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.command
+package com.flexingstudios.flexingnetwork.api.command
 
-import com.flexingstudios.Common.player.Rank
+import com.flexingstudios.common.player.Rank
 
 @Target(
     AnnotationTarget.FUNCTION,

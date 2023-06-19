@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.event;
+package com.flexingstudios.flexingnetwork.api.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -14,18 +14,18 @@ public class PlayerBanEvent extends PlayerEvent {
     }
 
     /**
-     * Gets the ban message send to all online players
+     * Gets the ban message send to all online players.
      *
-     * @return string ban reason
+     * @return string ban reason.
      */
     public String getBanMessage() {
         return banMessage;
     }
 
     /**
-     * Sets the ban message send to all online players
+     * Sets the ban message send to all online players.
      *
-     * @param banMessage ban message
+     * @param banMessage ban message.
      */
     public void setBanMessage(String banMessage) {
         this.banMessage = banMessage;

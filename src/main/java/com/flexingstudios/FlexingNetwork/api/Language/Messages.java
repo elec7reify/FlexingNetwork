@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.Language;
+package com.flexingstudios.flexingnetwork.api.Language;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +14,7 @@ public class Messages {
     /** BAN/KICK/MUTE Messages + SHADE */
     public static final String REASON_NOT_SPECIFIED = "Не указана";
     public static final String COMMAND_KICK_USAGE = "&cИспользование: /{command} <игрок> [причина]";
-    public static final String COMMAND_BAN_USAGE = "&cИспользование: /{command} <игрок> [время] [причина]";
+    public static final String COMMAND_BAN_USAGE = "&cИспользование: /{command} [игрок] <время> <причина>";
     public static final String KICKED_BY_SHADEADMIN = "&c&lТеневой админ &fкикнул игрока &3{player} &fпо причине: &6{reason}";
     public static final String KICKED_BY_ADMIN = "&3{admin} &fкикнул игрока &3{player} &fпо причине: &6{reason}";
     public static final String BANNED_BY_ADMIN = "&3{admin} &fзабанил игрока &3{player} &6навсегда &fпо причине: &6{reason}";

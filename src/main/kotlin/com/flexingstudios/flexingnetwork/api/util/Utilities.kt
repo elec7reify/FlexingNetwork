@@ -1,18 +1,17 @@
-package com.flexingstudios.FlexingNetwork.api.utils
+package com.flexingstudios.flexingnetwork.api.util
 
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import org.jetbrains.annotations.NotNull
 
 class Utilities {
     companion object {
-        fun colored(message: String): String? {
+        fun colored(message: String): String {
             return ChatColor.translateAlternateColorCodes('&', message)
         }
 
-        fun colored(vararg lines: String?): Array<out String?> {
+        fun colored(vararg lines: String): Array<out String> {
             for (i in lines.indices) {
                 lines[i] = colored(lines[i]) as Nothing
             }
@@ -27,7 +26,8 @@ class Utilities {
         }
 
         fun msg(@NotNull cs: CommandSender, vararg message: String) {
-            cs.sendMessage(colored(message.toString()))
+            for (msg: String in message)
+                cs.sendMessage(colored(msg))
         }
 
         fun msg(@NotNull cs: CommandSender, messages: List<String>) {

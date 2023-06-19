@@ -1,8 +1,8 @@
-package com.flexingstudios.FlexingNetwork.impl;
+package com.flexingstudios.flexingnetwork.impl;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.Metrics;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.Metrics;
 import org.bukkit.Bukkit;
 
 import java.util.HashMap;
@@ -28,9 +28,9 @@ public class FlexMetric implements Metrics {
                 continue;
             if (!entry.getValue().inserted) {
                 entry.getValue().inserted = true;
-                FlexingNetwork.mysql().query("INSERT INTO `metrics` (`id`, `value`) VALUES ('" + entry.getKey() + "', " + entry.getValue().value + ") ON DUPLICATE KEY UPDATE `value` = `value` + " + entry.getValue().value);
+                FlexingNetwork.INSTANCE.mysql().query("INSERT INTO `metrics` (`id`, `value`) VALUES ('" + entry.getKey() + "', " + entry.getValue().value + ") ON DUPLICATE KEY UPDATE `value` = `value` + " + entry.getValue().value);
             } else {
-                FlexingNetwork.mysql().query("UPDATE `metrics` SET `value` = `value` + " + entry.getValue().value + " WHERE id = '" + entry.getKey() + "'");
+                FlexingNetwork.INSTANCE.mysql().query("UPDATE `metrics` SET `value` = `value` + " + entry.getValue().value + " WHERE id = '" + entry.getKey() + "'");
             }
             entry.getValue().value = 0;
         }

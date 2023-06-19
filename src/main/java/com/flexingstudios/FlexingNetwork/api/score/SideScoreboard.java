@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.score;
+package com.flexingstudios.flexingnetwork.api.score;
 
-import com.flexingstudios.FlexingNetwork.api.util.Reflect;
+import com.flexingstudios.flexingnetwork.api.util.Reflect;
 import io.netty.util.internal.ConcurrentSet;
 import net.minecraft.server.v1_12_R1.Scoreboard;
 import net.minecraft.server.v1_12_R1.ScoreboardObjective;

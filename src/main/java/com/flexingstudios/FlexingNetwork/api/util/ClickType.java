@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
-import com.flexingstudios.FlexingNetwork.api.event.ItemClickedEvent;
+import com.flexingstudios.flexingnetwork.api.event.ItemClickedEvent;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 

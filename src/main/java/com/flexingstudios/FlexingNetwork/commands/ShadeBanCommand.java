@@ -1,12 +1,12 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.Common.F;
-import com.flexingstudios.Common.player.Permission;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
+import com.flexingstudios.common.F;
+import com.flexingstudios.common.player.Permission;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.Language.Messages;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,14 +16,14 @@ import org.bukkit.entity.Player;
 public class ShadeBanCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-        if (!FlexingNetwork.hasPermission(commandSender, Permission.BAN, true))
+        if (!FlexingNetwork.INSTANCE.hasPermission(commandSender, Permission.BAN, true))
             return true;
 
         Player sender = (Player) commandSender;
 
         if (command.getName().equals("shadeban")) {
             if (args.length == 0) {
-                Utilities.msg(sender, Messages.COMMAND_BAN_USAGE.replace("{command}", command.getName()));
+                Utils.msg(sender, Messages.COMMAND_BAN_USAGE.replace("{command}", command.getName()));
             } else {
                 long time;
                 String reason = "";
@@ -49,38 +49,38 @@ public class ShadeBanCommand implements CommandExecutor {
                     FlexPlayer flPlayer = FlexPlayer.get(sender);
 
                     if (banned == sender) {
-                        Utilities.msg(sender, Messages.BAN_ME);
+                        Utils.msg(sender, Messages.BAN_ME);
                         return true;
                     }
 
                     // Immunity to kick
                     if (flPlayer.has(Rank.ADMIN)) {
-                        FlexingNetwork.ban(args[0], time, reason, sender.getName(), true);
+                        FlexingNetwork.INSTANCE.ban(args[0], time, reason, sender.getName(), true);
                     } else if (flPlayer.has(Rank.SADMIN)) {
-                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN)) {
-                            FlexingNetwork.ban(args[0], time, reason, sender.getName(), true);
+                        if (!FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.ADMIN)) {
+                            FlexingNetwork.INSTANCE.ban(args[0], time, reason, sender.getName(), true);
                         }
                     } else if (flPlayer.has(Rank.VADMIN)) {
-                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN)) {
-                            FlexingNetwork.ban(args[0], time, reason, sender.getName(), true);
+                        if (!FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.SADMIN)) {
+                            FlexingNetwork.INSTANCE.ban(args[0], time, reason, sender.getName(), true);
                         }
                     } else if (flPlayer.has(Rank.TEAM)) {
-                        if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.VADMIN)) {
-                            FlexingNetwork.ban(args[0], time, reason, sender.getName(), true);
+                        if (!FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.VADMIN)) {
+                            FlexingNetwork.INSTANCE.ban(args[0], time, reason, sender.getName(), true);
                         }
-                    } else if (flPlayer.has(Rank.GOD) && !FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.VADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.TEAM)) {
-                        FlexingNetwork.ban(args[0], time, reason, sender.getName(), true);
+                    } else if (flPlayer.has(Rank.GOD) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.VADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.TEAM)) {
+                        FlexingNetwork.INSTANCE.ban(args[0], time, reason, sender.getName(), true);
                     }
 
                     if (banned != null) {
                         for (Player players : Bukkit.getOnlinePlayers())
-                            Utilities.msg(players, Messages.BANNED_BY_ADMIN
+                            Utils.msg(players, Messages.BANNED_BY_ADMIN
                                     .replace("{admin}", "&cТеневой админ")
                                     .replace("{player}", banned.getName())
                                     .replace("{reason}", reason));
                     } else {
                         for (Player players : Bukkit.getOnlinePlayers())
-                            Utilities.msg(players, Messages.BANNED_BY_ADMIN
+                            Utils.msg(players, Messages.BANNED_BY_ADMIN
                                     .replace("{admin}", "&cТеневой админ")
                                     .replace("{player}", args[0])
                                     .replace("{reason}", reason));
@@ -93,9 +93,9 @@ public class ShadeBanCommand implements CommandExecutor {
 
         if (command.getName().equals("shadeunban")) {
             if (args.length == 0) {
-                Utilities.msg(sender, "&cИспользование: /shadeunban <username>");
+                Utils.msg(sender, "&cИспользование: /shadeunban <username>");
             } else {
-                FlexingNetwork.unban(args[0], sender.getName(), true);
+                FlexingNetwork.INSTANCE.unban(args[0], sender.getName(), true);
             }
         }
 

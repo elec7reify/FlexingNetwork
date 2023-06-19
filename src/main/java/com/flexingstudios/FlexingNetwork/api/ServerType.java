@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api;
+package com.flexingstudios.flexingnetwork.api;
 
 import java.util.HashMap;
 import java.util.Map;

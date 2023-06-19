@@ -1,9 +1,7 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.event.PlayerUnloadEvent;
-import com.flexingstudios.FlexingNetwork.api.menu.TrailMenu;
-import io.netty.util.internal.ConcurrentSet;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.event.PlayerUnloadEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;

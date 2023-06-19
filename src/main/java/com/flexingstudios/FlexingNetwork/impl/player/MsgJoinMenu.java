@@ -1,11 +1,10 @@
-package com.flexingstudios.FlexingNetwork.impl.player;
+package com.flexingstudios.flexingnetwork.impl.player;
 
-import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenuImpl;
-import com.flexingstudios.FlexingNetwork.api.player.MessageOnJoin;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Items;
+import com.flexingstudios.flexingnetwork.api.menu.ConfirmMenu;
+import com.flexingstudios.flexingnetwork.api.menu.InvMenu;
+import com.flexingstudios.flexingnetwork.api.player.MessageOnJoin;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -15,9 +14,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MsgJoinMenu extends InvMenuImpl {
-    public MsgJoinMenu(NetworkPlayer player) {
-        super(Bukkit.createInventory(player.getBukkitPlayer(), 36, "Сообщения о входе"));
+public class MsgJoinMenu implements InvMenu {
+    private final Inventory inv;
+    private final FlexPlayer player;
+
+    public MsgJoinMenu(NetworkPlayer nplayer) {
+        inv = Bukkit.createInventory(this, 36, "Сообщение при входе");
+        player = (FlexPlayer) nplayer;
         int index = 0;
 
         for (MessageOnJoin message : MessageOnJoin.values()) {
@@ -74,7 +77,7 @@ public class MsgJoinMenu extends InvMenuImpl {
                 lore.add("&6Нажмите, чтобы купить.");
             }
             Items.name(is, color + "Сообщение #" + message.getId(), lore);
-            getInventory().setItem(getSlot(index++), is);
+            inv.setItem(getSlot(index++), is);
         }
     }
 
@@ -94,8 +97,7 @@ public class MsgJoinMenu extends InvMenuImpl {
     }
 
     @Override
-    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType ClickType) {
-        Player bukkitPlayer = player.getBukkitPlayer();
+    public void onClick(ItemStack itemStack, Player bukkitPlayer, int slot, ClickType ClickType) {
         int index = getIndex(slot);
         if (index < 0 || index >= MessageOnJoin.values().length)
             return;
@@ -119,5 +121,10 @@ public class MsgJoinMenu extends InvMenuImpl {
             player.setMessageOnJoin(selected);
             bukkitPlayer.closeInventory();
         }
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return inv;
     }
 }

@@ -1,5 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,12 +10,12 @@ public class Notifications {
         return title + " → &f" + text;
     }
 
-    public static String success(String title, String text) {
-        return system("&a" + title, "&f" + text);
+    public static void success(CommandSender sender, String title, String text) {
+        Utilities.Companion.msg(sender, system("&a" + title, "&f" + text));
     }
 
-    public static String error(String title, String text) {
-        return system("&c" + title, "&f" + text);
+    public static void error(CommandSender sender, String title, String text) {
+        Utilities.Companion.msg(sender, system("&c" + title, "&f" + text));
     }
 
     public static String banMessage() {

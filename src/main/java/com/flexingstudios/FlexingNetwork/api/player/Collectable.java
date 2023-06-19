@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.player;
+package com.flexingstudios.flexingnetwork.api.player;
 
 public class Collectable {
     protected final NetworkPlayer player;

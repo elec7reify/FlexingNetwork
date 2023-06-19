@@ -1,7 +1,8 @@
-package com.flexingstudios.FlexingNetwork.BungeeListeners;
+package com.flexingstudios.flexingnetwork.BungeeListeners;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.ServerType;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -27,7 +28,7 @@ public class BungeeBridge implements PluginMessageListener {
         if (channel.equals("FlexingBungee") || channel.equals("BungeeCord")) {
             String msg = new String(message, StandardCharsets.UTF_8);
             if (msg.startsWith("bcast"))
-                Bukkit.broadcastMessage(Utilities.colored(msg.substring(6)));
+                Bukkit.broadcastMessage(Utils.colored(msg.substring(6)));
         }
 
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
@@ -120,6 +121,17 @@ public class BungeeBridge implements PluginMessageListener {
         try {
             out.writeUTF("Connect");
             out.writeUTF(serverName);
+            out.flush();
+        } catch (IOException ioException) {}
+        player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", b.toByteArray());
+    }
+
+    public static void toServer(Player player, ServerType serverName) {
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(b);
+        try {
+            out.writeUTF("Connect");
+            out.writeUTF(serverName.getId());
             out.flush();
         } catch (IOException ioException) {}
         player.sendPluginMessage(FlexingNetworkPlugin.getInstance(), "BungeeCord", b.toByteArray());

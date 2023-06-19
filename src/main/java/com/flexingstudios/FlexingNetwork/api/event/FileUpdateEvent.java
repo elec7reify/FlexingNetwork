@@ -1,8 +1,8 @@
-package com.flexingstudios.FlexingNetwork.api.event;
+package com.flexingstudios.flexingnetwork.api.event;
 
-import com.flexingstudios.FlexingNetwork.api.updater.WatchedDir;
-import com.flexingstudios.FlexingNetwork.api.updater.WatchedEntry;
-import com.flexingstudios.FlexingNetwork.api.updater.WatchedFile;
+import com.flexingstudios.flexingnetwork.api.updater.WatchedDir;
+import com.flexingstudios.flexingnetwork.api.updater.WatchedEntry;
+import com.flexingstudios.flexingnetwork.api.updater.WatchedFile;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

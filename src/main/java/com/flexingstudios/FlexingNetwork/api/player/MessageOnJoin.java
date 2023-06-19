@@ -1,10 +1,8 @@
-package com.flexingstudios.FlexingNetwork.api.player;
+package com.flexingstudios.flexingnetwork.api.player;
 
-import com.flexingstudios.FlexingNetwork.api.ItemRarity;
-import com.flexingstudios.FlexingNetwork.api.util.Items;
+import com.flexingstudios.flexingnetwork.api.ItemRarity;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 public enum MessageOnJoin {

@@ -1,14 +1,12 @@
-package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
+package com.flexingstudios.flexingnetwork.impl.player.actionsMenu.subMenu;
 
-import com.flexingstudios.Common.F;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.menu.ConfirmMenu;
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Items;
+import com.flexingstudios.common.F;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.menu.ConfirmMenu;
+import com.flexingstudios.flexingnetwork.api.menu.InvMenu;
+import com.flexingstudios.flexingnetwork.api.util.Items;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.graph.Network;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -52,16 +50,15 @@ public class TimeValueMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack item, NetworkPlayer nplayer, int slot, ClickType clickType) {
-        Player player = nplayer.getBukkitPlayer();
+    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
         switch (slot) {
             case 10:
-                if (!FlexingNetwork.hasRank(player, Rank.CHIKIBOMBASTER, true)) {
+                if (!FlexingNetwork.INSTANCE.hasRank(player, Rank.CHIKIBOMBASTER, true)) {
                     return;
                 } else {
                     for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
-                            FlexingNetwork.ban(target, F.toMilliSec("1w"), object.getRight(), player.getName(), false);
+                            FlexingNetwork.INSTANCE.ban(target, F.toMilliSec("1w"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
                         menu.setBackOnConfirm(false);
                         menu.setConfirmText("", "");
@@ -71,12 +68,12 @@ public class TimeValueMenu implements InvMenu {
                 }
                 break;
             case 11:
-                if (!FlexingNetwork.hasRank(player, Rank.CHIKIBOMBASTER, true)) {
+                if (!FlexingNetwork.INSTANCE.hasRank(player, Rank.CHIKIBOMBASTER, true)) {
                     return;
                 } else {
                     for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
-                            FlexingNetwork.ban(target, F.toMilliSec("1d"), object.getRight(), player.getName(), false);
+                            FlexingNetwork.INSTANCE.ban(target, F.toMilliSec("1d"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
                         menu.setBackOnConfirm(false);
                         menu.setConfirmText("", "");
@@ -86,12 +83,12 @@ public class TimeValueMenu implements InvMenu {
                 }
                 break;
             case 12:
-                if (!FlexingNetwork.hasRank(player, Rank.OWNER, true)) {
+                if (!FlexingNetwork.INSTANCE.hasRank(player, Rank.OWNER, true)) {
                     return;
                 } else {
                     for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
-                            FlexingNetwork.ban(target, F.toMilliSec("6h"), object.getRight(), player.getName(), false);
+                            FlexingNetwork.INSTANCE.ban(target, F.toMilliSec("6h"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
                         menu.setBackOnConfirm(false);
                         menu.setConfirmText("", "");
@@ -101,12 +98,12 @@ public class TimeValueMenu implements InvMenu {
                 }
                 break;
             case 13:
-                if (!FlexingNetwork.hasRank(player, Rank.OWNER, true)) {
+                if (!FlexingNetwork.INSTANCE.hasRank(player, Rank.OWNER, true)) {
                     return;
                 } else {
                     for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
-                            FlexingNetwork.ban(target, F.toMilliSec("2h"), object.getRight(), player.getName(), false);
+                            FlexingNetwork.INSTANCE.ban(target, F.toMilliSec("2h"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
                         menu.setBackOnConfirm(false);
                         menu.setConfirmText("", "");
@@ -116,12 +113,12 @@ public class TimeValueMenu implements InvMenu {
                 }
                 break;
             case 14:
-                if (!FlexingNetwork.hasRank(player, Rank.OWNER, true)) {
+                if (!FlexingNetwork.INSTANCE.hasRank(player, Rank.OWNER, true)) {
                     return;
                 } else {
                     for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
-                            FlexingNetwork.ban(target, F.toMilliSec("1h"), object.getRight(), player.getName(), false);
+                            FlexingNetwork.INSTANCE.ban(target, F.toMilliSec("1h"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
                         menu.setBackOnConfirm(false);
                         menu.setConfirmText("", "");
@@ -131,12 +128,12 @@ public class TimeValueMenu implements InvMenu {
                 }
                 break;
             case 15:
-                if (!FlexingNetwork.hasRank(player, Rank.SPONSOR, true)) {
+                if (!FlexingNetwork.INSTANCE.hasRank(player, Rank.SPONSOR, true)) {
                     return;
                 } else {
                     for (Pair<Long, String> object : objects) {
                         ConfirmMenu menu = new ConfirmMenu(() -> {
-                            FlexingNetwork.ban(target, F.toMilliSec("30min"), object.getRight(), player.getName(), false);
+                            FlexingNetwork.INSTANCE.ban(target, F.toMilliSec("30min"), object.getRight(), player.getName(), false);
                         }, "Подтвердите действия");
                         menu.setBackOnConfirm(false);
                         menu.setConfirmText("", "");

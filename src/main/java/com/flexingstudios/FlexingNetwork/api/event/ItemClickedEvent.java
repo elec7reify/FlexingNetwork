@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.event;
+package com.flexingstudios.flexingnetwork.api.event;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

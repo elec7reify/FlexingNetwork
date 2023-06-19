@@ -1,10 +1,9 @@
-package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
+package com.flexingstudios.flexingnetwork.impl.player.actionsMenu.subMenu;
 
-import com.flexingstudios.Common.F;
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;
+import com.flexingstudios.common.F;
+import com.flexingstudios.flexingnetwork.impl.player.actionsMenu.ActionsMenu;
+import com.flexingstudios.flexingnetwork.api.menu.InvMenu;
+import com.flexingstudios.flexingnetwork.api.util.Items;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
@@ -75,12 +74,12 @@ public class BanMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
-        if (slot == 49) player.getBukkitPlayer().openInventory(new ActionsMenu(target).getInventory());
+    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
+        if (slot == 49) player.openInventory(new ActionsMenu(target).getInventory());
 
         int index = getIndex(slot);
         if (index >= 0 && index < BanMenu.REASON.size()) {
-            player.getBukkitPlayer().openInventory(new TimeValueMenu(target, getInventory()).getInventory());
+            player.openInventory(new TimeValueMenu(target, getInventory()).getInventory());
         }
     }
 

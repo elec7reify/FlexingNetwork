@@ -1,9 +1,9 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -24,7 +24,7 @@ public class EventListener<T extends Event> implements Listener {
      * @param handler The callback to receive the event and this EventListener
      */
     public EventListener(Class<T> eventClass, EventPriority priority, BiConsumer<EventListener<T>, T> handler) {
-        this(FlexingNetwork.getCallingPlugin(), eventClass, priority, handler);
+        this(FlexingNetwork.INSTANCE.getCallingPlugin(), eventClass, priority, handler);
     }
 
     /**
@@ -47,7 +47,7 @@ public class EventListener<T extends Event> implements Listener {
      * @param handler The callback to receive the event
      */
     public EventListener(Class<T> eventClass, EventPriority priority, Consumer<T> handler) {
-        this(FlexingNetwork.getCallingPlugin(), eventClass, priority, handler);
+        this(FlexingNetwork.INSTANCE.getCallingPlugin(), eventClass, priority, handler);
     }
 
     /**
@@ -67,7 +67,7 @@ public class EventListener<T extends Event> implements Listener {
      * @param handler The callback to receive the event and this EventListener
      */
     public EventListener(Class<T> eventClass, BiConsumer<EventListener<T>, T> handler) {
-        this(FlexingNetwork.getCallingPlugin(), eventClass, handler);
+        this(FlexingNetwork.INSTANCE.getCallingPlugin(), eventClass, handler);
     }
 
     /**
@@ -86,7 +86,7 @@ public class EventListener<T extends Event> implements Listener {
      * @param handler The callback to receive the event
      */
     public EventListener(Class<T> eventClass, Consumer<T> handler) {
-        this(FlexingNetwork.getCallingPlugin(), eventClass, handler);
+        this(FlexingNetwork.INSTANCE.getCallingPlugin(), eventClass, handler);
     }
 
     /**

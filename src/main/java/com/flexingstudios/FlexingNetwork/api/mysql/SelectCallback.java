@@ -1,7 +1,7 @@
-package com.flexingstudios.FlexingNetwork.api.mysql;
+package com.flexingstudios.flexingnetwork.api.mysql;
 
 import java.sql.ResultSet;
 
 public interface SelectCallback extends Callback {
-    void done(ResultSet rs) throws Exception;
+    void output(ResultSet rs) throws Exception;
 }

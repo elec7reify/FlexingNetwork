@@ -1,13 +1,13 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.Common.player.Permission;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.ServerType;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Spectators;
-import com.flexingstudios.FlexingNetwork.api.util.Notifications;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.common.player.Permission;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.ServerType;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.util.Spectators;
+import com.flexingstudios.flexingnetwork.api.util.Notifications;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import com.google.common.base.Joiner;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,9 +22,9 @@ import java.util.List;
 public class TpCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        NetworkPlayer networkPlayer = FlexingNetwork.getPlayer(sender.getName());
+        NetworkPlayer networkPlayer = FlexingNetwork.INSTANCE.getPlayer(sender.getName());
 
-        if (FlexingNetwork.lobby().getServerType() == ServerType.BUILD) {
+        if (FlexingNetwork.INSTANCE.lobby().getServerType() == ServerType.BUILD) {
             if (!networkPlayer.hasAndNotify(Permission.BUILDSERVER))
                 return true;
         } else {
@@ -32,7 +32,7 @@ public class TpCommand implements CommandExecutor {
                 return true;
 
             if (!networkPlayer.has(Rank.TEAM) && !Spectators.instance().contains((Player) sender)) {
-                Utilities.msg(sender, "&cВы можете использовать телепорт только в режиме наблюдателя");
+                Utils.msg(sender, "&cВы можете использовать телепорт только в режиме наблюдателя");
                 return true;
             }
         }
@@ -45,7 +45,7 @@ public class TpCommand implements CommandExecutor {
                 if (target != null) {
                     teleport(sender, target);
                 } else {
-                    Utilities.msg(sender, "&cИгрок &f" + args[0] + "&c не найден");
+                    Utils.msg(sender, "&cИгрок &f" + args[0] + "&c не найден");
                     }
                 }
                 return true;
@@ -54,12 +54,12 @@ public class TpCommand implements CommandExecutor {
             if (args.length == 2 && networkPlayer.getRank().has(Rank.ADMIN)) {
                 Player player1 = Bukkit.getPlayerExact(args[0]);
                 if (player1 == null) {
-                    Utilities.msg(sender, "&cИгрок &f" + args[0] + "&c не найден");
+                    Utils.msg(sender, "&cИгрок &f" + args[0] + "&c не найден");
                     return true;
                 }
                 Player player2 = Bukkit.getPlayerExact(args[1]);
                 if (player2 == null) {
-                    Utilities.msg(sender, "&cИгрок &f" + args[1] + "&c не найден");
+                    Utils.msg(sender, "&cИгрок &f" + args[1] + "&c не найден");
                     return true;
                 }
                 teleport(player1, player1);
@@ -77,7 +77,7 @@ public class TpCommand implements CommandExecutor {
     private void help(CommandSender sender) {
         List<String> list = new ArrayList<>();
         list.add("&cИспользование: /tp <игрок>");
-        Utilities.msg(sender, list);
+        Utils.msg(sender, list);
     }
 
     private void teleport(CommandSender sender, String[] loc) {
@@ -103,7 +103,7 @@ public class TpCommand implements CommandExecutor {
 
     private void teleport(CommandSender sender, Player entity) {
         teleport(sender, entity.getLocation());
-        Utilities.msg(sender, Notifications.success("GOT IT!", "&fВы телепортированы к игркоку &a" + entity.getName()));
+        Notifications.success(sender, "GOT IT!", "&fВы телепортированы к игркоку &a" + entity.getName());
     }
 
     private void teleport(CommandSender sender, Location loc) {

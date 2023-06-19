@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

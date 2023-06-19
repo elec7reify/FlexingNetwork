@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.updater;
+package com.flexingstudios.flexingnetwork.api.updater;
 
 import java.io.File;
 

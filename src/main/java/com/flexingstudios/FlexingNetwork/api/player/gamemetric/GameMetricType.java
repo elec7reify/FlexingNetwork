@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.player.gamemetric;
+package com.flexingstudios.flexingnetwork.api.player.gamemetric;
 
 public enum GameMetricType {
     GLOBAL, SHARED, SEASONAL;

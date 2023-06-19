@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ public class UserCache {
             for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
                 nameCache.put(player.getName().toLowerCase(Locale.ROOT), player);
             }
-            Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetwork.getCallingPlugin(), () -> new EventListener<>(FlexingNetwork.getCallingPlugin(), PlayerJoinEvent.class, EventPriority.LOWEST, e -> {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(FlexingNetwork.INSTANCE.getCallingPlugin(), () -> new EventListener<>(FlexingNetwork.INSTANCE.getCallingPlugin(), PlayerJoinEvent.class, EventPriority.LOWEST, e -> {
                 Player player = e.getPlayer();
                 nameCache.put(player.getName().toLowerCase(Locale.ROOT), player);
             }));

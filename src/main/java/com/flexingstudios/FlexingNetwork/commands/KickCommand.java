@@ -1,12 +1,11 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.Language.Messages;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.Language.Messages;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,18 +14,18 @@ import org.bukkit.entity.Player;
 public class KickCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-        if (!FlexingNetwork.hasRank(commandSender, Rank.CHIKIBAMBONYLA, true)) return true;
+        if (!FlexingNetwork.INSTANCE.hasRank(commandSender, Rank.CHIKIBAMBONYLA, true)) return true;
 
         Player sender = (Player) commandSender;
 
-        if (FlexingNetwork.getPlayer(sender).getRestrict()) {
-            Utilities.msg(sender, "&cНа вас наложено ограничение на выдачу наказаний");
+        if (FlexingNetwork.INSTANCE.getPlayer(sender).getRestrict()) {
+            Utils.msg(sender, "&cНа вас наложено ограничение на выдачу наказаний");
             return true;
         }
 
         if (command.getName().equals("kick")) {
             if (args.length == 0) {
-                Utilities.msg(commandSender, Messages.COMMAND_KICK_USAGE.replace("{command}", command.getName()));
+                Utils.msg(commandSender, Messages.COMMAND_KICK_USAGE.replace("{command}", command.getName()));
             } else {
                 String reason;
                 if (args.length > 1) {
@@ -42,38 +41,38 @@ public class KickCommand implements CommandExecutor {
                 FlexPlayer flPlayer = FlexPlayer.get(sender);
 
                 if (targetPlayer == sender) {
-                    Utilities.msg(sender, Messages.KICK_ME);
+                    Utils.msg(sender, Messages.KICK_ME);
                     return true;
                 }
 
                 // Immunity to kick
                 if (flPlayer.has(Rank.ADMIN)) {
-                    FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                    FlexingNetwork.INSTANCE.kick(args[0], reason, sender.getName(), false);
                 } else if (flPlayer.has(Rank.SADMIN)) {
-                    if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN)) {
-                        FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                    if (!FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.ADMIN)) {
+                        FlexingNetwork.INSTANCE.kick(args[0], reason, sender.getName(), false);
                     }
                 } else if (flPlayer.has(Rank.VADMIN)) {
-                    if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN)) {
-                        FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                    if (!FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.SADMIN)) {
+                        FlexingNetwork.INSTANCE.kick(args[0], reason, sender.getName(), false);
                     }
                 } else if (flPlayer.has(Rank.TEAM)) {
-                    if (!FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.VADMIN)) {
-                        FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                    if (!FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.VADMIN)) {
+                        FlexingNetwork.INSTANCE.kick(args[0], reason, sender.getName(), false);
                     }
-                } else if (flPlayer.has(Rank.GOD) && !FlexingNetwork.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.VADMIN) && !FlexingNetwork.getPlayer(args[0]).has(Rank.TEAM)) {
-                    FlexingNetwork.kick(args[0], reason, sender.getName(), false);
+                } else if (flPlayer.has(Rank.GOD) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.ADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.SADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.VADMIN) && !FlexingNetwork.INSTANCE.getPlayer(args[0]).has(Rank.TEAM)) {
+                    FlexingNetwork.INSTANCE.kick(args[0], reason, sender.getName(), false);
                 }
 
                 if (targetPlayer != null) {
                     for (Player players : Bukkit.getOnlinePlayers())
-                        Utilities.msg(players, Messages.KICKED_BY_ADMIN
+                        Utils.msg(players, Messages.KICKED_BY_ADMIN
                                 .replace("{admin}", sender.getName())
                                 .replace("{player}", targetPlayer.getName())
                                 .replace("{reason}", reason));
                 } else {
                     for (Player players : Bukkit.getOnlinePlayers())
-                        Utilities.msg(players, Messages.KICKED_BY_ADMIN
+                        Utils.msg(players, Messages.KICKED_BY_ADMIN
                                 .replace("{admin}", sender.getName())
                                 .replace("{player}", args[0])
                                 .replace("{reason}", reason));

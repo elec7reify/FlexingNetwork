@@ -1,9 +1,9 @@
-package com.flexingstudios.FlexingNetwork.api.conf;
+package com.flexingstudios.flexingnetwork.api.conf;
 
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
-import com.flexingstudios.FlexingNetwork.api.geom.Cuboid;
-import com.flexingstudios.FlexingNetwork.api.geom.Vec3f;
-import com.flexingstudios.FlexingNetwork.api.geom.Vec3i;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.flexingstudios.flexingnetwork.api.geom.Cuboid;
+import com.flexingstudios.flexingnetwork.api.geom.Vec3f;
+import com.flexingstudios.flexingnetwork.api.geom.Vec3i;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -224,7 +224,7 @@ public class Configuration {
     }
 
     public Location getLocation(World world, String path) {
-        return Utilities.parseLocation(world, getString(path));
+        return Utils.parseLocation(world, getString(path));
     }
 
     public Vec3i getVec3i(String path) {
@@ -258,7 +258,7 @@ public class Configuration {
     }
 
     public List<Location> getLocationList(World world, String path) {
-        return Utilities.parseLocations(world, getStringList(path));
+        return Utils.parseLocations(world, getStringList(path));
     }
 
     public List<Vec3i> getVec3iList(String path) {

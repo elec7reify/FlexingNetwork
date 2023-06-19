@@ -1,14 +1,12 @@
-package com.flexingstudios.FlexingNetwork.impl.lobby;
+package com.flexingstudios.flexingnetwork.impl.lobby;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.Lobby;
-import com.flexingstudios.FlexingNetwork.api.ServerType;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.Lobby;
+import com.flexingstudios.flexingnetwork.api.ServerType;
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class MysqlLobby implements Lobby, Runnable {
     private final FlexingNetworkPlugin plugin;
@@ -72,36 +70,36 @@ public class MysqlLobby implements Lobby, Runnable {
     }
 
     @Override
-    public void setMenuText(String... lines) {
-        if (lines == null || lines.length == 0) {
+    public void setMenuText(String... menuText) {
+        if (menuText == null || menuText.length == 0) {
             menuInfo = "NULL";
         } else {
-            menuInfo = "'" + StringEscapeUtils.escapeSql(Joiner.on("^").join(lines)) + "'";
+            menuInfo = "'" + StringEscapeUtils.escapeSql(Joiner.on("^").join(menuText)) + "'";
         }
     }
 
     @Override
-    public void setConnectableState(Lobby.State state) {
+    public void setConnectableState(Lobby.@NotNull State state) {
         this.state = state;
     }
 
     @Override
-    public void setMaxPlayers(int max) {
-        maxPlayers = max;
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 
     @Override
-    public String getServerId() {
+    public @NotNull String getServerId() {
         return plugin.config.lobbyServerId;
     }
 
     @Override
-    public ServerType getServerType() {
+    public @NotNull ServerType getServerType() {
         return type;
     }
 
     @Override
-    public String getServerTypeId() {
+    public @NotNull String getServerTypeId() {
         return typeId;
     }
 
@@ -111,7 +109,7 @@ public class MysqlLobby implements Lobby, Runnable {
     }
 
     @Override
-    public String getHost() {
+    public @NotNull String getHost() {
         return plugin.config.lobbyServerHost;
     }
 

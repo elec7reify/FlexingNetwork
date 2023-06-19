@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
 import net.minecraft.server.v1_12_R1.EntityFireworks;
 import net.minecraft.server.v1_12_R1.WorldServer;

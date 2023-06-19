@@ -1,13 +1,11 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
+import com.flexingstudios.flexingnetwork.api.util.Fireworks;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.nio.Buffer;
 
 public class FireworkCommand implements CommandExecutor {
     @Override

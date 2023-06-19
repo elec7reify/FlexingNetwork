@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.event;
+package com.flexingstudios.flexingnetwork.api.event;
 
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

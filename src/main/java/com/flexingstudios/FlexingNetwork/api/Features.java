@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api;
+package com.flexingstudios.flexingnetwork.api;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
 
 public class Features {
     static final Features inst = new Features();

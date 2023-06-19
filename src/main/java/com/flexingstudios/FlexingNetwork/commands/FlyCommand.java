@@ -1,7 +1,7 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,7 +19,7 @@ public class FlyCommand implements CommandExecutor, Listener {
 
         if (command.getName().equalsIgnoreCase("fly")) {
 
-            if (!FlexingNetwork.hasRank(sender, Rank.TEAM, true))
+            if (!FlexingNetwork.INSTANCE.hasRank(sender, Rank.TEAM, true))
                 return true;
 
             if (!player.getAllowFlight()) {

@@ -1,9 +1,9 @@
-package com.flexingstudios.FlexingNetwork.api.player.gamemetric;
+package com.flexingstudios.flexingnetwork.api.player.gamemetric;
 
-import com.flexingstudios.Common.season.GameSeason;
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.common.season.GameSeason;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -102,14 +102,14 @@ public class GameMetrics {
             }
             if (stringBuilder.length() == 0)
                 stringBuilder.append('1');
-            FlexingNetwork.mysql().select("SELECT " + stringBuilder + " FROM " + game + "_stats" + this.season.getTableSuffix() + " WHERE userid = " + this.player.getId(), rs -> {
+            FlexingNetwork.INSTANCE.mysql().select("SELECT " + stringBuilder + " FROM " + game + "_stats" + this.season.getTableSuffix() + " WHERE userid = " + this.player.getId(), rs -> {
                 if (rs.next()) {
                     for (GameMetricValue metric : this.metrics) {
                         if (metric.getType() != GameMetricType.GLOBAL)
                             metric.seasonal().mysqlRead(rs);
                     }
                 } else if (!this.readOnly) {
-                    FlexingNetwork.mysql().query("INSERT INTO " + this.game + "_stats" + this.season.getTableSuffix() + " (userid) VALUES (" + this.player.getId() + ")");
+                    FlexingNetwork.INSTANCE.mysql().query("INSERT INTO " + this.game + "_stats" + this.season.getTableSuffix() + " (userid) VALUES (" + this.player.getId() + ")");
                 }
                 queryFinished();
             });
@@ -126,14 +126,14 @@ public class GameMetrics {
         }
         if (sb.length() == 0)
             sb.append('1');
-        FlexingNetwork.mysql().select("SELECT " + sb + " FROM " + this.game + "_stats WHERE userid = " + this.player.getId(), rs -> {
+        FlexingNetwork.INSTANCE.mysql().select("SELECT " + sb + " FROM " + this.game + "_stats WHERE userid = " + this.player.getId(), rs -> {
             if (rs.next()) {
                 for (GameMetricValue metric : this.metrics) {
                     if (metric.getType() != GameMetricType.SEASONAL)
                         metric.global().mysqlRead(rs);
                 }
             } else if (!this.readOnly) {
-                FlexingNetwork.mysql().query("INSERT INTO " + this.game + "_stats (userid) VALUES (" + this.player.getId() + ")");
+                FlexingNetwork.INSTANCE.mysql().query("INSERT INTO " + this.game + "_stats (userid) VALUES (" + this.player.getId() + ")");
             }
             queryFinished();
         });
@@ -150,7 +150,7 @@ public class GameMetrics {
             }
         }
         if (sb.length() > 0)
-            FlexingNetwork.mysql().query("UPDATE " + this.game + "_stats SET " + sb + " WHERE userid = " + this.player.getId());
+            FlexingNetwork.INSTANCE.mysql().query("UPDATE " + this.game + "_stats SET " + sb + " WHERE userid = " + this.player.getId());
         if (this.season != null) {
             sb = new StringBuilder();
             for (GameMetricValue metric : this.metrics) {
@@ -161,7 +161,7 @@ public class GameMetrics {
                 }
             }
             if (sb.length() > 0)
-                FlexingNetwork.mysql().query("UPDATE " + this.game + "_stats" + this.season + " SET " + sb + " WHERE userid = " + this.player.getId());
+                FlexingNetwork.INSTANCE.mysql().query("UPDATE " + this.game + "_stats" + this.season + " SET " + sb + " WHERE userid = " + this.player.getId());
 
         }
     }

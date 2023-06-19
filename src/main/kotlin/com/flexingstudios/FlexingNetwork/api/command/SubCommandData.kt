@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.command
+package com.flexingstudios.flexingnetwork.api.command
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player

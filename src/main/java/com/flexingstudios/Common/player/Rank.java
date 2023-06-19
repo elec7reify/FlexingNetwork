@@ -1,4 +1,4 @@
-package com.flexingstudios.Common.player;
+package com.flexingstudios.common.player;
 
 import java.util.EnumSet;
 

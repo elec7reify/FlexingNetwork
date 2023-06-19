@@ -1,5 +1,5 @@
-package com.flexingstudios.FlexingNetwork.api.menu;
+package com.flexingstudios.flexingnetwork.api.menu;
 
-public interface MenuClosable extends InvMenu {
+public interface MenuClosable extends InvMenuKt {
     void onClose();
 }

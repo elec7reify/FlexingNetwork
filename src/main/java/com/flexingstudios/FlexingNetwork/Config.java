@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork;
+package com.flexingstudios.flexingnetwork;
 
-import com.flexingstudios.FlexingNetwork.api.conf.Configuration;
+import com.flexingstudios.flexingnetwork.api.conf.Configuration;
 
 public class Config extends Configuration {
     private final FlexingNetworkPlugin plugin;

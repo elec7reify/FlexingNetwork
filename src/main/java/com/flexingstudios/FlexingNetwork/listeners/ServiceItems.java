@@ -1,9 +1,9 @@
-package com.flexingstudios.FlexingNetwork.listeners;
+package com.flexingstudios.flexingnetwork.listeners;
 
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.ItemsDef;
-import com.flexingstudios.FlexingNetwork.api.event.ItemClickedEvent;
-import com.flexingstudios.FlexingNetwork.api.util.ClickType;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.ItemsDef;
+import com.flexingstudios.flexingnetwork.api.event.ItemClickedEvent;
+import com.flexingstudios.flexingnetwork.api.util.ClickType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -37,7 +37,7 @@ public class ServiceItems implements Listener {
             Material id = event.getItem().getType();
             int meta = event.getItem().getDurability();
             if (id == new ItemsDef(event.getPlayer()).ITEM_TO_LOBBY.getType() && meta == 0) {
-                FlexingNetwork.toLobby(event.getPlayer());
+                FlexingNetwork.INSTANCE.toLobby(event.getPlayer());
             } else if (id == new ItemsDef(event.getPlayer()).ITEM_GAME_SELECT.getType() && meta == 0) {
                 event.getPlayer().chat("/bw gui");
             }

@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Array;
@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import sun.reflect.ReflectionFactory;
 
 public class Reflect {
@@ -52,7 +55,7 @@ public class Reflect {
             System.arraycopy(args, 0, params, 2, args.length);
 
             ReflectionFactory rFactory = ReflectionFactory.getReflectionFactory();
-            Enum enum_ = (Enum)rFactory.newConstructorAccessor(data.findConstructor(params)).newInstance(params);
+            Enum enum_ = (Enum)rFactory.newConstructorForSerialization(data.findConstructor(params).getClass()).newInstance(params);
             values.add((T)enum_);
             field.set(null, values.toArray((Enum[])Array.newInstance(enumType, 0)));
             setFinal(Class.class, enumType, "enumConstants", null);
@@ -188,6 +191,10 @@ public class Reflect {
         return findField(clazz, field) != null;
     }
 
+    public static boolean isClassExist(@NotNull String name) {
+        return findClass(name) != null;
+    }
+
     public static <T> Constructor<T> findConstructor(Class<T> clazz, Class... args) {
         try {
             return getClass(clazz).findConstructor0(args);
@@ -220,12 +227,14 @@ public class Reflect {
         }
     }
 
+    @Nullable
     public static Class<?> findClass(String name) {
         try {
             return Class.forName(name);
-        } catch (ClassNotFoundException ignored) {
-            return null;
+        } catch (ClassNotFoundException exception) {
+            exception.printStackTrace();
         }
+        return null;
     }
 
     public static void setAggressiveMethodsOverloading(Class<?> clazz, boolean flag) {

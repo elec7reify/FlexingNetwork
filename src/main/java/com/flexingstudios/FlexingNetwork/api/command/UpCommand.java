@@ -1,8 +1,8 @@
-package com.flexingstudios.FlexingNetwork.api.command;
+package com.flexingstudios.flexingnetwork.api.command;
 
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -98,7 +98,7 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
 
     protected Rank getRank(CommandSender sender) {
         if (sender instanceof org.bukkit.command.ConsoleCommandSender) return Rank.ADMIN;
-        return FlexingNetwork.getPlayer(sender.getName()).getRank();
+        return FlexingNetwork.INSTANCE.getPlayer(sender.getName()).getRank();
     }
 
     protected List<PublicSub> getPublicSubs() {
@@ -123,12 +123,12 @@ public abstract class UpCommand implements CommandExecutor, TabCompleter {
                     if (rank1 == rank) return true;
                 }
                 if (inform != null)
-                    Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + ranks[0].getDisplayName());
+                    Utils.msg(inform, "&cОтказ в доступе: Необходим статус " + ranks[0].getDisplayName());
                 return false;
             }
             if (rank.has(ranks[0])) return true;
             if (inform != null)
-                Utilities.msg(inform, "&cОтказ в доступе: Необходим статус " + ranks[0].getDisplayName());
+                Utils.msg(inform, "&cОтказ в доступе: Необходим статус " + ranks[0].getDisplayName());
             return false;
         }
     }

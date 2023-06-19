@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
 public class MathUtil {
     public static float pitchNormalizer(float pitch) {

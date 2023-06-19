@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.score;
+package com.flexingstudios.flexingnetwork.api.score;
 
 public class Record {
     private static int counter = 0;

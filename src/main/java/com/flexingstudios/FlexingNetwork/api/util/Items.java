@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
 import net.minecraft.server.v1_12_R1.NBTBase;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
@@ -26,10 +26,10 @@ public class Items {
 
     public static ItemStack name(ItemStack is, String name, String... lore) {
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(Utilities.colored(name));
+        im.setDisplayName(Utils.colored(name));
 
         if (lore.length > 0)
-            im.setLore(Arrays.asList(Utilities.colored(lore)));
+            im.setLore(Arrays.asList(Utils.colored(lore)));
 
         is.setItemMeta(im);
 
@@ -42,10 +42,10 @@ public class Items {
 
     public static ItemStack name(ItemStack is, String name, List<String> lore) {
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(Utilities.colored(name));
+        im.setDisplayName(Utils.colored(name));
 
         if (!lore.isEmpty())
-            im.setLore(Utilities.colored(lore));
+            im.setLore(Utils.colored(lore));
 
         is.setItemMeta(im);
 
@@ -96,9 +96,9 @@ public class Items {
         List<String> lore0 = im.getLore();
 
         if (lore0 == null) {
-            lore0 = Utilities.colored(lore);
+            lore0 = Utils.colored(lore);
         } else {
-            lore0.addAll(Utilities.colored(lore));
+            lore0.addAll(Utils.colored(lore));
         }
 
         im.setLore(lore0);

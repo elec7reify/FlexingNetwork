@@ -1,10 +1,10 @@
-package com.flexingstudios.FlexingNetwork.api.updater;
+package com.flexingstudios.flexingnetwork.api.updater;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.event.FileUpdateEvent;
-import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
-import com.flexingstudios.FlexingNetwork.tasks.Restart;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.event.FileUpdateEvent;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
+import com.flexingstudios.flexingnetwork.tasks.Restart;
 import org.apache.commons.lang3.SystemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -22,7 +22,7 @@ import java.util.logging.Level;
 
 public class UpdateWatcher implements Listener {
     public static final File UPDATE_DIR = (SystemUtils.IS_OS_WINDOWS ? new File("C:/FlexingWorld/update") : new File("/home/flexingworld/update")).getAbsoluteFile();
-    public static final File SERVER_UPDATE_DIR = new File(UPDATE_DIR, FlexingNetwork.lobby().getServerTypeId());
+    public static final File SERVER_UPDATE_DIR = new File(UPDATE_DIR, FlexingNetwork.INSTANCE.lobby().getServerTypeId());
     private final FlexingNetworkPlugin plugin;
     private boolean restartNeeded = false;
     private boolean restartScheduled = false;

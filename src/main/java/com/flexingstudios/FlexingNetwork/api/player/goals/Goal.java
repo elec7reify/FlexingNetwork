@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.player.goals;
+package com.flexingstudios.flexingnetwork.api.player.goals;
 
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
 import com.google.gson.JsonObject;
 import org.bukkit.inventory.ItemStack;
 

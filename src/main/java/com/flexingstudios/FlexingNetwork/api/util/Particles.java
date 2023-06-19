@@ -1,12 +1,9 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
 import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.util.NumberConversions;
 
 import java.util.List;
 
@@ -64,7 +61,7 @@ public enum Particles {
             }
         } else {
             for (Player player : players)
-                Utilities.sendPacket(player, packet);
+                Utils.sendPacket(player, packet);
         }
     }
 
@@ -80,7 +77,7 @@ public enum Particles {
             }
         } else {
             for (Player player : players)
-                Utilities.sendPacket(player, packet);
+                Utils.sendPacket(player, packet);
         }
     }
 }

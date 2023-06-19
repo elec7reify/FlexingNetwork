@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.listeners;
+package com.flexingstudios.flexingnetwork.listeners;
 
-import com.flexingstudios.FlexingNetwork.api.util.Spectators;
+import com.flexingstudios.flexingnetwork.api.util.Spectators;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.Plugin;
 
 public class PerWorldTablist implements Listener {
 

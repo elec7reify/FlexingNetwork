@@ -1,13 +1,8 @@
-package com.flexingstudios.FlexingNetwork
+package com.flexingstudios.flexingnetwork
 
-enum class Debug(private var enabled: Boolean = false) {
+enum class Debug(
+    @get:JvmName("isEnabled")
+    var enabled: Boolean = false
+) {
     MYSQL;
-
-    fun setEnabled(enabled: Boolean) {
-        this.enabled = enabled
-    }
-
-    fun isEnabled(): Boolean {
-        return enabled
-    }
 }

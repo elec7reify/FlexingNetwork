@@ -1,4 +1,4 @@
-package com.flexingstudios.Common.season;
+package com.flexingstudios.common.season;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

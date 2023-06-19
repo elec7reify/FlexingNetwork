@@ -1,11 +1,12 @@
-package com.flexingstudios.FlexingNetwork.api.mysql;
+package com.flexingstudios.flexingnetwork.api.mysql;
 
+import com.flexingstudios.flexingnetwork.api.util.Reflect;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.sql.*;
 import java.util.Queue;
 import java.util.Scanner;
@@ -23,22 +24,22 @@ public abstract class MysqlThread extends Thread {
     private volatile boolean connected = false;
     private volatile boolean running = false;
     protected Connection db;
-    protected final Logger logger;
+    protected final Logger LOGGER;
 
-    public MysqlThread(Plugin plugin, String url, String user, String pass) {
+    public MysqlThread(Plugin plugin, @NotNull String url, @NotNull String user, @NotNull String pass) {
         this(plugin, new MysqlConfigString(url, user, pass));
     }
 
-    public MysqlThread(Plugin plugin, Supplier<String> url, Supplier<String> user, Supplier<String> pass) {
+    public MysqlThread(Plugin plugin, @NotNull Supplier<String> url, @NotNull Supplier<String> user, @NotNull Supplier<String> pass) {
         this(plugin, new MysqlConfigSupplier(url, user, pass));
     }
 
-    public MysqlThread(Plugin plugin, MysqlConfig config) {
-        setName(plugin.getName() + " - Mysql");
+    public MysqlThread(Plugin plugin, @NotNull MysqlConfig config) {
+        setName(plugin.getName() + " - MySQL");
         setDaemon(true);
         this.config = config;
         queries = new ConcurrentLinkedDeque<>();
-        logger = plugin.getLogger();
+        LOGGER = plugin.getLogger();
     }
 
     public void query(@NotNull String query) {
@@ -59,8 +60,8 @@ public abstract class MysqlThread extends Thread {
         }
     }
 
-    public void execute(File file) {
-        safe(() -> execute(new FileInputStream(file)));
+    public void execute(@NotNull File file) {
+        safe(() -> execute(Files.newInputStream(file.toPath())));
     }
 
     public void execute(@NotNull InputStream is) {
@@ -104,21 +105,24 @@ public abstract class MysqlThread extends Thread {
         useUnicode = true;
     }
 
-    protected void onConnect() {}
+    protected void onConnect() {
+    }
 
-    protected void onDisconnect() {}
+    protected void onDisconnect() {
+    }
 
     protected String onPreQuery(String query) {
         return query;
     }
 
-    protected void onPostQuery(String query, boolean success) {}
-
+    protected void onPostQuery(String query, boolean success) {
+    }
 
     protected void safe(SafeRunnable safeRunnable) {
         try {
             safeRunnable.run();
-        } catch (Exception exception) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
@@ -153,24 +157,24 @@ public abstract class MysqlThread extends Thread {
                     if (isSelect) {
                         if (query.callback != null) {
                             ResultSet rs = statement.getResultSet();
-                            ((SelectCallback) query.callback).done(rs);
+                            ((SelectCallback) query.callback).output(rs);
                             rs.close();
                         }
                     } else if (query.callback != null) {
-                        ((UpdateCallback) query.callback).done(statement.getUpdateCount());
+                        ((UpdateCallback) query.callback).output(statement.getUpdateCount());
                     }
                 } catch (Exception e) {
-                    logger.log(Level.SEVERE, "Query " + q + " is failed!", e);
+                    LOGGER.log(Level.SEVERE, "Query " + q + " is failed!", e);
                 }
                 onPostQuery(q, true);
             } catch (Exception e) {
                 onPostQuery(q, false);
                 if (e.getMessage() != null && e.getMessage().contains("try restarting transaction")) {
                     queries.add(query);
-                    logger.warning(" Query " + q + " is failed! Restarting: " + e.getMessage());
+                    LOGGER.warning(" Query " + q + " is failed! Restarting: " + e.getMessage());
                     continue;
                 }
-                logger.severe("Query " + q + " is failed! Message: " + e.getMessage());
+                LOGGER.severe("Query " + q + " is failed! Message: " + e.getMessage());
             }
         }
     }
@@ -187,7 +191,7 @@ public abstract class MysqlThread extends Thread {
                 connect();
             state = (db != null && isValid());
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Error while connecting to database: {0}", e.getMessage());
+            LOGGER.log(Level.WARNING, "Error while connecting to database: {0}", e.getMessage());
         }
         if (connected != state) {
             connected = state;
@@ -205,11 +209,11 @@ public abstract class MysqlThread extends Thread {
                 url = addUnicodeParams(config.getUrl());
             db = DriverManager.getConnection(url, config.getUser(), config.getPass());
             if (isValid()) {
-                logger.info("MySQL connected.");
+                LOGGER.info("MySQL connected.");
                 onConnect();
             }
         } catch (SQLException ex) {
-            logger.warning(ex.getMessage());
+            LOGGER.warning(ex.getMessage());
         }
     }
 
@@ -228,22 +232,18 @@ public abstract class MysqlThread extends Thread {
         return db.isValid(40);
     }
 
-    private static long limit(long min, long value, long max) {
-        if (value < min)
-            return min;
-        if (value > max)
-            return max;
-
-        return value;
-    }
-
-    public static interface MysqlConfig {
+    public interface MysqlConfig {
+        @NotNull
         String getUrl();
+
+        @NotNull
         String getUser();
+
+        @NotNull
         String getPass();
     }
 
-    protected static interface SafeRunnable {
+    protected interface SafeRunnable {
         void run() throws Exception;
     }
 
@@ -257,15 +257,15 @@ public abstract class MysqlThread extends Thread {
             this.user = user;
             this.pass = pass;
         }
-        public String getUrl() {
+        public @NotNull String getUrl() {
             return url;
         }
 
-        public String getUser() {
+        public @NotNull String getUser() {
             return user;
         }
 
-        public String getPass() {
+        public @NotNull String getPass() {
             return pass;
         }
     }
@@ -281,15 +281,15 @@ public abstract class MysqlThread extends Thread {
             this.pass = pass;
         }
 
-        public String getUrl() {
+        public @NotNull String getUrl() {
             return url.get();
         }
 
-        public String getUser() {
+        public @NotNull String getUser() {
             return user.get();
         }
 
-        public String getPass() {
+        public @NotNull String getPass() {
             return pass.get();
         }
     }

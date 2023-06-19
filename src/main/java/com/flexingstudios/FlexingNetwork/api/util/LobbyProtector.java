@@ -1,11 +1,7 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
-import com.flexingstudios.FlexingNetwork.Config;
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.World;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

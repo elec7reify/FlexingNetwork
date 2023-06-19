@@ -1,7 +1,7 @@
-package com.flexingstudios.FlexingNetwork.api.player.goals;
+package com.flexingstudios.flexingnetwork.api.player.goals;
 
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
@@ -35,6 +35,6 @@ public abstract class ExpCoinsGoal extends Goal {
 
     public List<String> getRewardText() {
         return Arrays.asList(new String[] { "&7+ &e" +
-                Utilities.pluralsCoins(this.rewardCoins), "&7+ &9" + this.rewardExp + " опыта"});
+                Utils.pluralsCoins(this.rewardCoins), "&7+ &9" + this.rewardExp + " опыта"});
     }
 }

@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.geom;
+package com.flexingstudios.flexingnetwork.api.geom;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

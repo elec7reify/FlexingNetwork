@@ -1,3 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.mysql;
+package com.flexingstudios.flexingnetwork.api.mysql;
 
-interface Callback {}
+interface Callback {
+}

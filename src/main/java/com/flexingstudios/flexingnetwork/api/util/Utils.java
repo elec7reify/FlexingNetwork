@@ -1,7 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.util;
+package com.flexingstudios.flexingnetwork.api.util;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import io.netty.util.internal.MathUtil;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
 import net.minecraft.server.v1_12_R1.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,9 +16,9 @@ import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class Utilities {
+public class Utils {
 
-    private Utilities() {
+    private Utils() {
         throw new UnsupportedOperationException("This class cannot be instantiated");
     }
 
@@ -50,7 +49,7 @@ public class Utilities {
 
     public static void bcast(List<String> msg) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            Utilities.msg(player, msg);
+            Utils.msg(player, msg);
         }
     }
 
@@ -93,7 +92,7 @@ public class Utilities {
             cs.sendMessage(colored(str));
     }
 
-    public static void sendPacket(Player player, Packet packet) {
+    public static void sendPacket(Player player, Packet<?> packet) {
         (((CraftPlayer) player).getHandle()).playerConnection.sendPacket(packet);
     }
 

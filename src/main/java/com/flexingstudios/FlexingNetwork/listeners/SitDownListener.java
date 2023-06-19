@@ -1,7 +1,7 @@
-package com.flexingstudios.FlexingNetwork.listeners;
+package com.flexingstudios.flexingnetwork.listeners;
 
-import com.flexingstudios.FlexingNetwork.api.util.ClickType;
-import com.flexingstudios.FlexingNetwork.api.util.TitleManager;
+import com.flexingstudios.flexingnetwork.api.util.ClickType;
+import com.flexingstudios.flexingnetwork.api.util.TitleManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

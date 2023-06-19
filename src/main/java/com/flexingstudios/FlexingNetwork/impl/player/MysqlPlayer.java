@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.impl.player;
+package com.flexingstudios.flexingnetwork.impl.player;
 
 import org.bukkit.entity.Player;
 

@@ -1,4 +1,4 @@
-package com.flexingstudios.Common;
+package com.flexingstudios.common;
 
 public class F {
     private static final char[] magnitudes = new char[] { 'k', 'M', 'G', 'T', 'P', 'E' };

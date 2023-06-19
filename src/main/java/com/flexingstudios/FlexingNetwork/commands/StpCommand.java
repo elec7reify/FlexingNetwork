@@ -1,8 +1,9 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.ServerType;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import com.google.common.collect.Sets;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +22,7 @@ public class StpCommand implements CommandExecutor {
 
                 Player player = (Player) sender;
 
-                if (!FlexingNetwork.hasRank(sender, Rank.VADMIN, true)) return true;
+                if (!FlexingNetwork.INSTANCE.hasRank(sender, Rank.VADMIN, true)) return true;
 
                 if (args.length == 0) {
                     player.sendMessage("§cИспользование /stp @<сервер>");
@@ -34,22 +35,22 @@ public class StpCommand implements CommandExecutor {
                     tpToServer(sender, target.substring(1).toUpperCase());
                     return true;
                 }
-                Utilities.msg(sender, "&aТелепортация на сервер " + target);
+                Utils.msg(sender, "&aТелепортация на сервер " + target);
 
         return true;
     }
 
     private static void tpToServer(CommandSender sender, String server) {
-        if (server.equals(FlexingNetwork.lobby().getServerId())) {
-            Utilities.msg(sender, "&6Вы уже на нужном сервере");
+        if (server.equals(FlexingNetwork.INSTANCE.lobby().getServerId())) {
+            Utils.msg(sender, "&6Вы уже на нужном сервере");
             return;
         }
-        Set<String> allowed = FlexingNetwork.getPlayer(sender.getName()).has(Rank.VADMIN) ? ALLOWED_STP : ALLOWED_SERVER_TYPES;
+        Set<String> allowed = FlexingNetwork.INSTANCE.getPlayer(sender.getName()).has(Rank.VADMIN) ? ALLOWED_STP : ALLOWED_SERVER_TYPES;
 
         if (!allowed.contains(server.split("_")[0])) {
-            Utilities.msg(sender, "&cВы не можете телепортироваться на сервер " + server + ". В доступе отказано");
+            Utils.msg(sender, "&cВы не можете телепортироваться на сервер " + server + ". В доступе отказано");
             return;
         }
-        FlexingNetwork.toServer(server, (Player) sender);
+        FlexingNetwork.INSTANCE.toServer(ServerType.valueOf(server), (Player) sender);
     }
 }

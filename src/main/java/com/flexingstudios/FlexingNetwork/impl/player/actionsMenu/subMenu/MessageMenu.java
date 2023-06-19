@@ -1,9 +1,8 @@
-package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu;
+package com.flexingstudios.flexingnetwork.impl.player.actionsMenu.subMenu;
 
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Items;
-import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.ActionsMenu;
+import com.flexingstudios.flexingnetwork.impl.player.actionsMenu.ActionsMenu;
+import com.flexingstudios.flexingnetwork.api.menu.InvMenu;
+import com.flexingstudios.flexingnetwork.api.util.Items;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -73,14 +72,14 @@ public class MessageMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType) {
-        if (slot == 22) player.getBukkitPlayer().openInventory(new ActionsMenu(target).getInventory());
+    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
+        if (slot == 22) player.openInventory(new ActionsMenu(target).getInventory());
 
         int index = getIndex(slot);
         if (index >= 0 && index < MESSAGES.size()) {
             String object = MESSAGES.get(index);
-            Bukkit.dispatchCommand(player.getBukkitPlayer(), "m " + target + " " + object);
-            player.getBukkitPlayer().closeInventory();
+            Bukkit.dispatchCommand(player, "m " + target + " " + object);
+            player.closeInventory();
         }
     }
 

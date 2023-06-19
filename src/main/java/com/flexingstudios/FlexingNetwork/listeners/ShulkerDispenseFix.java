@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.listeners;
+package com.flexingstudios.flexingnetwork.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

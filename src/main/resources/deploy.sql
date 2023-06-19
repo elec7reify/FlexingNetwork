@@ -93,3 +93,23 @@ CREATE TABLE `friends_requests` (
     `user` varchar(20) NOT NULL,
     `target` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
+
+CREATE TABLE `user_log_actions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `time` int(11) NOT NULL,
+  `action` varchar(20) NOT NULL,
+  `data` varchar(20) DEFAULT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
+
+CREATE TABLE `mod_log_actions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `time` int(11) NOT NULL,
+  `action` varchar(20) NOT NULL,
+  `data` varchar(20) DEFAULT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;

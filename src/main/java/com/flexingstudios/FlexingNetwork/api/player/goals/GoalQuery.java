@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.player.goals;
+package com.flexingstudios.flexingnetwork.api.player.goals;
 
 import java.util.HashMap;
 import java.util.Map;

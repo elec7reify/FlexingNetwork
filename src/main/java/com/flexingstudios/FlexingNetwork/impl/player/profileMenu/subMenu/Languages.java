@@ -1,8 +1,7 @@
-package com.flexingstudios.FlexingNetwork.impl.player.profileMenu.subMenu;
+package com.flexingstudios.flexingnetwork.impl.player.profileMenu.subMenu;
 
-import com.flexingstudios.FlexingNetwork.api.util.ItemBuilder;
-import com.flexingstudios.FlexingNetwork.api.util.SkullBuilder;
-import org.bukkit.Material;
+import com.flexingstudios.flexingnetwork.api.util.ItemBuilder;
+import com.flexingstudios.flexingnetwork.api.util.SkullBuilder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;

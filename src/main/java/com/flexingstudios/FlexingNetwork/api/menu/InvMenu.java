@@ -1,14 +1,13 @@
-package com.flexingstudios.FlexingNetwork.api.menu;
+package com.flexingstudios.flexingnetwork.api.menu;
 
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.Invs;
+import com.flexingstudios.flexingnetwork.api.util.Invs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public interface InvMenu extends InventoryHolder {
-    void onClick(ItemStack item, NetworkPlayer player, int slot, ClickType clickType);
+    void onClick(ItemStack item, Player player, int slot, ClickType clickType);
 
     default void show(Player player) {
         Invs.forceOpen(player, getInventory());

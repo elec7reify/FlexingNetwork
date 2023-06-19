@@ -1,6 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api.entity;
+package com.flexingstudios.flexingnetwork.api.entity;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

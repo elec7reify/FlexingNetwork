@@ -1,4 +1,4 @@
-package com.flexingstudios.FlexingNetwork.api.player.gamemetric;
+package com.flexingstudios.flexingnetwork.api.player.gamemetric;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

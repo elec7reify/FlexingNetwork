@@ -1,13 +1,16 @@
-package com.flexingstudios.FlexingNetwork.impl.player;
+package com.flexingstudios.flexingnetwork.impl.player;
 
-import com.flexingstudios.Common.player.Leveling;
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.player.*;
-import com.flexingstudios.FlexingNetwork.api.util.Fireworks;
-import com.flexingstudios.FlexingNetwork.api.util.Notifications;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.common.player.Leveling;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.ServerType;
+import com.flexingstudios.flexingnetwork.api.player.ArrowTrail;
+import com.flexingstudios.flexingnetwork.api.player.Collectable;
+import com.flexingstudios.flexingnetwork.api.player.MessageOnJoin;
+import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
+import com.flexingstudios.flexingnetwork.api.util.Fireworks;
+import com.flexingstudios.flexingnetwork.api.util.Notifications;
 import gnu.trove.set.hash.TIntHashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -99,11 +102,11 @@ public abstract class FlexPlayer implements NetworkPlayer {
     }
 
     public void toLobby() {
-        FlexingNetwork.toLobby(player);
+        FlexingNetwork.INSTANCE.toLobby(player);
     }
 
-    public void toServer(String id) {
-        FlexingNetwork.toServer(id, player);
+    public void toServer(ServerType id) {
+        FlexingNetwork.INSTANCE.toServer(id, player);
     }
 
     public String getName() {
@@ -257,9 +260,9 @@ public abstract class FlexPlayer implements NetworkPlayer {
         setMeta("msg.open", sb.toString());
     }
 
-    public boolean setRestrict(boolean flag) {
+    @Override
+    public void setRestrict(boolean flag) {
         restrict = flag;
-        return flag;
     }
 
     public TIntHashSet getAvailableArrowTrails() {
@@ -308,7 +311,7 @@ public abstract class FlexPlayer implements NetworkPlayer {
     public void updateExp(int given) {
         if (this.exp >= Leveling.getTotalExp(this.level + 1)) {
             this.level = Leveling.getLevel(this.exp);
-            Utilities.msg(this.player, Notifications.success("Flexing&f&lWorld", "Вы получили &3" + this.level + " &fуровень!"));
+            Notifications.success(player, "Flexing&f&lWorld", "Вы получили &3" + this.level + " &fуровень!");
             boolean launchFirework = true;
 
             if (launchFirework)

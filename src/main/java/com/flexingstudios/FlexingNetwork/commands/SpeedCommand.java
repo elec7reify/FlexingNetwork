@@ -1,7 +1,7 @@
-package com.flexingstudios.FlexingNetwork.commands;
+package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.FlexingNetwork.api.util.Notifications;
-import com.flexingstudios.FlexingNetwork.api.util.Utilities;
+import com.flexingstudios.flexingnetwork.api.util.Notifications;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ public class SpeedCommand implements CommandExecutor {
 
         Player player = (Player)sender;
         if (!player.hasPermission("speed")) {
-            Utilities.msg(sender, "§cНет прав");
+            Utils.msg(sender, "§cНет прав");
             return true;
         }
 
@@ -38,16 +38,16 @@ public class SpeedCommand implements CommandExecutor {
 
         if (player.isFlying()) {
             player.setFlySpeed(0.1F + 0.05F * (speed - 1));
-            Utilities.msg(sender, Notifications.success("GOT IT!", "&fСкорость &aполёта &fустановлен на &a" + speed));
+            Notifications.success(sender, "GOT IT!", "&fСкорость &aполёта &fустановлен на &a" + speed);
         } else {
             player.setWalkSpeed(0.2F + 0.08F * (speed - 1));
-            Utilities.msg(sender, Notifications.success("GOT IT!", "&fСкорость &aходьбы &fустановлен на &a" + speed));
+            Notifications.success(sender, "GOT IT!", "&fСкорость &aходьбы &fустановлен на &a" + speed);
         }
 
         return true;
     }
 
     private void help(CommandSender sender) {
-        Utilities.msg(sender, "&cИспользование: /speed <скорость ходьбы/полёта>");
+        Utils.msg(sender, "&cИспользование: /speed <скорость ходьбы/полёта>");
     }
 }

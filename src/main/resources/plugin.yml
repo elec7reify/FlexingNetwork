@@ -2,7 +2,7 @@ name: '${name}'
 author: [ FlexingStudios, Elec7reify ]
 version: '${version}'
 
-main: com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
+main: com.flexingstudios.flexingnetwork.FlexingNetworkPlugin
 
 commands:
   msg:

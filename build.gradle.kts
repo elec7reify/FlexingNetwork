@@ -1,16 +1,18 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.backend.wasm.lower.excludeDeclarationsFromCodegen
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
     java
     `java-library`
-    id("maven-publish")
+    `maven-publish`
     kotlin("jvm") version "1.8.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("xyz.jpenilla.run-paper") version "2.0.1"
 }
 
 group = "com.flexingstudios"
-version = "0.7.2-SNAPSHOT"
+version = "0.8.12-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -31,6 +33,7 @@ dependencies {
     compileOnly("com.mojang:authlib:1.5.25")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("net.kyori:adventure-api:4.13.1")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.0")
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-RC")
@@ -47,15 +50,38 @@ tasks.runServer {
     minecraftVersion("1.12.2")
 }
 
-configure<PublishingExtension> {
+tasks.register("apiJar", Jar::class).configure {
+    archiveClassifier.set("")
+    from(sourceSets.main.get().output) {
+        include("com/flexingstudios/flexingnetwork/api/**")
+    }
+}
+
+publishing {
     publications {
-        register<MavenPublication>("maven") {
+        create<MavenPublication>("maven") {
+            groupId = "com.flexingstudios"
+            artifactId = "flexingnetwork"
+            version = version
+            from(components["java"])
+
             versionMapping {
                 usage("java-api") {
                     fromResolutionOf("runtimeClasspath")
                 }
                 usage("java-runtime") {
                     fromResolutionResult()
+                }
+            }
+
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/FlexingWorldDev/FlexingNetwork")
+                    credentials {
+                        username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                        password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                    }
                 }
             }
         }
@@ -73,7 +99,7 @@ tasks
     }
 
 tasks.named<ShadowJar>("shadowJar") {
-    archiveClassifier.set("")
+    archiveClassifier.set("dist")
     dependencies {
         relocate("kotlin", "com.flexingstudios.kotlin")
     }
@@ -95,19 +121,6 @@ tasks.named<Copy>("processResources") {
 
 tasks.named("assemble").configure {
     dependsOn("shadowJar")
-}
-
-tasks.register("apiJar", Jar::class).configure {
-    archiveClassifier.set("api")
-    from(sourceSets.main.get().output) {
-        include("com/flexingstudios/FlexingNetwork/api/**")
-    }
-}
-
-configure<PublishingExtension> {
-    publications.named<MavenPublication>("maven") {
-        from(components["java"])
-    }
 }
 
 sourceSets.main {

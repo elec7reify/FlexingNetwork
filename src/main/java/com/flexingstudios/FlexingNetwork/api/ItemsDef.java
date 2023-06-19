@@ -1,7 +1,6 @@
-package com.flexingstudios.FlexingNetwork.api;
+package com.flexingstudios.flexingnetwork.api;
 
-import com.flexingstudios.FlexingNetwork.api.util.Items;
-import org.bukkit.Bukkit;
+import com.flexingstudios.flexingnetwork.api.util.Items;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

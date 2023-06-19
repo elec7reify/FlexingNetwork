@@ -1,17 +1,15 @@
-package com.flexingstudios.FlexingNetwork.impl.player.actionsMenu;
+package com.flexingstudios.flexingnetwork.impl.player.actionsMenu;
 
-import com.flexingstudios.Common.player.Rank;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
-import com.flexingstudios.FlexingNetwork.api.menu.InvMenu;
-import com.flexingstudios.FlexingNetwork.api.player.NetworkPlayer;
-import com.flexingstudios.FlexingNetwork.api.util.*;
-import com.flexingstudios.FlexingNetwork.friends.utils.FriendsManager;
-import com.flexingstudios.FlexingNetwork.impl.player.FlexPlayer;
-import com.flexingstudios.FlexingNetwork.impl.player.MysqlPlayer;
-import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.BanMenu;
-import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.KickMenu;
-import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.MessageMenu;
-import com.flexingstudios.FlexingNetwork.impl.player.actionsMenu.subMenu.MuteMenu;
+import com.flexingstudios.common.player.Rank;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.api.menu.InvMenu;
+import com.flexingstudios.flexingnetwork.api.util.*;
+import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
+import com.flexingstudios.flexingnetwork.impl.player.MysqlPlayer;
+import com.flexingstudios.flexingnetwork.impl.player.actionsMenu.subMenu.BanMenu;
+import com.flexingstudios.flexingnetwork.impl.player.actionsMenu.subMenu.KickMenu;
+import com.flexingstudios.flexingnetwork.impl.player.actionsMenu.subMenu.MessageMenu;
+import com.flexingstudios.flexingnetwork.impl.player.actionsMenu.subMenu.MuteMenu;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
 import org.bukkit.Bukkit;
@@ -64,39 +62,36 @@ public class ActionsMenu implements InvMenu {
     }
 
     @Override
-    public void onClick(ItemStack item, NetworkPlayer nplayer, int slot, ClickType clickType) {
-        MysqlPlayer flPlayer = (MysqlPlayer) FlexPlayer.get(nplayer.getBukkitPlayer());
-        Player player = nplayer.getBukkitPlayer();
+    public void onClick(ItemStack itemStack, Player player, int slot, ClickType clickType) {
+        MysqlPlayer flPlayer = (MysqlPlayer) FlexPlayer.get(player);
 
         switch (slot) {
             case 19:
                 player.openInventory(new MessageMenu(target).getInventory());
                 break;
             case 22:
-                FriendsManager.addFriendRequest(player.getName(), target);
-                Utilities.msg(player, "&2Друзья » §aИгроку " + target + " &aотправлена заявка в друзья.");
                 break;
             case 25:
                 if (!flPlayer.ignored.contains(target)) {
                     flPlayer.ignored.add(target);
                     player.closeInventory();
-                    Utilities.msg(player, Notifications.success("GOT IT!", "Теперь вы игнорируете игрока " + target));
+                    Notifications.success(player, "GOT IT!", "Теперь вы игнорируете игрока " + target);
                 } else {
                     flPlayer.ignored.remove(target);
                     player.closeInventory();
-                    Utilities.msg(player, Notifications.success("GOT IT!", "Вы больше не игнорируете игрока " + target));
+                    Notifications.success(player, "GOT IT!", "Вы больше не игнорируете игрока " + target);
                 }
                 break;
             case 37:
-                if (FlexingNetwork.hasRank(flPlayer.getBukkitPlayer(), Rank.CHIKIBAMBONYLA, true))
+                if (FlexingNetwork.INSTANCE.hasRank(flPlayer.getBukkitPlayer(), Rank.CHIKIBAMBONYLA, true))
                     player.openInventory(new KickMenu(target).getInventory());
                 break;
             case 40:
-                if (FlexingNetwork.hasRank(flPlayer.getBukkitPlayer(), Rank.SPONSOR, true))
+                if (FlexingNetwork.INSTANCE.hasRank(flPlayer.getBukkitPlayer(), Rank.SPONSOR, true))
                     player.openInventory(new BanMenu(target).getInventory());
                 break;
             case 43:
-                if (FlexingNetwork.hasRank(flPlayer.getBukkitPlayer(), Rank.GOD, true))
+                if (FlexingNetwork.INSTANCE.hasRank(flPlayer.getBukkitPlayer(), Rank.GOD, true))
                     player.openInventory(new MuteMenu(target, this).getInventory());
                 break;
         }

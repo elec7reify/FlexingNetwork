@@ -1,11 +1,11 @@
-package com.flexingstudios.FlexingNetwork.tasks
+package com.flexingstudios.flexingnetwork.tasks
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork
-import com.flexingstudios.FlexingNetwork.api.Language.Messages
-import com.flexingstudios.FlexingNetwork.api.ServerType
-import com.flexingstudios.FlexingNetwork.api.event.ServerRestartEvent
-import com.flexingstudios.FlexingNetwork.api.utils.Utilities
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork
+import com.flexingstudios.flexingnetwork.api.Language.Messages
+import com.flexingstudios.flexingnetwork.api.ServerType
+import com.flexingstudios.flexingnetwork.api.event.ServerRestartEvent
+import com.flexingstudios.flexingnetwork.api.util.Utilities
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

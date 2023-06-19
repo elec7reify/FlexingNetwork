@@ -1,7 +1,7 @@
-package com.flexingstudios.FlexingNetwork.impl.player;
+package com.flexingstudios.flexingnetwork.impl.player;
 
-import com.flexingstudios.FlexingNetwork.FlexingNetworkPlugin;
-import com.flexingstudios.FlexingNetwork.api.FlexingNetwork;
+import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
 import gnu.trove.iterator.TIntObjectIterator;
 import gnu.trove.list.linked.TIntLinkedList;
 import gnu.trove.map.TIntObjectMap;
@@ -35,7 +35,7 @@ public class FlexCoin {
                 player.coinsAddBuffer = 0;
             }
         }
-        FlexingNetwork.metrics().add("coins.added", total);
+        FlexingNetwork.INSTANCE.metrics().add("coins.added", total);
         waiting = true;
         TIntObjectIterator<TIntLinkedList> it = map.iterator();
         while (it.hasNext()) {
