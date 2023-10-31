@@ -12,6 +12,7 @@ import com.flexingstudios.flexingnetwork.api.util.Notifications
 import com.flexingstudios.flexingnetwork.api.util.Utilities
 import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer
 import kotlinx.datetime.Clock
+import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.apache.commons.lang.StringEscapeUtils
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -24,6 +25,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 object FlexingNetwork {
+
+    fun audience(): BukkitAudiences = FlexingNetworkPlugin.getInstance().adventure()
 
     /**
      * @param username the minecraft username of the player.

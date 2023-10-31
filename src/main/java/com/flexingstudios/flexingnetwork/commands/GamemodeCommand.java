@@ -1,12 +1,10 @@
 package com.flexingstudios.flexingnetwork.commands;
 
-import com.flexingstudios.flexingnetwork.api.Language.Messages;
 import com.flexingstudios.common.player.Permission;
 import com.flexingstudios.common.player.Rank;
 import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
 import com.flexingstudios.flexingnetwork.api.ServerType;
-import com.flexingstudios.flexingnetwork.api.util.Notifications;
-import com.flexingstudios.flexingnetwork.api.util.Utils;
+import com.flexingstudios.flexingnetwork.api.util.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -14,6 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class GamemodeCommand implements CommandExecutor {
@@ -31,7 +30,7 @@ public class GamemodeCommand implements CommandExecutor {
             switch (cmd.getName()) {
                 case "gamemode":
                     if (args.length == 0) {
-                        Utils.msg(player, Messages.COMMAND_GAMEMODE_USAGE.replace("{command}", label));
+                        sender.sendMessage(Messages.COMMAND_GAMEMODE_USAGE.toMessage(Map.of("command", label)));
                         break;
                     }
                     switch (args[0].toLowerCase()) {
@@ -74,7 +73,7 @@ public class GamemodeCommand implements CommandExecutor {
             switch (cmd.getName()) {
                 case "gamemode":
                     if (args.length == 0 || args.length == 1) {
-                        Utils.msg(sender, Messages.COMMAND_GAMEMODE_USAGE.replace("{command}", label));
+                        sender.sendMessage(Messages.COMMAND_GAMEMODE_USAGE.toMessage(Map.of("command", label)));
                         break;
                     }
                     switch (args[0].toLowerCase()) {
@@ -102,28 +101,28 @@ public class GamemodeCommand implements CommandExecutor {
                     break;
                 case "gmc":
                     if (args.length == 0) {
-                        Utils.msg(sender, Messages.COMMAND_GAMEMODE_USAGE.replace("{command}", label));
+                        sender.sendMessage(Messages.COMMAND_GAMEMODE_USAGE.toMessage(Map.of("command", label)));
                         break;
                     }
                     changeGamemode(args[0], GameMode.CREATIVE);
                     break;
                 case "gma":
                     if (args.length == 0) {
-                        Utils.msg(sender, Messages.COMMAND_GAMEMODE_USAGE.replace("{command}", label));
+                        sender.sendMessage(Messages.COMMAND_GAMEMODE_USAGE.toMessage(Map.of("command", label)));
                         break;
                     }
                     changeGamemode(args[0], GameMode.ADVENTURE);
                     break;
                 case "gms":
                     if (args.length == 0) {
-                        Utils.msg(sender, Messages.COMMAND_GAMEMODE_USAGE.replace("{command}", label));
+                        sender.sendMessage(Messages.COMMAND_GAMEMODE_USAGE.toMessage(Map.of("command", label)));
                         break;
                     }
                     changeGamemode(args[0], GameMode.SURVIVAL);
                     break;
                 case "gmsp":
                     if (args.length == 0) {
-                        Utils.msg(sender, Messages.COMMAND_GAMEMODE_USAGE.replace("{command}", label));
+                        sender.sendMessage(Messages.COMMAND_GAMEMODE_USAGE.toMessage(Map.of("command", label)));
                         break;
                     }
                     changeGamemode(args[0], GameMode.SPECTATOR);
@@ -136,12 +135,12 @@ public class GamemodeCommand implements CommandExecutor {
 
     private void changeGamemode(Player player, GameMode mode) {
         if (player.getGameMode() == mode) {
-            Notifications.error(player, "Ошибка", Messages.COMMAND_GAMEMODE_ERROR.replace("{mode}", mode.name()));
+            player.sendMessage(Messages.COMMAND_GAMEMODE_ERROR_IDENTICAL.toMessage(Map.of("mode", mode.name())));
             return;
         }
 
         player.setGameMode(mode);
-        Notifications.success(player, "GOT IT!", Messages.COMMAND_GAMEMODE_CHANGED.replace("{mode}", mode.name()));
+        player.sendMessage(Messages.COMMAND_GAMEMODE_SUCCESSFUL.toMessage(Map.of("name", mode.name())));
     }
 
     private void changeGamemode(String player, GameMode mode) {

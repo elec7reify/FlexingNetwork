@@ -1,5 +1,6 @@
 package com.flexingstudios.flexingnetwork;
 
+import com.flexingstudios.flexingnetwork.api.util.Messages;
 import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
 import com.flexingstudios.flexingnetwork.api.FlexingNetwork;
 import com.flexingstudios.flexingnetwork.api.util.ChatUtil;
@@ -34,6 +35,7 @@ public class FlexingChat implements Listener {
 
                 Logger.getGlobal().info(Utils.colored("«" + flPlayer.getRank().getName() + "» " + player.getName() + ": " + event.getMessage()));
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
+                    player1.sendMessage(Messages.CHAT_FORMAT.toMessage());
                     player1.spigot().sendMessage(ChatMessageType.CHAT, components);
                 }
             }

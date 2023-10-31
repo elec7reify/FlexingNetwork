@@ -1,5 +1,6 @@
 package com.flexingstudios.flexingnetwork;
 
+import com.flexingstudios.flexingnetwork.api.entity.NPC;
 import com.flexingstudios.flexingnetwork.api.player.NetworkPlayer;
 import com.flexingstudios.flexingnetwork.commands.BanCommand;
 import com.flexingstudios.flexingnetwork.impl.player.FlexPlayer;
@@ -65,6 +66,8 @@ class WorldProtect implements Listener {
         });
         ((CraftPlayer) player).addChannel("BungeeCord");
         ((CraftPlayer) player).addChannel("FlexingBungee");
+
+        new NPC("Elec7reify", player.getWorld(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getLocation().getYaw(), player.getLocation().getPitch());
     }
 
     @EventHandler

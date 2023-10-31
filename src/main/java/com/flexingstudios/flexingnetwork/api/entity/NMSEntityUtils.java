@@ -1,23 +1,28 @@
 package com.flexingstudios.flexingnetwork.api.entity;
 
 import com.flexingstudios.flexingnetwork.FlexingNetworkPlugin;
+import com.flexingstudios.flexingnetwork.api.util.Reflect;
+import com.flexingstudios.flexingnetwork.api.util.Utils;
 import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.sql.Ref;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class NMSEntityUtils {
+public class NMSEntityUtils implements IEntity {
     private static Field PathfinderGoalSelector_list1;
     private static Field PathfinderGoalSelector_list2;
     private static Field EntityInsentient_goalSelector;
@@ -25,6 +30,8 @@ public class NMSEntityUtils {
     private static Field EntityTypes_d;
     private static Field EntityTypes_e;
     private static Method EntityTypes_registerEntity;
+
+    public Entity entity;
 
 //    static {
 //        try {
@@ -63,7 +70,7 @@ public class NMSEntityUtils {
         }
     }
 
-    public static Entity spawn(Entity entity, Location loc) {
+    public Entity spawn(Entity entity, Location loc) {
         entity.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         getNMSWorld(loc.getWorld()).addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
         Chunk chunk = loc.getBlock().getChunk();
@@ -72,7 +79,7 @@ public class NMSEntityUtils {
         return entity;
     }
 
-    public static void clearPathfinding(EntityInsentient entity) {
+    public void clearPathfinding(EntityInsentient entity) {
         try {
             Object goalSelector = EntityInsentient_goalSelector.get(entity);
             ((List)PathfinderGoalSelector_list1.get(goalSelector)).clear();
@@ -86,15 +93,16 @@ public class NMSEntityUtils {
     }
 
 
-    private static double getPathfindingRange(EntityLiving entity) {
+    private double getPathfindingRange(EntityLiving entity) {
         return entity.getAttributeInstance(GenericAttributes.g).getValue();
     }
 
-    public static void setMovementSpeed(EntityLiving entity, double speed) {
+    @Override
+    public void setMovementSpeed(EntityLiving entity, double speed) {
         entity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
     }
 
-    public static double getMovementSpeed(EntityLiving entity) {
+    public double getMovementSpeed(EntityLiving entity) {
         return entity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
     }
 

@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "com.flexingstudios"
-version = "0.8.12-SNAPSHOT"
+version = "0.8.14-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -22,6 +22,8 @@ repositories {
 }
 
 dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT") {
         exclude("com.google.code.gson", "gson")
         exclude("org.slf4j", "slf4j-api")
@@ -51,10 +53,17 @@ tasks.runServer {
 }
 
 tasks.register("apiJar", Jar::class).configure {
-    archiveClassifier.set("")
+    archiveClassifier.set("api")
     from(sourceSets.main.get().output) {
         include("com/flexingstudios/flexingnetwork/api/**")
+        include("com/flexingstudios/common/**")
     }
+
+    val attributes = mutableMapOf(
+        "Implementation-Version" to version,
+        "Main-Class" to "com.flexingstudios.flexingnetwork.api.FlexingNetwork"
+    )
+    manifest.attributes(attributes)
 }
 
 publishing {
@@ -63,7 +72,8 @@ publishing {
             groupId = "com.flexingstudios"
             artifactId = "flexingnetwork"
             version = version
-            from(components["java"])
+
+            artifact("build/libs/FlexingNetwork-$version-api.jar")
 
             versionMapping {
                 usage("java-api") {

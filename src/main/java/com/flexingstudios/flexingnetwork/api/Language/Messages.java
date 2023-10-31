@@ -51,7 +51,6 @@ public class Messages {
 
     /** ONLY Console AND ONLY in ENGLISH */
     public static final String CONSOLE_COMMAND_GAMEMODE_USAGE = "console-cmd-gamemode-usage";
-    rus
 
 //                "&7После применения: язык",
 //                "&7интерфейса сервера будет",

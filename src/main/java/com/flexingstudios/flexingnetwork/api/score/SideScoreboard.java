@@ -13,7 +13,7 @@ import org.bukkit.scoreboard.Objective;
 import java.util.Set;
 
 public class SideScoreboard {
-    private Set<java.lang.Record> records;
+    private Set<Record> records;
     private org.bukkit.scoreboard.Scoreboard scoreboard;
     private Objective objective;
     private ScoreboardObjective nmsObjective;
@@ -45,32 +45,32 @@ public class SideScoreboard {
         } catch (IllegalStateException ex) {}
     }
 
-    public java.lang.Record create() {
+    public Record create() {
         return create("", 1);
     }
 
-    public java.lang.Record create(String name) {
+    public Record create(String name) {
         return create(name, 1);
     }
 
-    public java.lang.Record create(String name, int value) {
+    public Record create(String name, int value) {
         if (name == null)
             throw new IllegalArgumentException("Name cannot be null");
 
-        java.lang.Record rec = new java.lang.Record(this, name);
+        Record rec = new Record(this, name);
         rec.value = value;
         records.add(rec);
 
         return rec;
     }
 
-    public void remove(java.lang.Record record) {
+    public void remove(Record record) {
         records.remove(record);
         removeScore(record.name);
     }
 
     public void reset() {
-        for (java.lang.Record record : records)
+        for (Record record : records)
             removeScore(record.name);
         records.clear();
     }
