@@ -1,6 +1,7 @@
 package com.flexingstudios.flexingnetwork.impl.player;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -9,7 +10,7 @@ public class MysqlPlayer extends FlexPlayer {
     public boolean ignoreAll = false;
     public String lastWriter = null;
 
-    public MysqlPlayer(Player player) {
+    public MysqlPlayer(@NotNull Player player) {
         super(player);
     }
 
@@ -70,7 +71,7 @@ public class MysqlPlayer extends FlexPlayer {
         public long changed;
         public boolean saved = false;
 
-        public MetaValue(String value) {
+        public MetaValue(@NotNull String value) {
             this.value = value;
         }
     }

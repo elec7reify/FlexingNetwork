@@ -16,8 +16,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -28,16 +31,16 @@ public abstract class FlexPlayer implements NetworkPlayer {
     private static final String ARROW_SELECTED = "arr.sel";
     private static final String ARROW_AVAILABLE = "arr.open";
     protected final FlexingNetworkPlugin plugin = FlexingNetworkPlugin.getInstance();
-    public int id = -1;
-    public final String username;
-    public final Player player;
+    public int id;
+    public final @NotNull String username;
+    public final @NotNull Player player;
     public boolean loaded = false;
     public long loginTime = System.currentTimeMillis();
     public Rank rank = Rank.PLAYER;
     private ArrowTrail arrowTrail = null;
     private MessageOnJoin messageOnJoin = null;
     public TIntHashSet availableArrowTrails;
-    private final TIntHashSet availableJoinMessages;
+    private final @NotNull TIntHashSet availableJoinMessages;
     public Collectable settings;
     public Player lastDamager = null;
     public Entity lastDamagerEntity = null;
@@ -76,50 +79,59 @@ public abstract class FlexPlayer implements NetworkPlayer {
         }
     }
 
+    @Override
     public int addCoins(int amount) {
         addCoinsExact(amount);
         return amount;
     }
 
+    @Override
     public void addCoinsExact(int amount) {
         plugin.coins.addCoins(this, amount, false);
     }
 
+    @Override
     public int getCoins() {
         return coins;
     }
 
+    @Override
     public void takeCoins(int amount) {
         plugin.coins.takeCoins(this, amount, false);
     }
 
+    @Override
     public Rank getRank() {
         return rank;
     }
 
+    @Override
     public Player getBukkitPlayer() {
         return player;
     }
 
+    @Override
     public void toLobby() {
         FlexingNetwork.INSTANCE.toLobby(player);
     }
 
+    @Override
     public void toServer(ServerType id) {
         FlexingNetwork.INSTANCE.toServer(id, player);
     }
 
+    @Nullable
+    @Override
     public String getName() {
         return username;
     }
 
-    /**
-     * @return player id
-     */
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public String getPrefixedName() {
         String prefix = getPrefix();
         if (!prefix.isEmpty())
@@ -127,27 +139,33 @@ public abstract class FlexPlayer implements NetworkPlayer {
         return rank.getColor() + username + ChatColor.RESET;
     }
 
+    @Override
     public String getPrefix() {
         String prefix = getMeta("prefix");
         return (prefix == null) ? rank.getPrefix() : prefix;
     }
 
+    @Override
     public String getColoredName() {
         return rank.getColor() + username + ChatColor.RESET;
     }
 
+    @Override
     public boolean isOnline() {
         return PLAYERS.containsKey(username);
     }
 
+    @Override
     public ArrowTrail getArrowTrail() {
         return arrowTrail;
     }
 
+    @Override
     public MessageOnJoin getMessageOnJoin() {
         return messageOnJoin;
     }
 
+    @Override
     public void setArrowTrail(ArrowTrail arrowTrail) {
         if (arrowTrail != this.arrowTrail) {
             this.arrowTrail = arrowTrail;
@@ -159,6 +177,7 @@ public abstract class FlexPlayer implements NetworkPlayer {
         }
     }
 
+    @Override
     public void setMessageOnJoin(MessageOnJoin msg) {
         if (msg != messageOnJoin) {
             messageOnJoin = msg;
@@ -170,11 +189,13 @@ public abstract class FlexPlayer implements NetworkPlayer {
         }
     }
 
+    @Override
     public void unlockArrowTrail(ArrowTrail trail) {
         if (getAvailableArrowTrails().add(trail.getId()))
             saveAvailableArrowTrails();
     }
 
+    @Override
     public void unlockJoinMessage(MessageOnJoin msg) {
         if (getAvailableJoinMessages().add(msg.getId()))
             saveAvailableMessagesOnJoin();
@@ -265,45 +286,47 @@ public abstract class FlexPlayer implements NetworkPlayer {
         restrict = flag;
     }
 
+    @Override
     public TIntHashSet getAvailableArrowTrails() {
         return availableArrowTrails;
     }
 
+    @Override
     public TIntHashSet getAvailableJoinMessages() {
         return availableJoinMessages;
     }
 
-    /**
-     * @return player login time
-     */
+    @Override
     public long getLoginTime() {
         return loginTime;
     }
 
+    @Override
     public int getLevel() {
         return level;
     }
 
+    @Override
     public int getTotalExp() {
         return exp;
     }
 
+    @Override
     public int getPartialExp() {
         return exp - Leveling.getTotalExp(level);
     }
 
+    @Override
     public void giveExp(int exp) {
-        if (exp <= 0)
-            return;
-
+        if (exp <= 0) return;
         this.exp += exp;
         expBuffer += exp;
         updateExp(exp);
     }
 
+    @Override
     public void giveExpExact(int exp) {
-        if (exp <= 0)
-            return;
+        if (exp <= 0) return;
         this.exp += exp;
         updateExp(exp);
     }
@@ -322,10 +345,6 @@ public abstract class FlexPlayer implements NetworkPlayer {
     @Override
     public boolean getRestrict() {
         return restrict;
-    }
-
-    public boolean equals(Object obj) {
-        return obj == this;
     }
 
     public int hashCode() {

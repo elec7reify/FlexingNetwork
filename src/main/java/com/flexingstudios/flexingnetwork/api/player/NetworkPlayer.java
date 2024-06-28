@@ -7,8 +7,10 @@ import com.flexingstudios.flexingnetwork.api.ServerType;
 import com.flexingstudios.flexingnetwork.api.util.Utils;
 import gnu.trove.set.hash.TIntHashSet;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.UUID;
 
 public interface NetworkPlayer {
     String getMeta(String key);
@@ -47,12 +49,23 @@ public interface NetworkPlayer {
         return false;
     }
 
-    String getName();
+    /**
+     * @return The player's name.
+     */
+    @Nullable String getName();
+
+    /**
+     * @return player id.
+     */
     int getId();
     String getPrefixedName();
     String getPrefix();
     String getColoredName();
     Player getBukkitPlayer();
+
+    /**
+     * @return true if they are online.
+     */
     boolean isOnline();
     ArrowTrail getArrowTrail();
     MessageOnJoin getMessageOnJoin();
@@ -62,7 +75,12 @@ public interface NetworkPlayer {
     void unlockJoinMessage(MessageOnJoin msg);
     TIntHashSet getAvailableArrowTrails();
     TIntHashSet getAvailableJoinMessages();
+
+    /**
+     * @return player login time.
+     */
     long getLoginTime();
+
     int getLevel();
     int getTotalExp();
     int getPartialExp();

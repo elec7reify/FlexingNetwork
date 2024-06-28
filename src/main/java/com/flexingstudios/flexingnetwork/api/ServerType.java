@@ -1,5 +1,7 @@
 package com.flexingstudios.flexingnetwork.api;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +12,8 @@ public enum ServerType {
     BUILD("BUILD", "Билд"),
     SURVIVAL("SURVIVAL", "Выживание"),
     ANARCHY("ANARCHY", "Анархия"),
-    UNKNOWN("UNKNOWN", "UNKNOWN");
+    UNKNOWN("UNKNOWN", "UNKNOWN")
+    ;
 
     private static final Map<String, ServerType> byId;
     private final String name;
@@ -25,7 +28,7 @@ public enum ServerType {
         }
     }
 
-    ServerType(String id, String name) {
+    ServerType(@NotNull String id, @NotNull String name) {
         this.id = id;
         this.name = name;
     }
@@ -33,14 +36,14 @@ public enum ServerType {
     /**
      * @return The official name of the ServerType
      */
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     /**
      * @return The internal ID
      */
-    public String getId() {
+    public @NotNull String getId() {
         return id;
     }
 
